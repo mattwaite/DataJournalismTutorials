@@ -1,0 +1,20 @@
+Package: DataJournalismTutorials
+Title: The Companion Tutorials To UNL's JOUR 307 Data Journalism Course
+Version: 0.1.0.0000
+Authors@R: 
+    person(given = "Matt",
+           family = "Waite",
+           role = c("aut", "cre"),
+           email = "matt.waite@unl.edu")
+Description: Walks students through the skills needed for UNL's JOUR 307 course.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+Suggests: 
+    learnr
+Imports: 
+    gradethis (>= 0.2.3.9001)
+Remotes:  
+    rstudio/gradethis
