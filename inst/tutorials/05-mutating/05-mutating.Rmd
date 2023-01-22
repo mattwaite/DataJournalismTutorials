@@ -63,33 +63,21 @@ Your first task is to import the data. For this exercise, you need to simply run
 ```{r mutating-load-data, message=FALSE, warning=FALSE}
 counties <- read_csv("http://mattwaite.github.io/datajournalismfiles/estimates21.csv")
 
-ruthless <- soccer %>% mutate(
-  gpg = Goals/Games
-) %>% 
-  arrange(desc(gpg)) %>% slice(1)
-
-snipers <- soccer %>%
-  mutate(SoGPct = (SoG/ShAtt)*100
+fastest <- counties %>% mutate(
+  change = ((`2021` - `2020`)/`2020`)*100
 ) %>%
-  arrange(desc(SoGPct)) %>% slice(1)
+  arrange(desc(change)) %>% slice(1)
 
-maxgames <- soccer %>% summarize(max_games = max(Games))
-
-confsnipers <- soccer %>%
-  group_by(Conference) %>%
-  summarize(
-    total_sog = sum(SoG),
-    total_shatt = sum(ShAtt)
-  ) %>%
-  mutate(SoGPct = (total_sog/total_shatt)*100
+biggest <- counties %>% mutate(
+  rawchange = `2021` - `2020`
 ) %>%
-  arrange(desc(SoGPct)) %>% slice(1)
+  arrange(desc(rawchange)) %>% slice(1)
 ```
 ```{r mutating-load-data-exercise, exercise = TRUE}
-soccer <- read_csv("http://mattwaite.github.io/sportsdatafiles/ncaa_womens_soccer_totals_2022.csv")
+counties <- read_csv("http://mattwaite.github.io/datajournalismfiles/estimates21.csv")
 ```
 ```{r mutating-load-data-exercise-solution}
-soccer <- read_csv("http://mattwaite.github.io/sportsdatafiles/ncaa_womens_soccer_totals_2022.csv")
+counties <- read_csv("http://mattwaite.github.io/datajournalismfiles/estimates21.csv")
 ```
 ```{r mutating-load-data-exercise-check}
 grade_this_code()
@@ -101,7 +89,7 @@ Remember, if you want to see the first six rows -- handy to take a peek at your 
 head(??????)
 ```
 ```{r head-data-solution}
-head(soccer)
+head(counties)
 ```
 ```{r head-data-check}
 grade_this_code()
@@ -151,11 +139,6 @@ grade_this_code()
 
 Better. But ... unless we really care about Autuga County, Alabama, this isn't doing much for us. 
 
-
-```{r ruthless, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "mutating-load-data", results='asis'}
-glue("So in that season, {ruthless$Institution} were the most ruthless team scoring about {format(ruthless$gpg, digits=2)} goals per game.")
-```
-
 ### Exercise 3: Arranging to answer a question
 
 So who had the most growth last year from the year before? We can find that with arrange, which we learned about in the last tutorial.
@@ -167,55 +150,43 @@ counties %>% mutate(
   arrange(desc(??????))
 ```
 ```{r mutate-change-percent-solution, exercise.reveal_solution = FALSE}
-soccer %>%
-  mutate(SoGPct = (SoG/ShAtt)*100
+counties %>% mutate(
+  change = ((`2021` - `2020`)/`2020`)*100
 ) %>%
-  arrange(desc(SoGPct))
+  arrange(desc(change))
 ```
 ```{r mutate-change-percent-check}
 grade_this_code()
 ```
 
-```{r accurate, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "mutating-load-data", results='asis'}
-glue("Who is putting the most pressure on the keeper shot after shot?  {snipers$Institution}, who are on goal {format(snipers$SoGPct, digits=1)}% of the time.
-     
-     A note about this. Note that {snipers$Institution} played in {snipers$Games} matches. The team that played the most played in {maxgames$max_games}. We'll learn how to deal with that in the next tutorial.")
+```{r fastest, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "mutating-load-data", results='asis'}
+glue("Which county is the fastest growing?  {fastest$County}, {fastest$State}, which grew {format(fastest$change, digits=1)}% in just one year.")
 ``` 
 
-### Exercise 3: Combining what we know
+## More mutating
 
-With this data, we have every team and their stats. But what if we wanted to know which is the most ruthless conference? Here is an example of how you can use what you learned in the last tutorial with what you learned here.
+### Exercise 4: Looking at change differently
 
-To take a dataset of every team and get each conference, we need to use group by again. And then, to calculate a percentage for the conference, we need to add up the two pieces we need in summarize *before* we mutate a new column. 
+With this data, we have every county and the population in two years. We've looked at the percent change, which allows us to put Los Angeles County, California and Arthur County, Nebraska on the same playing field. But what if we wanted to know which county was growing just at a raw number?
 
-We're going to sum the shots on goal and the shot attempts. Then we're going to create a shots on goal percentage -- let's use the shots on goal percentage column name from the previous exercise. 
+What you're going to learn about data journalism is that often, the simplest way is going to be the best. Simple math means you can explain what you've done easily to anyone. So how do we get a raw number? Subtraction! Let's call this new column rawchange and the rest should be obvious to you.
 
 ```{r mutate-change-percent-arrange, exercise=TRUE, exercise.setup = "mutating-load-data", message=FALSE, warning=FALSE}
-soccer %>%
-  group_by(NOT THE TEAM BUT THE...) %>%
-  summarize(
-    total_sog = sum(???),
-    total_shatt = sum(?????)
-  ) %>%
-  mutate(NEWCOLUMNNAME = (LITTLETHINGINSUMMARIZE/BIGTHINGINSUMMARIZE)*???
+counties %>% mutate(
+  ????????? = `????` - `????`
 ) %>%
-  arrange(desc(NEWCOLUMNNAME))
+  arrange(desc(?????????))
 ```
 ```{r mutate-change-percent-arrange-solution, exercise.reveal_solution = FALSE, warning=FALSE}
-soccer %>%
-  group_by(Conference) %>%
-  summarize(
-    total_sog = sum(SoG),
-    total_shatt = sum(ShAtt)
-  ) %>%
-  mutate(SoGPct = (total_sog/total_shatt)*100
+counties %>% mutate(
+  rawchange = `2021` - `2020`
 ) %>%
-  arrange(desc(SoGPct))
+  arrange(desc(rawchange))
 ```
 ```{r mutate-change-percent-arrange-check}
 grade_this_code()
 ```
 
-```{r conf, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "mutating-load-data", results='asis'}
-glue("What conference do you not want to be a keeper?  The {confsnipers$Conference} Conference, who are on goal {format(confsnipers$SoGPct, digits=1)}% of the time.")
+```{r rawchange, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "mutating-load-data", results='asis'}
+glue("What county added the most people by raw number? It's {biggest$County}, {biggest$State} adding {biggest$rawchange} people in one year. Know where that is?")
 ``` 
