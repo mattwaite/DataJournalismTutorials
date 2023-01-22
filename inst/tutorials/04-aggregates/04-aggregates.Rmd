@@ -1,5 +1,5 @@
 ---
-title: "Lesson 4: Aggregates"
+title: "Data Journalism Lesson 4: Aggregates"
 output: 
   learnr::tutorial:
     progressive: true

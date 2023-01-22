@@ -1,5 +1,5 @@
 ---
-title: "Lesson 3: Replication"
+title: "Data Journalism Lesson 3: Replication"
 output: 
   learnr::tutorial:
     progressive: true

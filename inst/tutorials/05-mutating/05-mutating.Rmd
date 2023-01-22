@@ -1,5 +1,5 @@
 ---
-title: "Lesson 5: Mutating data"
+title: "Data Journalism Lesson 5: Mutating data"
 output: 
   learnr::tutorial:
     progressive: true
