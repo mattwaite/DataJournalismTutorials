@@ -89,6 +89,8 @@ grade_this_code()
 
 See that reported column? See how it's a character? We have to fix that. There's a lot of ways to fix dates. The base R way is to use formatting. The code is ... a little odd ... but it's useful to know if you get a really odd date format. What you are doing is essentially parsing the date into it's component parts then reassmbling it into a date using formatting. 
 
+### Exercise 1: Formatting the date
+
 To walk through this, we're going to use `mutate` to create a new column. Why not just overwrite our original column? It's good practice never to delete or overwrite data. What do you have to compare it to and how will you know you did it write if you overwrite it? We'll name that new column clean_reported. It's a habit I picked up where when I clean a column, I name it clean_originalcolumnname. Helps keep track of which is original and which has been modified. 
 
 Then, we're going to use the `as.POSIXct` function. That function parses text into dates. The inputs it takes are first, what column are you parsing? Second, what is the `format`? That format can get really complicated, but look at one of the dates and times we have. You have things like `1/19/2023 12:32`. So we can see the format of the date we have. It's the month, with just one number, then the day, then the four digit year. Then you have a space and the hour colon minute. 
@@ -146,6 +148,8 @@ There is a [library called lubridate](https://lubridate.tidyverse.org/reference/
 
 Lubridate can handle this calls data easier with one of it's many functions. The functions parse dates given a basic pattern. In this case, our data is in a very common pattern of month day year hours minutes. Lubridate names its functions after the pattern you need. Need year month day, there's a function called `ymd` that will parse what you have with year month and day.  
 
+### Exercise 2: Lubridate
+
 We have month day year hours minutes. See if you can figure out how it works. 
 
 ```{r lubridate, exercise=TRUE, exercise.setup = "load-data"}
@@ -170,9 +174,13 @@ But you're not done with lubridate yet. It has some interesting pieces parts we'
 
 What's a question you might have about calls on campus involving dates? 
 
-How about what month are the most calls? We could use formatting to create a Month field but that would group all the Aprils together, regardless of if they were in 2022 or 2021. We could create a year and a month together, but that would give us an invalid date object and that would create problems later. Lubridate has something called a floor date that we can use. 
+How about what month are the most calls? 
 
-We're going to use mutate to create a floor_month field. Keep this code handy -- you'll need it for the homework.  
+### Exercise 3: Floor dates
+
+We could use formatting to create a Month field but that would group all the Aprils together, regardless of if they were in 2022 or 2021. We could create a year and a month together, but that would give us an invalid date object and that would create problems later. Lubridate has something called a floor date that we can use. 
+
+We're going to use mutate to create a floor_month field out of our properly formatted date column. Keep this code handy -- you'll need it for the homework.  
 
 ```{r floormonth, exercise=TRUE, exercise.setup = "load-data"}
 calls %>% 

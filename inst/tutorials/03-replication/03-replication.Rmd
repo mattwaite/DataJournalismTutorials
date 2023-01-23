@@ -18,7 +18,7 @@ And then there's this:
 
 __"You should have a strong command of at least one toolset that (a) allows for filtering, joining, pivoting, and aggregating tabular data, and (b) enables reproducible workflows."__
 
-The word you're seeing more and more of? Reproducible. And it started in earnest this summer when data journalism crossed a major threshold in American journalism: It now has it's own section in the Associated Press Stylebook.
+The word you're seeing more and more of? Reproducible. And it started in earnest in the summer of 2017 when data journalism crossed a major threshold in American journalism: It now has it's own section in the Associated Press Stylebook.
 
 "Data journalism has become a staple of reporting across beats and platforms," the Data Journalism section of the Stylebook opens. "The ability to analyze quantitative information and present conclusions in an engaging and accurate way is no longer the domain of specialists alone."
 
@@ -77,7 +77,7 @@ Meyer believes replication is vitally important, but doesn't believe it should t
 
 But journalists should be sharing their data and analysis steps. And it doesn't need to be complicated, he said.
 
-"Replication is a theoretical standard, not a requirement that every investigator duplicate his or  her own work for every project," he said. "Giving enough information in the report to enable another investigator to follow in your footsteps is enough. Just telling enough to make replication possible will build confidence."
+"Replication is a theoretical standard, not a requirement that every investigator duplicate his or her own work for every project," he said. "Giving enough information in the report to enable another investigator to follow in your footsteps is enough. Just telling enough to make replication possible will build confidence."
 
 But as simple as that sounds, it's not so simple. Ask social scientists.
 
@@ -131,7 +131,7 @@ An increasing number of data journalists are switching to tools like analysis no
 
 Combined with online sharing tools like GitHub, analysis notebooks seem to solve the problem of replication. But the number using them is small compared to those using spreadsheets. Recent examples of news organizations using analysis notebooks include the [Los Angeles Times](https://github.com/datadesk), the [New York Times](https://github.com/TheUpshot), [FiveThirtyEight](https://github.com/fivethirtyeight/data), and [Buzzfeed](https://github.com/BuzzFeedNews).
 
-Peter Aldous, a data journalist at Buzzfeed recently published a story about how the online news site used machine learning to find airplanes being used to spy on people in American cities. Published with the story is the code Aldous used to build his case.
+Peter Aldous, a former data journalist at Buzzfeed published a story about how the online news site used machine learning to find airplanes being used to spy on people in American cities. Published with the story is the code Aldous used to build his case.
 
 "I think of it this way: As a journalist, I don't like to simply trust what people tell me. Sometimes sources lie. Sometimes they're just mistaken. So I like to verify what I'm told," he wrote in an email. "By the same token, why should someone reading one of my articles believe my conclusions, if I don't provide the evidence that explains how I reached them?"
 
@@ -178,14 +178,14 @@ knitr::include_graphics(rep("images/verybasics2.png"))
 ```
 
 You will see that the notebook adds a lot of text for you. It tells you how to work in notebooks -- and you should read it. The most important parts are these: 
-
-To add text, simply type. To add code you can click on the *Insert* button on the toolbar or by pressing *Cmd+Option+I* on Mac or *Ctl+Alt+I* on Windows.
+* To add text, simply type. 
+* To add code you can click on the *Insert* button on the toolbar or by pressing *Cmd+Option+I* on Mac or *Ctl+Alt+I* on Windows.
 
 Highlight all that text and delete it. You should have a blank document. This document is called a R Markdown file -- it's a special form of text, one that you can style, and one you can include R in the middle of it. Markdown is a simple markup format that you can use to create documents. So first things first, let's give our notebook a big headline. Add this:
 
 `# My awesome notebook` 
 
-Now, under that, without any markup, just type This is my awesome notebook.
+Now, under that, without any markup, just type: This is my awesome notebook.
 
 Under that, you can make text bold by writing `It is **really** awesome`.
 
