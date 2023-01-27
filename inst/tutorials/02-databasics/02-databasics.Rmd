@@ -29,7 +29,7 @@ To start with, we need to understand the shape of data.
 
 ## Rows and columns
 
-Data, oversimplifying it a bit, is information organized. Generally speaking, it's organized into rows and columns. Rows, generally, are individual elements. A crime. A county. An accident. Columns, generally, are components of the data, sometimes called variables. So if each row is a crime, the first column might be the type. The second is the date and time. The third is the location. And so on. 
+Data, oversimplifying it a bit, is information organized. Generally speaking, it's organized into rows and columns. Rows, generally, are individual elements. A team. A player. A game. Columns, generally, are components of the data, sometimes called variables. So if each row is a player, the first column might be their name. The second is their position. The third is their batting average. And so on. 
 
 ```{r, echo=FALSE}
 knitr::include_graphics(rep("images/data1.png"))
@@ -64,7 +64,7 @@ Open a browser and go to the [LPD's log page](http://cjis.lincoln.ne.gov/~lpd/cf
 =importHTML("http://cjis.lincoln.ne.gov/~lpd/cfstoday.htm","table",1)
 ```
 
-This is **function**, with three **inputs**. The function is `importHTML` and the three inputs in order are the url of the page, the HTML tag we're after (a <table> tag in our case) and the number of the tag you're after. So our function says go to the LPD page and get the first table tag you find. Fortunately for us, there's only one. 
+This is **function**, with three **inputs**. The function is `importHTML` and the three inputs in order are the url of the page, the HTML tag we're after (a `<table>` tag in our case) and the number of the tag you're after. So our function says go to the LPD page and get the first table tag you find. Fortunately for us, there's only one. 
 
 If your version worked right, you've got the data from that page in a spreadsheet. 
 
@@ -79,8 +79,8 @@ knitr::include_graphics(rep("images/clean1.png"))
 The solution is easy:
 
 Edit > Select All or type command/control A
-Edit > Copy or type command/control C
-Edit > Paste Special > Values Only or type command/control shift V
+Edit > Copy or type command/control c
+Edit > Paste Special > Values Only or type command/control shift v
 
 You can verify that it worked by looking in that same row 1 column A, where you'll see the formula is gone.
 
