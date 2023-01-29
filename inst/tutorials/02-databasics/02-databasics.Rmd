@@ -61,10 +61,10 @@ The Lincoln Police Department publishes a daily summary of calls. Some days -- l
 Open a browser and go to the [LPD's log page](http://cjis.lincoln.ne.gov/~lpd/cfstoday.htm). Now, in a new tab, log into Google Docs/Drive and open a new spreadsheet. In the first cell of the first row, copy and paste this formula in:
 
 ```
-=importHTML("http://cjis.lincoln.ne.gov/~lpd/cfstoday.htm","table",1)
+=importHTML("http://cjis.lincoln.ne.gov/~lpd/cfstoday.htm","table",2)
 ```
 
-This is **function**, with three **inputs**. The function is `importHTML` and the three inputs in order are the url of the page, the HTML tag we're after (a `<table>` tag in our case) and the number of the tag you're after. So our function says go to the LPD page and get the first table tag you find. Fortunately for us, there's only one. 
+This is **function**, with three **inputs**. The function is `importHTML` and the three inputs in order are the url of the page, the HTML tag we're after (a `<table>` tag in our case) and the number of the tag you're after. So our function says go to the LPD page and get the *second* table tag you find. Unfortunately for us, there's more than one. Most times, the first one will be the only one. 
 
 If your version worked right, you've got the data from that page in a spreadsheet. 
 
