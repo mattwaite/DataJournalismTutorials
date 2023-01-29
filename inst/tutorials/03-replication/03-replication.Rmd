@@ -8,6 +8,15 @@ runtime: shiny_prerendered
 description: >
   Learn how to document your process.
 ---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(gradethis)
+library(tidyverse)
+knitr::opts_chunk$set(echo = FALSE)
+tutorial_options(exercise.completion=FALSE)
+```
+
 # Data journalism in the age of replication
 
 It's a single word in a single job description, but a Buzzfeed job posting in 2017 is another indicator in what could be a profound shift in how data journalism is both practiced and taught.
