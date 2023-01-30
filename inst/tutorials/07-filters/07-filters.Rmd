@@ -1,5 +1,5 @@
 ---
-title: "Lesson 5: Filters"
+title: "Data Journalism Lesson 5: Filters"
 output: 
   learnr::tutorial:
     progressive: true
@@ -7,7 +7,7 @@ output:
 runtime: shiny_prerendered
 description: >
   Learn how to narrow in on what's important and remove what isn't.
----
+--- 
 
 ```{r setup, include=FALSE}
 library(learnr)
@@ -28,14 +28,14 @@ More often than not, we have more data than we want. Sometimes we need to be rid
 
 **Selecting simply returns only the fields named**. So if you only want to see School and Attendance, you select those fields. When you look at your data again, you'll have two columns. If you try to use one of your columns that you had before you used select, you'll get an error.  
 
-Let's work on some examples using college football game data from last season. You can download the data here if you want to use it in your own notebook -- and this is the same data we used in the mutating tutorial, so if you already downloaded it, you don't need to do it again. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
+Let's work on some examples using the UNLPD reports data. You can download the data here if you want to use it in your own notebook -- and this is the same data we've used before, so if you already downloaded it, you don't need to do it again. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
 
 ```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
 library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv",
+  link = "http://mattwaite.github.io/datajournalismfiles/crimelogs.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -61,136 +61,127 @@ grade_this_code()
 Now import the data.
 
 ```{r filtering-load-data, message=FALSE, warning=FALSE}
-games <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
+crimes <- read_csv("http://mattwaite.github.io/datajournalismfiles/crimelogs.csv")
 
-rushinggames <- nrow(games %>% filter(RushingYds > 250))
+drunks <- crimes %>% filter(grepl("ALCOHOL", incident_code) == TRUE)
 
-bigrush <- games %>% filter(RushingYds > 250) %>% filter(Conference == "Big Ten Conference")
-
-powerfive <- c("Southeastern Conference", "Big Ten Conference", "Pac-12 Conference", "Big 12 Conference", "Atlantic Coast Conference")
-
-toprush <- games %>% 
-  filter(Conference %in% powerfive) %>% 
-  select(Team, Conference, RushingYds, Opponent) %>%
-  top_n(1, wt=RushingYds)
+arrests <- crimes %>% 
+  filter(grepl("ALCOHOL", incident_code) == TRUE) %>%
+  filter(grepl("Cleared by Arrest", disposition) == TRUE)
 ```
 ```{r filtering-load-data-exercise, exercise = TRUE}
-games <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
+crimes <- read_csv("http://mattwaite.github.io/datajournalismfiles/crimelogs.csv")
 ```
 ```{r filtering-load-data-exercise-solution}
-games <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
+crimes <- read_csv("http://mattwaite.github.io/datajournalismfiles/crimelogs.csv")
 ```
 ```{r filtering-load-data-exercise-check}
 grade_this_code()
 ```
 
-So, first things first, let's say we don't care about all this Air Force, Akron, Alabama crap and just want to see Dear Old Nebraska U. We do that with `filter` and then we pass it a condition. 
+So, first things first, let's look at one building on campus. We do that with `filter` and then we pass it a condition. 
 
 Before we do anything, a note about conditions. Most of the conditional operators you'll understand -- greater than and less than are > and <. The tough one to remember is equal to. In conditional statements, equal to is == not =. If you haven't noticed, = is a variable assignment operator, not a conditional statement. So equal is == and NOT equal is !=. 
 
-So if you want to see Nebraska, what would you do?
+So if you want to see the Nebraska Union, what would you do?
 
-First, let's use head to give us a peek at the data. This data's layout is ... not great ... so you're going to want to scroll all the way to the right to see the most useful columns for this exercise.
+First, let's use head to give us a peek at the data.
 
 ```{r head-data, exercise=TRUE, exercise.setup = "filtering-load-data"}
-head(?????)
+head(??????)
 ```
-```{r head-data-solution}
-head(games)
+```{r head-data-solution, exercise.reveal_solution = FALSE}
+head(crimes)
 ```
 ```{r head-data-check}
 grade_this_code()
 ```
 
-Now that we can see the column names, we now know Team is where the names of the universities are. Replace the all caps and question marks here and see if you can get only Nebraska.
+Now that we can see the column names, we now know `location` is where the addresses of the buildings are. The address of the Nebraska Union is `1400 R St` without a period after the St. Replace the all caps and question marks here and see if you can get only incidents at the Union.
 
-### Exercise 1: Dear Old Nebraska U 
+### Exercise 1: Hanging out at the Union 
 
 ```{r filtering-nebraska, exercise=TRUE, exercise.setup = "filtering-load-data"}
 NAMEOFDATA %>% filter(NAMEOFCOLUMN == "????????")
 ```
-```{r filtering-nebraska-solution}
-games %>% filter(Team == "Nebraska")
+```{r filtering-nebraska-solution, exercise.reveal_solution = FALSE}
+crimes %>% filter(location == "1400 R St")
 ```
 ```{r filtering-nebraska-check}
 grade_this_code()
 ```
 
-And what do you see? All of Nebraska's games last season. As much as we want to forget most of them, there they are.
+And what do you see? You see a lot of things going on at the Union.
 
-### Exercise 2: Run the damn ball
+### Exercise 2: Filter with fragments
 
-There's a certain strain of football fan around these parts that is absolutely obsessed with the past (cough cough cough) I mean running the ball. To this fan, run the ball = win. So what if we wanted to see games where teams ran for more than 250 yards?
+If you look at the crimes being reported to UNLPD, you'll see there's lots of different types. For example, there's four different kinds of narcotics charges on campus. There's nine unique alcohol related calls. 
 
-To do this, we need to know which column is rushing yards and we need to think about operators. We want more than 250 yards. Another name for more than, which you learned in math class in the third grade, is greater than. There's a symbol for that.
+But how do you write a filter that captures "ALCOHOL - DRUNK" and "ALCOHOL - MINOR IN POSSESSION"? You *could* do something like `... %>% filter(incident_code="ALCOHOL - DRUNK" | incident_code="ALCOHOL - MINOR IN POSSESSION")` where the pipe means this *or* this. But what about the seven other alcohol related incidents? Do you want to write all that code? No, you don't. 
 
-```{r filtering-rushers, exercise=TRUE, exercise.setup = "filtering-load-data"}
-NAMEOFDATA %>% filter(NAMEOFRUSHINGYARDSCOLUMN > ???)
+Computers have solved this. You can write a filter where a chunk of text contains a word or even part of a word. The function here is called `grepl`, and the basic pattern here is grepl is looking for X word in Y column of data. And if it finds it, it says `TRUE`. So our filter is saying if grepl == TRUE, then keep the row. See if you can fill it out, looking for ALCOHOL. 
+
+```{r filtering-alcohol, exercise=TRUE, exercise.setup = "filtering-load-data"}
+NAMEOFDATA %>% filter(grepl("???????", incident_code) == T???)
 ```
-```{r filtering-rushers-solution}
-games %>% filter(RushingYds > 250)
+```{r filtering-alcohol-solution, exercise.reveal_solution = FALSE}
+crimes %>% filter(grepl("ALCOHOL", incident_code) == TRUE)
 ```
-```{r filtering-rushers-check}
+```{r filtering-alcohol-check}
 grade_this_code()
 ```
 
-```{r rushers, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "filtering-load-data", results='asis'}
-glue("Look at that. There were {rushinggames} games last season where a team ran for more than 250 yards.")
-```
+But how many of those were drunks were arrested? To do this we're going to *chain* filters together, which is a fancy way of just saying we're going to add another. And when we do that, the effect is like saying AND. The data must match this AND this, so both things must be true.
 
-But how many of those were in the Big Ten? To do this we're going to *chain* filters together, which is a fancy way of just saying we're going to add another.
+### Exercise 3: Drunks under arrest
 
-Note: The conference name *must* be exact. B1G or Big Ten won't work. You have to spell it and capitalize it *exactly* like it is in the data. 
-
-### Exercise 3: B1G rushers
-
-```{r filtering-big, exercise=TRUE, exercise.setup = "filtering-load-data"}
+```{r filtering-drunks, exercise=TRUE, exercise.setup = "filtering-load-data"}
 NAMEOFDATA %>% 
-  filter(NAMEOFRUSHINGYARDSCOLUMN > ???) %>% 
-  filter(NAMEOFCONFERENCECOLUMN == "??????????????????")
+  filter(grepl("???????", incident_code) == T???) %>%
+  filter(?????("Cleared by Arrest", ???????????) == T???)
 ```
-```{r filtering-big-solution}
-games %>% 
-  filter(RushingYds > 250) %>% 
-  filter(Conference == "Big Ten Conference")
+```{r filtering-drunks-solution, exercise.reveal_solution = FALSE}
+crimes %>% 
+  filter(grepl("ALCOHOL", incident_code) == TRUE) %>%
+  filter(grepl("Cleared by Arrest", disposition) == TRUE)  
 ```
-```{r filtering-big-check}
+```{r filtering-drunks-check}
 grade_this_code()
 ```
 
-```{r bigrushers, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "filtering-load-data", results='asis'}
-glue("In the Big Ten last year, there were {nrow(bigrush)} games last season where a team ran for more than 250 yards. The next questions an analyst would ask are how many times did those teams win their games and does this hold consistently across seasons? Alas, another time. We have more filtering to do.")
+```{r drunsummary, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "filtering-load-data", results='asis'}
+glue("In this data, going back to 2018, there were {nrow(drunks)} alcohol related incidents. Of them, {nrow(arrests)} ended with an arrest. What does that say to you about alcohol incidents on campus?")
 ```
+
+But what if we want to see all of the dorms? We *could* use conditional logic in our filter. The conditional logic operators are `|` for OR and `&` for AND. **NOTE: AND means all conditions have to be met. OR means any of the conditions work.** So be careful about boolean logic. 
+
+Here's what that looks like with the first few residence hall addresses for the example. It's a lot of extra code that you've got to be careful with.
+
+```{r filtering-dorms, exercise=TRUE, exercise.setup = "filtering-load-data"}
+crimes %>%
+  filter(
+    location == "880 N 17th St" |
+    location == "860 N 17th St" |
+    location == "1150 N 14th St" |
+    location == "630 N 14th St"
+  )
+```
+```{r filtering-dorms-solution, exercise.reveal_solution = FALSE}
+crimes %>%
+  filter(
+    location == "880 N 17th St" |
+    location == "860 N 17th St" |
+    location == "1150 N 14th St" |
+    location == "630 N 14th St"
+  )
+```
+```{r filtering-dorms-check}
+grade_this_code()
+```
+
+But that's a lot of repetitive code. And a lot of typing. And typing is the devil. So what if we could create a list of addresses and pass it into the filter just once? It's pretty simple.
 
 ### Exercise 4: Filtering with a list
-
-But what if we want to see all of the Power Five conferences? We *could* use conditional logic in our filter. The conditional logic operators are `|` for OR and `&` for AND. **NOTE: AND means all conditions have to be met. OR means any of the conditions work.** So be careful about boolean logic. 
-
-Here's what that looks like. It's a lot of extra code that you've got to be careful with.
-
-```{r filtering-power5, exercise=TRUE, exercise.setup = "filtering-load-data"}
-games %>% 
-  filter(
-    Conference == "Big Ten Conference" | 
-      Conference == "Southeastern Conference" | 
-      Conference == "Pac-12 Conference" | 
-      Conference == "Atlantic Coast Conference" | 
-      Conference == "Big 12 Conference")
-```
-```{r filtering-power5-solution}
-games %>% 
-  filter(
-    Conference == "Big Ten Conference" | 
-      Conference == "Southeastern Conference" | 
-      Conference == "Pac-12 Conference" | 
-      Conference == "Atlantic Coast Conference" | 
-      Conference == "Big 12 Conference")
-```
-```{r filtering-power5-check}
-grade_this_code()
-```
-
-But that's a lot of repetitive code. And a lot of typing. And typing is the devil. So what if we could create a list of conferences and pass it into the filter just once? It's pretty simple.
 
 We can create a new variable -- remember variables can represent just about anything -- and create a list. To do that we use the `c` operator, which stands for concatenate. That just means take all the stuff in the parenthesis after the c and bunch it into a list. 
 
@@ -198,41 +189,41 @@ Note here: text is in quotes. If they were numbers, we wouldn't need the quotes.
 
 With a list, we can use the %in% operator. It does what you think it does -- it gives you data that matches things IN the list you give it. 
 
-```{r filtering-power, exercise=TRUE, exercise.setup = "filtering-load-data"}
-powerfive <- c("Southeastern Conference", "Big Ten Conference", "Pac-12 Conference", "Big 12 Conference", "Atlantic Coast Conference")
+```{r filtering-list, exercise=TRUE, exercise.setup = "filtering-load-data"}
+addresses <- c("880 N 17th St", "860 N 17th St", "1150 N 14th St", "630 N 14th St")
 
-NAMEOFDATA %>% filter(?????????? %in% ??????)
+NAMEOFDATA %>% filter(???????? %in% ????????? )
 ```
-```{r filtering-power-solution}
-powerfive <- c("Southeastern Conference", "Big Ten Conference", "Pac-12 Conference", "Big 12 Conference", "Atlantic Coast Conference")
+```{r filtering-list-solution, exercise.reveal_solution = FALSE}
+addresses <- c("880 N 17th St", "860 N 17th St", "1150 N 14th St", "630 N 14th St")
 
-games %>% filter(Conference %in% powerfive)
+crimes %>% filter(location %in% addresses)
 ```
-```{r filtering-power-check}
+```{r filtering-list-check}
 grade_this_code()
 ```
 
 ## Selecting data to make it easier to read
 
-So now we have our Power Five list. What if we just wanted to see team names, conferences and passing yards from the most recent season and ignore all the rest? Select to the rescue. With select, we just spell out exactly which columns we want to see. In our case, we've got three we're interested in seeing: Team, Conference and PassingYds. 
+So now we have a partial dorm list. What if we just wanted to see incident_codes, reported dates and locations and ignore all the rest? Select to the rescue. With select, we just spell out exactly which columns we want to see. In our case, we've got three we're interested in seeing: Team, Conference and PassingYds. 
 
 ### Exercise 5: Select to simplify 
 
-```{r selecting-power, exercise=TRUE, exercise.setup = "filtering-load-data"}
-powerfive <- c("Southeastern Conference", "Big Ten Conference", "Pac-12 Conference", "Big 12 Conference", "Atlantic Coast Conference")
+```{r selecting-dorms, exercise=TRUE, exercise.setup = "filtering-load-data"}
+addresses <- c("880 N 17th St", "860 N 17th St", "1150 N 14th St", "630 N 14th St")
 
 NAMEOFDATA %>% 
-  filter(???? %in% ??????) %>% 
-  select(????, ??????????, ??????????)
+  filter(???????? %in% ?????????) %>%
+  select(?????????????, ?????????, ?????????)
 ```
-```{r selecting-power-solution}
-powerfive <- c("Southeastern Conference", "Big Ten Conference", "Pac-12 Conference", "Big 12 Conference", "Atlantic Coast Conference")
+```{r selecting-dorms-solution, exercise.reveal_solution = FALSE}
+addresses <- c("880 N 17th St", "860 N 17th St", "1150 N 14th St", "630 N 14th St")
 
-games %>% 
-  filter(Conference %in% powerfive) %>% 
-  select(Team, Conference, PassingYds)
+crimes %>% 
+  filter(location %in% addresses) %>%
+  select(incident_code, reported, location)
 ```
-```{r selecting-power-check}
+```{r selecting-dorms-check}
 grade_this_code()
 ```
 
@@ -244,30 +235,28 @@ One last little dplyr trick that's nice to have in the toolbox is a shortcut for
 
 ### Exercise 6: Top N lists
 
-So what are the top rushing games by Power Five schools? All we're doing here is chaining commands together with what we've already got. We're *filtering* by our list of Power Five conferences, we're *selecting* the three fields we need. Now we'll introduce the new function: `top_n`. The `top_n` function just takes a number and a weight, abbreviated wt. So we want a top 10 list? Take what you did above and just add an arrange and then a `top_n` to the end with a number inside the ().
+So what are the top locations for alcohol? All we're doing here is chaining commands together with what we've already got. We're *filtering* our alcohol related charges, we're *grouping* by location, in summarize we're creating a count. We'll arrange it to get the largest count to the top. Now we'll introduce the new function: `top_n`. The `top_n` function just takes a number and a weight, abbreviated wt.
 
-```{r selecting-top-power, exercise=TRUE, exercise.setup = "filtering-load-data"}
-powerfive <- c("Southeastern Conference", "Big Ten Conference", "Pac-12 Conference", "Big 12 Conference", "Atlantic Coast Conference")
-
-NAMEOFDATA %>% 
-  filter(???? %in% ??????) %>% 
-  select(????, ??????????, ??????????) %>%
-  arrange(desc(NAMEOFRUSHINGYARDSCOLUMN)) %>% 
-  top_n(??, wt=NAMEOFRUSHINGYARDSCOLUMN)
+```{r selecting-top-locations, exercise=TRUE, exercise.setup = "filtering-load-data"}
+NAMEOFDATA %>%
+  group_by(????????) %>%
+  summarize(
+    count = n()
+  ) %>%
+  arrange(desc(?????)) %>%
+  top_n(10, wt=?????)
 ```
-```{r selecting-top-power-solution, exercise.reveal_solution = FALSE}
-powerfive <- c("Southeastern Conference", "Big Ten Conference", "Pac-12 Conference", "Big 12 Conference", "Atlantic Coast Conference")
-
-games %>% 
-  filter(Conference %in% powerfive) %>% 
-  select(Team, Conference, RushingYds) %>%
-  arrange(desc(RushingYds)) %>% 
-  top_n(10, wt=RushingYds)
+```{r selecting-top-locations-solution, exercise.reveal_solution = FALSE}
+crimes %>%
+  group_by(location) %>%
+  summarize(
+    count = n()
+  ) %>%
+  arrange(desc(count)) %>%
+  top_n(10, wt=count)
 ```
-```{r selecting-top-power-check}
+```{r selecting-top-locations-check}
 grade_this_code()
 ```
 
-```{r teamrushers, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "filtering-load-data", results='asis'}
-glue("Last season, it was {toprush$Team} that went off for {toprush$RushingYds} yards in a single game. Impressive, until you realize it was against {toprush$Opponent}.")
-```
+Anyone know where 300 N 17th Street is? It's the address of the university police. Is the most crime-ridden place on campus the police department? Not exactly. It's a convenient address for reports that don't have a clear location. 
