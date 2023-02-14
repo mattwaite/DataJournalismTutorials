@@ -249,7 +249,7 @@ grade_this_code()
 <div id="group-by-2-hint">
 **Hint:** The only thing new here is the arrange, and what goes in arrange comes from summarize, and it isn't the n() parts.
 </div>
-What is the most common position in volleyball? If you look at the row with the largest total, you get your answer. 
+What is the most common police call on campus? If you look at the row with the largest total, you get your answer. 
 
 ### Exercise 5: Grouping by more than one thing 
 
