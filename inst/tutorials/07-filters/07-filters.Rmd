@@ -205,7 +205,7 @@ grade_this_code()
 
 ## Selecting data to make it easier to read
 
-So now we have a partial dorm list. What if we just wanted to see incident_codes, reported dates and locations and ignore all the rest? Select to the rescue. With select, we just spell out exactly which columns we want to see. In our case, we've got three we're interested in seeing: Team, Conference and PassingYds. 
+So now we have a partial dorm list. What if we just wanted to see incident_codes, reported dates and locations and ignore all the rest? Select to the rescue. With select, we just spell out exactly which columns we want to see. In our case, we've got three we're interested in seeing: incident_code, reported and location. 
 
 ### Exercise 5: Select to simplify 
 
