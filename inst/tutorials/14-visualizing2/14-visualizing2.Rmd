@@ -1,0 +1,155 @@
+---
+title: "Data Journalism Lesson 14: Visualizing part 2: relationships"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+description: >
+  Making quick graphics for reporting.
+---
+```{r setup, include=FALSE}
+library(learnr)
+library(gradethis)
+library(tidyverse)
+library(ggrepel)
+knitr::opts_chunk$set(echo = FALSE)
+tutorial_options(exercise.completion=FALSE)
+```
+
+# More visualizing your data for reporting
+
+One of the most powerful things that we can do with visualizing data is establish relationships and find when things don't fit the relationship. Earlier in this course, you worked with some PPP data that included population and you were asked who had the most loans. And it was always the most populous county -- Douglas. The point of that was that with obvious things like where were the most loans issued, population is going to dictate it. But what happens when it doesn't? 
+
+We'll start with libraries. 
+
+```{r load-tidyverse, exercise=TRUE}
+library(tidyverse)
+library(ggrepel)
+```
+```{r load-tidyverse-solution}
+library(tidyverse)
+library(ggrepel)
+```
+```{r load-tidyverse-check}
+grade_this_code()
+```
+
+We'll work with the PPP data with populations that we worked with before called ppppop.csv. This is the same data we've used before, so if you already downloaded it, you don't need to do it again. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
+
+```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
+library(downloadthis)
+library(glue)
+
+dllink <- download_link(
+  link = "https://mattwaite.github.io/datajournalismfiles/ppppop.csv",
+  button_label = "Download csv file",
+  button_type = "danger",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
+
+```
+
+Now import the data.
+
+```{r chart-load-data, message=FALSE, warning=FALSE}
+ppp <- read_csv("http://mattwaite.github.io/datajournalismfiles/ppppop.csv")
+
+smallercounties <- ppp %>%
+  filter(total_loans < 4000)
+```
+```{r chart-load-data-exercise, exercise = TRUE}
+ppp <- read_csv("http://mattwaite.github.io/datajournalismfiles/ppppop.csv")
+```
+```{r chart-load-data-exercise-solution}
+ppp <- read_csv("http://mattwaite.github.io/datajournalismfiles/ppppop.csv")
+```
+```{r chart-load-data-exercise-check}
+grade_this_code()
+```
+
+## Scatterplots
+
+Scatterplots are, for my money, the most revealing and useful chart type out there that isn't a map. They reveal so much, and they allow you to make comparisons between two numbers. With a scatterplot, we put what predicts the thing on the x axis, and the thing being predicted on the y axis. `geom_point` works just like other geoms -- we need an x and a y and a data element. Both x and y  are numbers. 
+
+We're also going to add a second geom here called `geom_smooth`. This geom creates a line of best fit -- remember algebra and the equation of a line? This is it. This line best fits through all the dots. You can think of it like a prediction. Given all the data, the line is what you should expect given your two numbers. The x and y are identical, and it just takes a couple of extra bits on the end. 
+
+Let's start by charting the 2021 column of population numbers and the total number of loans as our x and y.  
+
+### Excercise 1: First scatterplot
+
+```{r scatter1, exercise=TRUE, exercise.setup = "chart-load-data"}
+ggplot() + 
+  geom_point(data=???, aes(x=`????`, y=total_loans)) + 
+  geom_smooth(data=???, aes(x=`????`, y=total_loans), method="lm", se=FALSE)
+```
+```{r scatter1-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_point(data=ppp, aes(x=`2021`, y=total_loans)) + 
+  geom_smooth(data=ppp, aes(x=`2021`, y=total_loans), method="lm", se=FALSE)
+```
+```{r scatter1-check}
+grade_this_code()
+```
+
+Note the dot on the far right. That's Douglas County. The line of best fit goes right through it. And you see just how much bigger Omaha is from the rest of the state. Even to the second farthest right dot Lancaster and the third farthest dot right which is Sarpy. 
+
+But what happens when we remove those three big counties? 
+
+Let's filter so we only get counties with fewer than 4000 loans.
+
+### Exercise 3: Get smaller
+
+```{r scatter2, exercise=TRUE, exercise.setup = "chart-load-data"}
+smallercounties <- ppp %>%
+  filter(total_loans < ????)
+```
+```{r scatter2-solution, exercise.reveal_solution = FALSE}
+smallercounties <- ppp %>%
+  filter(total_loans < 4000)
+```
+```{r scatter2-check}
+grade_this_code()
+```
+
+Now that we've got that, let's chart it.
+
+### Exercise 4: One more scatter
+
+```{r scatter3, exercise=TRUE, exercise.setup = "chart-load-data"}
+ggplot() + 
+  geom_point(data=???????????????, aes(x=`2021`, y=total_loans)) + 
+  geom_smooth(data=???????????????, aes(x=`2021`, y=total_loans), method="lm", se=FALSE)
+```
+```{r scatter3-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_point(data=smallercounties, aes(x=`2021`, y=total_loans)) + 
+  geom_smooth(data=smallercounties, aes(x=`2021`, y=total_loans), method="lm", se=FALSE)
+```
+```{r scatter3-check}
+grade_this_code()
+```
+
+Better, but what dot is which county? To get that, we're going to add another geom. This one is called `geom_text_repel` and it's going to add text near each dot -- a `label` -- without them overlapping. So is it going to label them all? No, especially where they bunch close together. But it will help us see what we need to see. The smartest column for us to use here is the ProjectCountyName.
+
+### Exercise 5: Labeling
+
+```{r scatter4, exercise=TRUE, exercise.setup = "chart-load-data"}
+ggplot() + 
+  geom_point(data=???????????????, aes(x=`2021`, y=total_loans)) + 
+  geom_smooth(data=???????????????, aes(x=`2021`, y=total_loans), method="lm", se=FALSE) +
+  geom_text_repel(data=smallercounties, aes(x=`2021`, y=total_loans, label=???????????????))
+```
+```{r scatter4-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_point(data=smallercounties, aes(x=`2021`, y=total_loans)) + 
+  geom_smooth(data=smallercounties, aes(x=`2021`, y=total_loans), method="lm", se=FALSE) +
+  geom_text_repel(data=smallercounties, aes(x=`2021`, y=total_loans, label=ProjectCountyName))
+```
+```{r scatter4-check}
+grade_this_code()
+```
