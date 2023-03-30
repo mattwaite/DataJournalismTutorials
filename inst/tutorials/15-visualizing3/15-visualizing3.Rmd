@@ -1,0 +1,111 @@
+---
+title: "Data Journalism Lesson 15: Visualizing part 3: Datawrapper"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+description: >
+  Making quick graphics for publication
+---
+```{r setup, include=FALSE}
+library(learnr)
+library(gradethis)
+library(tidyverse)
+knitr::opts_chunk$set(echo = FALSE)
+tutorial_options(exercise.completion=FALSE)
+```
+
+# Visualizing your data with Datawrapper
+
+Making charts in Datawrapper is preposterously simple, which is the point. There are dozens of chart types, and dozens of options. To get from a csv to a chart to publication is very, very easy.
+
+First, go to [datawrapper.de](https://www.datawrapper.de/) and sign up for an account. It’s free.
+
+## Data prep
+
+Next, we need some data. **Start a notebook in your homework directory**, copy this block of code and run it: 
+
+```
+library(tidyverse)
+
+predictions <- read_csv("https://mattwaite.github.io/datajournalismfiles/predictions.csv")
+
+preds <- predictions %>% filter(year == 2023) %>%
+  separate(coordinates, into=c("latitude", "longitude"), sep=",") 
+
+write_csv(preds, "predictions.csv")
+```
+
+This block of code does a few things -- it pulls in the groundhog predictions data we've worked with, filters for just this last year and separates the latitude and longitude coordinates into separate columns. Then, using write_csv it writes the dataframe out to a csv file. It's the opposite of read_csv. 
+
+After you run that, you'll have a csv file in your homework directory called predictions.csv. We'll use that for our datawrapper example. 
+
+## Working in Datawrapper
+
+In your Datawrapper dashboard, we want to start with a new chart. One thing Datawrapper does exceptionally well is create interactive maps. So let's make one.
+
+```{r, echo=FALSE, out.width = "100%"}
+knitr::include_graphics(rep("images/datawrapper1.png"))
+```
+
+We're going to make a symbol map because our data is made up of points. Another very common map type is the Cholopleth map where each unit of geography is shaded in by the value.
+
+```{r, echo=FALSE, out.width = "100%"}
+knitr::include_graphics(rep("images/datawrapper2.png"))
+```
+
+Our data includes points in Canada, so we want to select North America as our base map and then proceed.
+
+```{r, echo=FALSE, out.width = "100%"}
+knitr::include_graphics(rep("images/datawrapper3.png"))
+```
+
+Here's where that work of creating the data comes in. Go find the predictions.csv file on your computer and add it here.
+
+```{r, echo=FALSE, out.width = "100%"}
+knitr::include_graphics(rep("images/datawrapper4.png"))
+```
+
+We'll go to match and make sure Datawrapper found our latitude and longitude coordinates worked.
+
+```{r, echo=FALSE, out.width = "100%"}
+knitr::include_graphics(rep("images/datawrapper5.png"))
+```
+
+We'll start with refining our map. We'll start to work with color palletes. You should change it to Step given that we're going to shade it by the shadow column -- which is only 1 or 0. 
+
+```{r, echo=FALSE, out.width = "100%"}
+knitr::include_graphics(rep("images/datawrapper6.png"))
+```
+
+Now we can fiddle with the legend to make it so instead of saying 1 or 0 it says late winter or early spring. 
+
+```{r, echo=FALSE, out.width = "100%"}
+knitr::include_graphics(rep("images/datawrapper7.png"))
+```
+
+Now we need to annotate our chart. We need a headline, some chatter (the description), the [data source](https://groundhog-day.com/) and a credit line. 
+
+```{r, echo=FALSE, out.width = "100%"}
+knitr::include_graphics(rep("images/datawrapper11.png"))
+```
+
+One great part of interactive maps are tooltips, where you can click on the dot and get information about it. So let's enable tooltips and customize them.
+
+```{r, echo=FALSE, out.width = "100%"}
+knitr::include_graphics(rep("images/datawrapper9.png"))
+```
+
+You can always test what you see on the tooltips using the preview map on the right. Hover over a dot, see what it looks like.
+
+```{r, echo=FALSE, out.width = "100%"}
+knitr::include_graphics(rep("images/datawrapper10.png"))
+```
+
+If you're happy with it, go on and proceed to the end. For credit for doing this, click the png button and upload that to Canvas.
+
+```{r, echo=FALSE, out.width = "100%"}
+knitr::include_graphics(rep("images/datawrapper12.png"))
+```
+

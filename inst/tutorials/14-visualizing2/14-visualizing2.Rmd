@@ -102,7 +102,7 @@ But what happens when we remove those three big counties?
 
 Let's filter so we only get counties with fewer than 4000 loans.
 
-### Exercise 3: Get smaller
+### Exercise 2: Get smaller
 
 ```{r scatter2, exercise=TRUE, exercise.setup = "chart-load-data"}
 smallercounties <- ppp %>%
@@ -118,7 +118,7 @@ grade_this_code()
 
 Now that we've got that, let's chart it.
 
-### Exercise 4: One more scatter
+### Exercise 3: One more scatter
 
 ```{r scatter3, exercise=TRUE, exercise.setup = "chart-load-data"}
 ggplot() + 
@@ -136,7 +136,7 @@ grade_this_code()
 
 Better, but what dot is which county? To get that, we're going to add another geom. This one is called `geom_text_repel` and it's going to add text near each dot -- a `label` -- without them overlapping. So is it going to label them all? No, especially where they bunch close together. But it will help us see what we need to see. The smartest column for us to use here is the ProjectCountyName.
 
-### Exercise 5: Labeling
+### Exercise 4: Labeling
 
 ```{r scatter4, exercise=TRUE, exercise.setup = "chart-load-data"}
 ggplot() + 
