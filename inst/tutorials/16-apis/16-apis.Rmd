@@ -1,0 +1,199 @@
+---
+title: "Data Journalism Lesson 16: An introduction to APIs"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+description: >
+  Making quick graphics for publication
+---
+```{r setup, include=FALSE}
+library(learnr)
+library(gradethis)
+library(tidyverse)
+library(tidycensus)
+knitr::opts_chunk$set(echo = FALSE)
+tutorial_options(exercise.completion=FALSE)
+```
+
+# Intro to APIs: The Census
+
+There is truly an astonishing amount of data collected by the US Census Bureau. First, there's the Census that most people know -- the every 10 year census. That's the one mandated by the Constitution where the government attempts to count every person in the US. It's a mind-boggling feat to even try, and billions get spent on it. That data is used first for determining how many representatives each state gets in Congress. From there, the Census gets used to divide up billions of dollars of federal spending. 
+
+To answer the questions the government needs to do that, a ton of data gets collected. That, unfortunately, means the Census is exceedingly complicated to work with. The good news is, the Census has an API -- an application programming interface. What that means is we can get data directly through the Census Bureau via calls over the internet. 
+
+Let's demonstrate. 
+
+We're going to use a library called `tidycensus` which makes calls to the Census API in a very tidy way, and gives you back tidy data. That means we don't have to go through the process of importing the data from a file. I can't tell you how amazing this is, speaking from experience.
+
+```{r load-tidyverse, exercise=TRUE}
+library(tidyverse)
+library(tidycensus)
+```
+```{r load-tidyverse-solution}
+library(tidyverse)
+library(tidycensus)
+```
+```{r load-tidyverse-check}
+grade_this_code()
+```
+
+To use the API, you need an API key. To get that, you need to [apply for an API key with the Census Bureau](https://api.census.gov/data/key_signup.html). It takes a few minutes and you need to activate your key via email. Once you have your key, you need to set that for in your environment. If you've already done that per instructions, this should already work. 
+
+Just FYI: Your key is your key. Do not share it around.
+
+So to give you some idea of how complicated the data is, let's pull up just one file from the decennial Census. We'll use the PL 94-171 file. This is the file the Census Bureau uses for redistricting. It has the major population and housing stuff. 
+
+```{r census-load-data, message=FALSE, warning=FALSE}
+pl <- load_variables(2020, "pl", cache = TRUE)
+
+counties11 <- get_acs(geography = "county", 
+              variables = "B01001_001", 
+              state = "NE", 
+              year = 2011)
+
+counties21 <- get_acs(geography = "county", 
+              variables = "B01001_001", 
+              state = "NE", 
+              year = 2021)
+
+pop21 <- counties21 %>% select(GEOID, NAME, estimate) %>% rename(Population2021=estimate)
+
+pop11 <- counties11 %>% select(GEOID, NAME, estimate) %>% rename(Population2011=estimate)
+
+alldata <- pop21 %>% inner_join(pop11)
+```
+```{r census-load-data-exercise, exercise = TRUE}
+pl <- load_variables(2020, "pl", cache = TRUE)
+```
+```{r census-load-data-exercise-solution}
+pl <- load_variables(2020, "pl", cache = TRUE)
+```
+```{r census-load-data-exercise-check}
+grade_this_code()
+```
+
+Now glimpse it: 
+
+```{r census2, exercise=TRUE, exercise.setup = "census-load-data"}
+glimpse(pl)
+```
+```{r census2-solution, exercise.reveal_solution = FALSE}
+glimpse(pl)
+```
+```{r census2-check}
+grade_this_code()
+```
+
+There's 301 rows of data. That's 301 different kinds of data you can get from just six questions on the Census form. Population, population by race and ethnicity, population by age, housing, etc. 
+
+If you think that's crazy, there's 3,346 variables in Summary File 1, which is the PL data's more enumerated big brother. The really, really big one is SF3 file it has 5,555 variables.
+
+Let's try to answer a question using the Census. What is the fastest growing county in Nebraska? Fastest shrinking? We'll use the American Community Survey, a massive rolling survey of Americans. There are better datsets for this, but this is an example. 
+
+We're going to use a function called `get_acs`, which allows us to access all of the American Community Survey. You can explore the vastness of the Census in their [data explorer](https://data.census.gov/). We're going to focus on total population, which you can get with variable B01001_001. 
+
+### Exercise 1: Your first query
+
+Start with 2021.
+
+```{r census3, exercise=TRUE, exercise.setup = "census-load-data"}
+counties21 <- get_acs(geography = "county", 
+              variables = "B01001_001", 
+              state = "NE", 
+              year = ????)
+```
+```{r census3-solution, exercise.reveal_solution = FALSE}
+counties21 <- get_acs(geography = "county", 
+              variables = "B01001_001", 
+              state = "NE", 
+              year = 2021)
+```
+```{r census3-check}
+grade_this_code()
+```
+
+Now 2011.
+
+```{r census4, exercise=TRUE, exercise.setup = "census-load-data"}
+counties11 <- get_acs(geography = "county", 
+              variables = "B01001_001", 
+              state = "NE", 
+              year = 2011)
+```
+```{r census4-solution, exercise.reveal_solution = FALSE}
+counties11 <- get_acs(geography = "county", 
+              variables = "B01001_001", 
+              state = "NE", 
+              year = 2011)
+```
+```{r census4-check}
+grade_this_code()
+```
+
+### Exercise 2: Taking a look
+
+Let's look at counties21 of them, and you'll see an issue. 
+
+```{r census5, exercise=TRUE, exercise.setup = "census-load-data"}
+head(????????)
+```
+```{r census5-solution, exercise.reveal_solution = FALSE}
+head(counties21)
+```
+```{r census5-check}
+grade_this_code()
+```
+
+As you can see, we have a GEOID, NAME, then estimate and moe. Estimate and moe are going to be the same in both. Because those are named the same thing -- and neither indicates the year -- to merge them together, we need to rename them. 
+
+### Exercise 3: Renaming 
+
+```{r census6, exercise=TRUE, exercise.setup = "census-load-data"}
+pop21 <- counties21 %>% select(GEOID, NAME, estimate) %>% rename(Population20??=estimate)
+
+pop11 <- counties11 %>% select(GEOID, NAME, estimate) %>% rename(Population20??=estimate)
+```
+```{r census6-solution, exercise.reveal_solution = FALSE}
+pop21 <- counties21 %>% select(GEOID, NAME, estimate) %>% rename(Population2021=estimate)
+
+pop11 <- counties11 %>% select(GEOID, NAME, estimate) %>% rename(Population2011=estimate)
+```
+```{r census6-check}
+grade_this_code()
+```
+
+Now we join the data together. Let's start with the new data and join the old data to it. 
+
+### Exercise 4: Joins
+
+```{r census7, exercise=TRUE, exercise.setup = "census-load-data"}
+alldata <- pop?? %>% inner_join(pop??)
+```
+```{r census7-solution, exercise.reveal_solution = FALSE}
+alldata <- pop21 %>% inner_join(pop11)
+```
+```{r census7-check}
+grade_this_code()
+```
+
+### Exercise 5: Percent change
+
+Now we have all the data we need to calculate percent change. Remember: Percent change is (new - old)/old.
+
+```{r census8, exercise=TRUE, exercise.setup = "census-load-data"}
+alldata %>% 
+  mutate(PercentChange = (Population20?? - Population20??)/Population20??) %>%
+  arrange(desc(PercentChange))
+```
+```{r census8-solution, exercise.reveal_solution = FALSE}
+alldata %>% 
+  mutate(PercentChange = (Population2021 - Population2011)/Population2011) %>%
+  arrange(desc(PercentChange))
+```
+```{r census8-check}
+grade_this_code()
+```
+
+And just like that: Keya Paha is the fastest growing by percentage. Huh.
