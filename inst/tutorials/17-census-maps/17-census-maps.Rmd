@@ -1,0 +1,255 @@
+---
+title: "Data Journalism Lesson 17: Quick maps with Census data"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+description: >
+  Making quick maps for reporting and publication
+---
+```{r setup, include=FALSE}
+library(learnr)
+library(gradethis)
+library(tidyverse)
+library(tidycensus)
+library(tigris)
+library(sf)
+options(tigris_use_cache = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
+tutorial_options(exercise.completion=FALSE)
+```
+
+# Quick maps with Census data
+
+## The basics
+
+Up to now, we've been looking at patterns in data for what is more than this, or what's the middle look like. We've calculated metrics like per capita rates, or looked at how data changes over time. 
+
+Another way we can look at the data is geographically. Is there a spatial pattern to our data? Can we learn anything by using distance as a metric? What if we merge non-geographic data into geographic data? 
+
+The bad news is that there isn't a One Library To Rule Them All when it comes to geo queries in R. But there's one emerging, called Simple Features, that is very good. That's where we'll start -- loading libraries we'll need. We'll need the `tidyverse` for data manipulation, `tidycensus` to pull data from the Census Bureau, `tigris` to give us access to Census Bureau maps and `sf` to display it all when we're where we need to go.
+
+```{r load-tidyverse, exercise=TRUE}
+library(tidyverse)
+library(tidycensus)
+library(tigris)
+library(sf)
+options(tigris_use_cache = TRUE)
+```
+```{r load-tidyverse-solution}
+library(tidyverse)
+library(tidycensus)
+library(tigris)
+library(sf)
+options(tigris_use_cache = TRUE)
+```
+```{r load-tidyverse-check}
+grade_this_code()
+```
+
+## Answering a question with Census maps
+
+Let's do a simple version of this first and then a more complicated one. How about just a map of population in Nebraska? In the last tutorial, we ran a block that pulled county populations in Nebraska and we'll do that again here. This time, however, we're going to add one bit: `geometry = TRUE` which is going to use the `tigris` library and add geographic features to our dataframe as a simple features file. 
+
+```{r census-load-data, message=FALSE, warning=FALSE}
+counties21 <- get_acs(
+  geography = "county", 
+  variables = "B01001_001",
+  geometry = TRUE, 
+  state = "NE", 
+  year = 2021)
+
+totalpop <- get_acs(
+  state = "NE",
+  geography = "county",
+  variables = "B03001_001",
+  geometry = TRUE,
+  year = 2021
+) %>%
+  rename(
+    total_population = estimate,
+  ) %>%
+  select(-moe, -variable)
+
+hispanic <- get_acs(
+  state = "NE",
+  geography = "county",
+  variables = "B03001_003",
+  geometry = FALSE,
+  year = 2021
+) %>%
+  rename(
+    hispanic = estimate,
+  ) %>%
+  select(-moe, -variable)
+
+counties <- totalpop %>%
+  inner_join(hispanic) %>%
+  mutate(
+    percent_hispanic = (hispanic/total_population)*100
+    )
+```
+```{r census-load-data-exercise, exercise = TRUE}
+counties21 <- get_acs(
+  geography = "county", 
+  variables = "B01001_001",
+  geometry = TRUE, 
+  state = "NE", 
+  year = 2021)
+```
+```{r census-load-data-exercise-solution}
+counties21 <- get_acs(
+  geography = "county", 
+  variables = "B01001_001",
+  geometry = TRUE, 
+  state = "NE", 
+  year = 2021)
+```
+```{r census-load-data-exercise-check}
+grade_this_code()
+```
+
+To see it, we're going to add our data to a ggplot. The `sf` package has added some geoms to our toolbox, and making a simple map is very, very easy. You just start with your new dataframe name and the name of your data column. In this case, that column name is `estimate`.
+
+### Exercise 1: Make a map
+
+```{r census2, exercise=TRUE, exercise.setup = "census-load-data"}
+?????????? %>%
+  ggplot(aes(fill = ????????)) + 
+  geom_sf(color = NA) + 
+  scale_fill_viridis_c(option = "magma") 
+```
+```{r census2-solution, exercise.reveal_solution = FALSE}
+counties21 %>%
+  ggplot(aes(fill = estimate)) + 
+  geom_sf(color = NA) + 
+  scale_fill_viridis_c(option = "magma") 
+```
+```{r census2-check}
+grade_this_code()
+```
+
+And just that fast, you can see lots of people live in Omaha and Lincoln and not a lot of people live in certain areas of the state.
+
+## A more complex example
+
+Let's ask a more significant question: Which counties have the largest populations of people of Hispanic origin? In this case, we're going to look at it as a percentage of the population, not just a number.
+
+To do this, we're going to need to this in a few steps. The goal is to have a dataframe that has the total number of people in a county, the total number of people reporting Hispanic origin, and then we'll use mutate to calculate a percentage. We're going to need to use a join along the way, and we're going to need to use select to make that join easier on us. 
+
+The first dataframe we're going to make will have the total population in it. It will also have the geography. We want just one of our dataframes to be geographic, because spatial joins -- where you join two map files -- are much more complicated than we want to get into today. 
+
+In this dataframe, we need to do two extra things after we get the data. We're going to rename the estimate column first -- we want it to be named what it is to help us later. Then we're going to use select to drop the moe and variable columns so we don't have them later to complicate our joins. 
+
+### Exercise 2: Getting the total population
+
+```{r census3, exercise=TRUE, exercise.setup = "census-load-data"}
+totalpop <- get_acs(
+  state = "NE",
+  geography = "county",
+  variables = "B03001_001",
+  geometry = ????,
+  year = 2021
+) %>%
+  rename(
+    total_population = ????????,
+  ) %>%
+  select(-???, -???????)
+```
+```{r census3-solution, exercise.reveal_solution = FALSE}
+totalpop <- get_acs(
+  state = "NE",
+  geography = "county",
+  variables = "B03001_001",
+  geometry = TRUE,
+  year = 2021
+) %>%
+  rename(
+    total_population = estimate,
+  ) %>%
+  select(-moe, -variable)
+```
+```{r census3-check}
+grade_this_code()
+```
+
+Now we'll do the same thing for getting the number of people who are of Hispanic origin. However, this time we do NOT want geography. 
+
+## Exercise 3: Getting Hispanic numbers
+
+```{r census4, exercise=TRUE, exercise.setup = "census-load-data"}
+hispanic <- get_acs(
+  state = "NE",
+  geography = "county",
+  variables = "B03001_003",
+  geometry = ?????,
+  year = 2021
+) %>%
+  rename(
+    hispanic = ????????,
+  ) %>%
+  select(-???, -????????)
+```
+```{r census4-solution, exercise.reveal_solution = FALSE}
+hispanic <- get_acs(
+  state = "NE",
+  geography = "county",
+  variables = "B03001_003",
+  geometry = FALSE,
+  year = 2021
+) %>%
+  rename(
+    hispanic = estimate,
+  ) %>%
+  select(-moe, -variable)
+```
+```{r census4-check}
+grade_this_code()
+```
+
+Now we're ready to join them together. While we're at it, we might as well calculate the percentage. 
+
+### Exercise 4: Joining and mutating
+
+To calculate that percentage, you'll need the names of the renamed columns you got before. You renamed estimate twice. What did you call them? 
+
+```{r census5, exercise=TRUE, exercise.setup = "census-load-data"}
+counties <- totalpop %>%
+  inner_join(hispanic) %>%
+  mutate(
+    percent_hispanic = (???????/?????_??????????)*100
+    )
+```
+```{r census5-solution, exercise.reveal_solution = FALSE}
+counties <- totalpop %>%
+  inner_join(hispanic) %>%
+  mutate(
+    percent_hispanic = (hispanic/total_population)*100
+    )
+```
+```{r census5-check}
+grade_this_code()
+```
+
+And now, with a dataframe called `counties`, we're ready to make a map.
+
+### Exercise 5: Making a map
+
+For the fill ... why did we just do all that work above? Why calculate a number if we're not going to use it?
+
+```{r census6, exercise=TRUE, exercise.setup = "census-load-data"}
+???????? %>%
+  ggplot(aes(fill = ???????_????????)) + 
+  geom_sf(color = NA) + 
+  scale_fill_viridis_c(option = "magma") 
+```
+```{r census6-solution, exercise.reveal_solution = FALSE}
+counties %>%
+  ggplot(aes(fill = percent_hispanic)) + 
+  geom_sf(color = NA) + 
+  scale_fill_viridis_c(option = "magma") 
+```
+```{r census6-check}
+grade_this_code()
+```
