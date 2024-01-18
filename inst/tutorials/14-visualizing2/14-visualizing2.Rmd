@@ -59,7 +59,7 @@ Now import the data.
 ```{r chart-load-data, message=FALSE, warning=FALSE}
 ppp <- read_csv("http://mattwaite.github.io/datajournalismfiles/ppppop.csv")
 
-smallercounties <- ppp %>%
+smallercounties <- ppp |>
   filter(total_loans < 4000)
 ```
 ```{r chart-load-data-exercise, exercise = TRUE}
@@ -84,8 +84,8 @@ Let's start by charting the 2021 column of population numbers and the total numb
 
 ```{r scatter1, exercise=TRUE, exercise.setup = "chart-load-data"}
 ggplot() + 
-  geom_point(data=???, aes(x=`????`, y=total_loans)) + 
-  geom_smooth(data=???, aes(x=`????`, y=total_loans), method="lm", se=FALSE)
+  geom_point(data=____, aes(x=`____`, y=total_loans)) + 
+  geom_smooth(data=____, aes(x=`____`, y=total_loans), method="lm", se=FALSE)
 ```
 ```{r scatter1-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
@@ -105,11 +105,11 @@ Let's filter so we only get counties with fewer than 4000 loans.
 ### Exercise 2: Get smaller
 
 ```{r scatter2, exercise=TRUE, exercise.setup = "chart-load-data"}
-smallercounties <- ppp %>%
-  filter(total_loans < ????)
+smallercounties <- ppp |>
+  filter(total_loans < ____)
 ```
 ```{r scatter2-solution, exercise.reveal_solution = FALSE}
-smallercounties <- ppp %>%
+smallercounties <- ppp |>
   filter(total_loans < 4000)
 ```
 ```{r scatter2-check}
@@ -122,8 +122,8 @@ Now that we've got that, let's chart it.
 
 ```{r scatter3, exercise=TRUE, exercise.setup = "chart-load-data"}
 ggplot() + 
-  geom_point(data=???????????????, aes(x=`2021`, y=total_loans)) + 
-  geom_smooth(data=???????????????, aes(x=`2021`, y=total_loans), method="lm", se=FALSE)
+  geom_point(data=____, aes(x=`2021`, y=total_loans)) + 
+  geom_smooth(data=____, aes(x=`2021`, y=total_loans), method="lm", se=FALSE)
 ```
 ```{r scatter3-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
@@ -140,9 +140,9 @@ Better, but what dot is which county? To get that, we're going to add another ge
 
 ```{r scatter4, exercise=TRUE, exercise.setup = "chart-load-data"}
 ggplot() + 
-  geom_point(data=???????????????, aes(x=`2021`, y=total_loans)) + 
-  geom_smooth(data=???????????????, aes(x=`2021`, y=total_loans), method="lm", se=FALSE) +
-  geom_text_repel(data=smallercounties, aes(x=`2021`, y=total_loans, label=???????????????))
+  geom_point(data=____, aes(x=`2021`, y=total_loans)) + 
+  geom_smooth(data=____, aes(x=`2021`, y=total_loans), method="lm", se=FALSE) +
+  geom_text_repel(data=smallercounties, aes(x=`2021`, y=total_loans, label=____))
 ```
 ```{r scatter4-solution, exercise.reveal_solution = FALSE}
 ggplot() + 

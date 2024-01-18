@@ -72,8 +72,8 @@ Now we load our data. There's some issues with this data that requires you to ad
 ```{r janitor-load-data, message=FALSE, warning=FALSE}
 inmates <- read_csv("http://mattwaite.github.io/datajournalismfiles/inmateDownloadActive.csv", guess_max = 5000)
 
-clean_headers_inmates <- inmates %>% 
-  clean_names() %>% 
+clean_headers_inmates <- inmates |> 
+  clean_names() |> 
   remove_empty(which = c("cols", "rows"))
 ```
 ```{r janitor-load-data-exercise, exercise = TRUE}
@@ -95,10 +95,10 @@ Janitor makes this easy to fix. How easy? This easy. How easy? Janitor has a fun
 ### Exercise 1: Cleaning up column names
 
 ```{r cleannames-data, exercise=TRUE, exercise.setup = "janitor-load-data"}
-inmates %>% ?????_???????
+inmates |> _________
 ```
 ```{r cleannames-data-solution, exercise.reveal_solution = FALSE}
-inmates %>% clean_names()
+inmates |> clean_names()
 ```
 ```{r cleannames-data-check}
 grade_this_code()
@@ -113,13 +113,13 @@ Another thing janitor does well is to make it easy to drop empty columns and row
 If you look at the output of `readr`, you'll see 7,838 observations of 35 variables. Janitor has a function called `remove_empty()` where you have to specify which of `rows` or `cols` you want to remove. If they're empty, why have them at all?
 
 ```{r remove-data, exercise=TRUE, exercise.setup = "janitor-load-data"}
-inmates %>% 
-  clean_names() %>% 
-  remove_empty(which = c("c???", "r???"))
+inmates |> 
+  clean_names() |> 
+  remove_empty(which = c("c____", "r____"))
 ```
 ```{r remove-data-solution, exercise.reveal_solution = FALSE}
-inmates %>% 
-  clean_names() %>% 
+inmates |> 
+  clean_names() |> 
   remove_empty(which = c("cols", "rows"))
 ```
 ```{r remove-data-check}
@@ -131,13 +131,13 @@ And by using `remove_empty()`, how many columns and rows do we get rid of that w
 Let's save what we've done so we can use it for the rest of the exercise into a new dataframe called `clean_headers_inmates`.
 
 ```{r save-data, exercise=TRUE, exercise.setup = "janitor-load-data"}
-clean_headers_inmates <- inmates %>% 
-  clean_names() %>% 
+clean_headers_inmates <- inmates |> 
+  clean_names() |> 
   remove_empty(which = c("cols", "rows"))
 ```
 ```{r save-data-solution, exercise.reveal_solution = FALSE}
-clean_headers_inmates <- inmates %>% 
-  clean_names() %>% 
+clean_headers_inmates <- inmates |> 
+  clean_names() |> 
   remove_empty(which = c("cols", "rows"))
 ```
 ```{r save-data-check}
@@ -155,11 +155,11 @@ So the question is, do we have any inmates repeated? Anyone in prison twice?
 Here we'll use a function called `get_dupes`. And we'll use the inmate's last name, first name and date of birth. The likelihood that someone has the same name and date of birth is very small, so if there are no duplicates, we should get zero records returned. 
 
 ```{r dupes-data, exercise=TRUE, exercise.setup = "janitor-load-data"}
-clean_headers_inmates %>% 
-  ???_?????(committed_last_name, first_name_3, date_of_birth)
+clean_headers_inmates |> 
+  _________(committed_last_name, first_name_3, date_of_birth)
 ```
 ```{r dupes-data-solution, exercise.reveal_solution = FALSE}
-clean_headers_inmates %>% 
+clean_headers_inmates |> 
   get_dupes(committed_last_name, first_name_3, date_of_birth)
 ```
 ```{r dupes-data-check}
@@ -180,10 +180,10 @@ Janitor also has some handy tools for our data smells. One is called `tabyl`, wh
 So does the Department of Corrections record gender consistently? `tabyl` will tell us and will tell us a little bit about the data.
 
 ```{r tabyl1-data, exercise=TRUE, exercise.setup = "janitor-load-data"}
-clean_headers_inmates %>% tabyl(??????)
+clean_headers_inmates |> tabyl(____)
 ```
 ```{r tabyl1-data-solution, exercise.reveal_solution = FALSE}
-clean_headers_inmates %>% tabyl(gender)
+clean_headers_inmates |> tabyl(gender)
 ```
 ```{r tabyl1-data-check}
 grade_this_code()
@@ -208,10 +208,10 @@ grade_this_code()
 ```
 Got the column name?
 ```{r tabyl2-data, exercise=TRUE, exercise.setup = "janitor-load-data"}
-clean_headers_inmates %>% tabyl(????_????)
+clean_headers_inmates |> tabyl(_________)
 ```
 ```{r tabyl2-data-solution, exercise.reveal_solution = FALSE}
-clean_headers_inmates %>% tabyl(race_desc)
+clean_headers_inmates |> tabyl(race_desc)
 ```
 ```{r tabyl2-data-check}
 grade_this_code()
@@ -222,10 +222,10 @@ Four people do not have a race -- and according to the Census Bureau, Hispanic i
 How about what facilities they are in? 
 
 ```{r tabyl3-data, exercise=TRUE, exercise.setup = "janitor-load-data"}
-clean_headers_inmates %>% tabyl(????????)
+clean_headers_inmates |> tabyl(____)
 ```
 ```{r tabyl3-data-solution, exercise.reveal_solution = FALSE}
-clean_headers_inmates %>% tabyl(facility)
+clean_headers_inmates |> tabyl(facility)
 ```
 ```{r tabyl3-data-check}
 grade_this_code()
@@ -236,10 +236,10 @@ Not sure how I feel about 11 inmates not having a facility. That's probably wort
 But sometimes, NAs are not bad data. Sometimes they're just NA. Let's look at `inst_release_type` or how inmates were released. 
 
 ```{r tabyl4-data, exercise=TRUE, exercise.setup = "janitor-load-data"}
-clean_headers_inmates %>% tabyl(inst_release_type)
+clean_headers_inmates |> tabyl(inst_release_type)
 ```
 ```{r tabyl4-data-solution, exercise.reveal_solution = FALSE}
-clean_headers_inmates %>% tabyl(inst_release_type)
+clean_headers_inmates |> tabyl(inst_release_type)
 ```
 ```{r tabyl4-data-check}
 grade_this_code()

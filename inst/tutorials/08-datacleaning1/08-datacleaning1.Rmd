@@ -103,7 +103,7 @@ First, let's look at **Wrong Type Of Data**. We can sniff that out by looking at
 ### Exercise 1: Using glimpse for more than column names
 
 ```{r glimpse-data, exercise=TRUE, exercise.setup = "smells-load-data"}
-glimpse(??????)
+glimpse(____)
 ```
 ```{r glimpse-data-solution, exercise.reveal_solution = FALSE}
 glimpse(crimes)
@@ -131,13 +131,13 @@ Let's first look at locations.
 ### Exercise 2: Missing data part 1
 
 ```{r tally-data, exercise=TRUE, exercise.setup = "smells-load-data"}
-crimes %>% 
-  group_by(????????) %>% 
-  ?????()
+crimes |> 
+  group_by(____) |> 
+  ____()
 ```
 ```{r tally-data-solution, exercise.reveal_solution = FALSE}
-crimes %>% 
-  group_by(location) %>% 
+crimes |> 
+  group_by(location) |> 
   tally()
 ```
 ```{r tally-data-check}
@@ -147,15 +147,15 @@ What we're looking for here are blanks: Crimes without a location. Typically, th
 
 ### Exercise 3: Missing data part 2
 ```{r tally2-data, exercise=TRUE, exercise.setup = "smells-load-data"}
-crimes %>% 
-  group_by(????????) %>% 
-  ?????() %>%
-  arrange(desc(????????))
+crimes |> 
+  group_by(____) |> 
+  ____() |>
+  arrange(desc(____))
 ```
 ```{r tally2-data-solution, exercise.reveal_solution = FALSE}
-crimes %>% 
-  group_by(location) %>% 
-  tally() %>%
+crimes |> 
+  group_by(location) |> 
+  tally() |>
   arrange(desc(location))
 ```
 ```{r tally2-data-check}
@@ -169,13 +169,13 @@ What about crime type?
 ### Exercise 4: Missing data part 3
 
 ```{r tally3-data, exercise=TRUE, exercise.setup = "smells-load-data"}
-crimes %>% 
-  group_by(????????_????) %>% 
-  ?????()
+crimes |> 
+  group_by(_________) |> 
+  ____()
 ```
 ```{r tally3-data-solution, exercise.reveal_solution = FALSE}
-crimes %>% 
-  group_by(incident_code) %>% 
+crimes |> 
+  group_by(incident_code) |> 
   tally()
 ```
 ```{r tally3-data-check}
@@ -185,15 +185,15 @@ grade_this_code()
 And now looking at it the other way.
 
 ```{r tally4-data, exercise=TRUE, exercise.setup = "smells-load-data"}
-crimes %>% 
-  group_by(????????_????) %>% 
-  ?????() %>%
-  arrange(desc(????????_????))
+crimes |> 
+  group_by(_________) |> 
+  ____() |>
+  arrange(desc(_________))
 ```
 ```{r tally4-data-solution, exercise.reveal_solution = FALSE}
-crimes %>% 
-  group_by(incident_code) %>% 
-  tally() %>%
+crimes |> 
+  group_by(incident_code) |> 
+  tally() |>
   arrange(desc(incident_code))
 ```
 ```{r tally4-data-check}
@@ -209,13 +209,13 @@ Let's now look at **gaps in data**. It's been my experience that gaps in data of
 ### Exercise 5: Gaps
 
 ```{r gap-data, exercise=TRUE, exercise.setup = "smells-load-data"}
-crimes %>% 
-  group_by(floor_date((mdy_hm(????????)), "month")) %>% 
+crimes |> 
+  group_by(floor_date((mdy_hm(____)), "month")) |> 
   tally()
 ```
 ```{r gap-data-solution, exercise.reveal_solution = FALSE}
-crimes %>% 
-  group_by(floor_date((mdy_hm(reported)), "month")) %>% 
+crimes |> 
+  group_by(floor_date((mdy_hm(reported)), "month")) |> 
   tally()
 ```
 ```{r gap-data-check}
@@ -231,13 +231,13 @@ Any time you are going to focus on something, you should check it for consistenc
 ### Exercise 6: Are they the same?
 
 ```{r consistent-data, exercise=TRUE, exercise.setup = "smells-load-data"}
-crimes %>% 
-  group_by(????????) %>% 
-  ?????()
+crimes |> 
+  group_by(____) |> 
+  ____()
 ```
 ```{r consistent-data-solution, exercise.reveal_solution = FALSE}
-crimes %>% 
-  group_by(location) %>% 
+crimes |> 
+  group_by(location) |> 
   tally()
 ```
 ```{r consistent-data-check}

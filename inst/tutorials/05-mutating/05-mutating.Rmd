@@ -63,15 +63,15 @@ Your first task is to import the data. For this exercise, you need to simply run
 ```{r mutating-load-data, message=FALSE, warning=FALSE}
 counties <- read_csv("http://mattwaite.github.io/datajournalismfiles/estimates21.csv")
 
-fastest <- counties %>% mutate(
+fastest <- counties |> mutate(
   change = ((`2021` - `2020`)/`2020`)*100
-) %>%
-  arrange(desc(change)) %>% slice(1)
+) |>
+  arrange(desc(change)) |> slice(1)
 
-biggest <- counties %>% mutate(
+biggest <- counties |> mutate(
   rawchange = `2021` - `2020`
-) %>%
-  arrange(desc(rawchange)) %>% slice(1)
+) |>
+  arrange(desc(rawchange)) |> slice(1)
 ```
 ```{r mutating-load-data-exercise, exercise = TRUE}
 counties <- read_csv("http://mattwaite.github.io/datajournalismfiles/estimates21.csv")
@@ -86,7 +86,7 @@ grade_this_code()
 Remember, if you want to see the first six rows -- handy to take a peek at your data -- you can use the function `head`.
 
 ```{r head-data, exercise=TRUE, exercise.setup = "mutating-load-data"}
-head(??????)
+head(____)
 ```
 ```{r head-data-solution}
 head(counties)
@@ -104,12 +104,12 @@ If we look at what we got when we imported the data, you'll see there's a column
 NOTE: Pay attention to those backticks. They're the key next to the 1 key on your computer. Those backticks are there because R does not like numbers as column names. When you get a column name that starts with a number or has a space in it, you'll need backticks around it. 
 
 ```{r mutate-change, exercise=TRUE, exercise.setup = "mutating-load-data", message=FALSE}
-???????? %>% mutate(
-  change = (`????` - `????`)/`????`
+____ |> mutate(
+  change = (`____` - `____`)/`____`
 ) 
 ```
 ```{r mutate-change-solution, exercise.reveal_solution = FALSE}
-counties %>% mutate(
+counties |> mutate(
   change = (`2021` - `2020`)/`2020`
 ) 
 ```
@@ -124,12 +124,12 @@ Look out on the right and you'll see your change column. But what do you see rig
 Those numbers are a decimal -- a really, really small decimal when you see things like e-03, which means that number is to the -10 power, which means move the decimal that many spaces to the left. We want it expressed as a percentage. So let's fix that by multiplying by 100. 
 
 ```{r mutate-change2, exercise=TRUE, exercise.setup = "mutating-load-data", message=FALSE}
-???????? %>% mutate(
-  change = ((`????` - `????`)/`????`)*???
+____ |> mutate(
+  change = ((`____` - `____`)/`____`)*____
 ) 
 ```
 ```{r mutate-change2-solution, exercise.reveal_solution = FALSE}
-counties %>% mutate(
+counties |> mutate(
   change = ((`2021` - `2020`)/`2020`)*100
 ) 
 ```
@@ -144,15 +144,15 @@ Better. But ... unless we really care about Autuga County, Alabama, this isn't d
 So who had the most growth last year from the year before? We can find that with arrange, which we learned about in the last tutorial.
 
 ```{r mutate-change-percent, exercise=TRUE, exercise.setup = "mutating-load-data", message=FALSE, warning=FALSE}
-counties %>% mutate(
+counties |> mutate(
   change = ((`2021` - `2020`)/`2020`)*100
-) %>%
-  arrange(desc(??????))
+) |>
+  arrange(desc(____))
 ```
 ```{r mutate-change-percent-solution, exercise.reveal_solution = FALSE}
-counties %>% mutate(
+counties |> mutate(
   change = ((`2021` - `2020`)/`2020`)*100
-) %>%
+) |>
   arrange(desc(change))
 ```
 ```{r mutate-change-percent-check}
@@ -172,15 +172,15 @@ With this data, we have every county and the population in two years. We've look
 What you're going to learn about data journalism is that often, the simplest way is going to be the best. Simple math means you can explain what you've done easily to anyone. So how do we get a raw number? Subtraction! Let's call this new column rawchange and the rest should be obvious to you.
 
 ```{r mutate-change-percent-arrange, exercise=TRUE, exercise.setup = "mutating-load-data", message=FALSE, warning=FALSE}
-counties %>% mutate(
-  ????????? = `????` - `????`
-) %>%
-  arrange(desc(?????????))
+counties |> mutate(
+  ____ = `____` - `____`
+) |>
+  arrange(desc(____))
 ```
 ```{r mutate-change-percent-arrange-solution, exercise.reveal_solution = FALSE, warning=FALSE}
-counties %>% mutate(
+counties |> mutate(
   rawchange = `2021` - `2020`
-) %>%
+) |>
   arrange(desc(rawchange))
 ```
 ```{r mutate-change-percent-arrange-check}

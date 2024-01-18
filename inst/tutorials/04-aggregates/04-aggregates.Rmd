@@ -67,7 +67,7 @@ grade_this_code()
 
 The first thing we need to do is get some data to work with. We do that by reading it in. In our case, we're going to read data from a csv file -- a comma-separated values file.
 
-The CSV file we're going to read is a list of all calls to UNLPD since 2018.
+The CSV file we're going to read is a list of all calls to UNLPD from 2018 to 2022.
 
 You can download the data here if you want to use it in your own notebook. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
 
@@ -111,12 +111,12 @@ calls <- read_csv("http://mattwaite.github.io/datajournalismfiles/crimelogs.csv"
 
 ncalls <- nrow(calls)
 
-totalcalls <- calls %>%
-  group_by(incident_code) %>%
+totalcalls <- calls |>
+  group_by(incident_code) |>
   summarise(
     count = n()
-  ) %>%
-  arrange(desc(count)) %>% slice(1)
+  ) |>
+  arrange(desc(count)) |> slice(1)
 
 ```
 ```{r load-data-exercise, exercise = TRUE}
@@ -136,7 +136,7 @@ Now we can inspect the data we imported. What does it look like? What's in it? W
 To do that, we use `head()` and **put the name of the variable we created above between the parenthesis** to show the headers and **the first six rows of data**. 
 
 ```{r head-data, exercise=TRUE, exercise.setup = "load-data"}
-head(?????)
+head(____)
 ```
 ```{r head-data-solution, exercise.reveal_solution = FALSE}
 head(calls)
@@ -155,7 +155,7 @@ Let's look at this. As you can see by the data, we have six players, **which is 
 Why do this? Why use head? It gives us a glimpse of the data. Which ... conveniently ... is also a way to look at your data, and it works the same way as `head()` 
 
 ```{r glimpse-data, exercise=TRUE, exercise.setup = "load-data"}
-glimpse(?????)
+glimpse(____)
 ```
 ```{r glimpse-data-solution, exercise.reveal_solution = FALSE}
 glimpse(calls)
@@ -179,12 +179,12 @@ glue("What if we wanted to know what the most common call type to UNLPD is? To d
 
 **The secret to writing code is that much of it is a pattern.** The building blocks largely stay the same. With the tidyverse, this is *especially* true.
 
-To accomplish our goal, we start with the name of the data we created before. The same name we used in `head()` and `glipse()`. We'll take that data and we'll introduce a new operator: `%>%`. The best way to read that operator, in my opinion, is to interpret that as "and then do this." So the start of our pattern is `data %>%` which you can read as `data and now we'll do this`.
+To accomplish our goal, we start with the name of the data we created before. The same name we used in `head()` and `glipse()`. We'll take that data and we'll introduce a new operator: `|>`. The best way to read that operator, in my opinion, is to interpret that as "and then do this." So the start of our pattern is `data |>` which you can read as `data and now we'll do this`.
 
 The this, in our case, is `group_by()`. Like `head()` and `glimpse()`, **we need to put something in the parenthesis**. But unlike `head()` and `glimpse()`, this time the something comes from that first row of head. We are grouping data by one of the pieces of the data -- a field. *If we're trying to group by incident type*, which field looks like it holds the incident name? Let's use head again and take a look at the very top row in bold.
 
 ```{r head-review, exercise=TRUE, exercise.setup = "load-data"}
-head(?????)
+head(____)
 ```
 ```{r head-review-solution, exercise.reveal_solution = FALSE}
 head(calls)
@@ -202,15 +202,15 @@ After we group our data together by the thing we want to group it by, we need to
 Here's the pattern. **You fill in where there are all capitals with what needs to be there.** What you fill in are the two hints from above.
 
 ```{r group-by, exercise=TRUE, exercise.setup = "load-data", message=FALSE}
-NAMEOFDATA %>%
-  group_by(NAMEOFFIELD) %>%
+NAMEOFDATA |>
+  group_by(NAMEOFFIELD) |>
   summarise(
     total = n()
   ) 
 ```
 ```{r group-by-solution, exercise.reveal_solution = FALSE}
-calls %>%
-  group_by(incident_code) %>%
+calls |>
+  group_by(incident_code) |>
   summarise(
     total = n()
   )
@@ -225,22 +225,22 @@ In this case, we wanted to group together incident types, signified by the field
 
 ### Exercise 4: Arranging data
 
-And when we run that, we get a list of positions with a count next to them. But it's not in any order. So we'll add another And Then Do This %>% and use `arrange`. Arrange does what you think it does -- it arranges data in order. By default, it's in ascending order -- smallest to largest. But if we want to know the type with the most calls, we need to sort it in descending order. In arrange, we need to tell it what we are arranging by. **If you have group_by, then whatever you are arranging by will *always* come from inside summarize.** The pattern looks like this:
+And when we run that, we get a list of positions with a count next to them. But it's not in any order. So we'll add another And Then Do This |> and use `arrange`. Arrange does what you think it does -- it arranges data in order. By default, it's in ascending order -- smallest to largest. But if we want to know the type with the most calls, we need to sort it in descending order. In arrange, we need to tell it what we are arranging by. **If you have group_by, then whatever you are arranging by will *always* come from inside summarize.** The pattern looks like this:
 
 ```{r group-by-2, exercise=TRUE, exercise.setup = "load-data", message=FALSE}
-calls %>%
-  group_by(???????????) %>%
+calls |>
+  group_by(____) |>
   summarise(
     total = n()
-  ) %>% 
-  arrange(desc(?????))
+  ) |> 
+  arrange(desc(____))
 ```
 ```{r group-by-2-solution, exercise.reveal_solution = FALSE}
-calls %>%
-  group_by(incident_code) %>%
+calls |>
+  group_by(incident_code) |>
   summarise(
     total = n()
-  ) %>% 
+  ) |> 
   arrange(desc(total))
 ```
 ```{r group-by-2-check}
@@ -256,19 +256,19 @@ What is the most common police call on campus? If you look at the row with the l
 We can, if we want, group by more than one thing. Which location has the most of a single call type? To do that, we can group by the type and location in the data:
 
 ```{r group-by-3, exercise=TRUE, exercise.setup = "load-data", message=FALSE}
-calls %>%
-  group_by(????????????, ????????) %>%
+calls |>
+  group_by(____, ____) |>
   summarise(
     total = n()
-  ) %>% 
-  arrange(desc(?????))
+  ) |> 
+  arrange(desc(____))
 ```
 ```{r group-by-3-solution, exercise.reveal_solution = FALSE}
-calls %>%
-  group_by(incident_code, location) %>%
+calls |>
+  group_by(incident_code, location) |>
   summarise(
     total = n()
-  ) %>% 
+  ) |> 
   arrange(desc(total))
 ```
 ```{r group-by-3-check}

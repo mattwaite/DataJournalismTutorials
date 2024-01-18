@@ -78,7 +78,7 @@ grade_this_code()
 And let's look at it quick using glimpse.
 
 ```{r glimpse-data, exercise=TRUE, exercise.setup = "load-data"}
-glimpse(?????)
+glimpse(____)
 ```
 ```{r glimpse-data-solution, exercise.reveal_solution = FALSE}
 glimpse(calls)
@@ -125,12 +125,12 @@ Posix date formatting has notations for all of those and more.
 Reminder: You need month, day, four-digit year, hour (24 hour clock) and minute. 
 
 ```{r posix, exercise=TRUE, exercise.setup = "load-data"}
-calls %>% mutate(
+calls |> mutate(
     clean_reported = as.POSIXct(reported, format="%?/%?/%? %?:%?")
 )
 ```
 ```{r posix-solution, exercise.reveal_solution = FALSE}
-calls %>% mutate(
+calls |> mutate(
     clean_reported = as.POSIXct(reported, format="%m/%d/%Y %H:%M")
 )
 ```
@@ -153,12 +153,12 @@ Lubridate can handle this calls data easier with one of it's many functions. The
 We have month day year hours minutes. See if you can figure out how it works. 
 
 ```{r lubridate, exercise=TRUE, exercise.setup = "load-data"}
-calls %>% mutate(
-    clean_reported = ???_??(reported)
+calls |> mutate(
+    clean_reported = _________(reported)
 )
 ```
 ```{r lubridate-solution, exercise.reveal_solution = FALSE}
-calls %>% mutate(
+calls |> mutate(
     clean_reported = mdy_hm(reported)
 )
 ```
@@ -183,14 +183,14 @@ We could use formatting to create a Month field but that would group all the Apr
 We're going to use mutate to create a floor_month field out of our properly formatted date column. Keep this code handy -- you'll need it for the homework.  
 
 ```{r floormonth, exercise=TRUE, exercise.setup = "load-data"}
-calls %>% 
+calls |> 
   mutate(
-    clean_reported = ???_??(reported),
-    floor_month = floor_date(?????_????????, "month")
+    clean_reported = _________(reported),
+    floor_month = floor_date(_________, "month")
     ) 
 ```
 ```{r floormonth-solution, exercise.reveal_solution = FALSE}
-calls %>% 
+calls |> 
   mutate(
     clean_reported = mdy_hm(reported),
     floor_month = floor_date(clean_reported, "month")

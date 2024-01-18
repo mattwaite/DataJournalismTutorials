@@ -66,10 +66,10 @@ totalpop <- get_acs(
   variables = "B03001_001",
   geometry = TRUE,
   year = 2021
-) %>%
+) |>
   rename(
     total_population = estimate,
-  ) %>%
+  ) |>
   select(-moe, -variable)
 
 hispanic <- get_acs(
@@ -78,14 +78,14 @@ hispanic <- get_acs(
   variables = "B03001_003",
   geometry = FALSE,
   year = 2021
-) %>%
+) |>
   rename(
     hispanic = estimate,
-  ) %>%
+  ) |>
   select(-moe, -variable)
 
-counties <- totalpop %>%
-  inner_join(hispanic) %>%
+counties <- totalpop |>
+  inner_join(hispanic) |>
   mutate(
     percent_hispanic = (hispanic/total_population)*100
     )
@@ -115,13 +115,13 @@ To see it, we're going to add our data to a ggplot. The `sf` package has added s
 ### Exercise 1: Make a map
 
 ```{r census2, exercise=TRUE, exercise.setup = "census-load-data"}
-?????????? %>%
-  ggplot(aes(fill = ????????)) + 
+_____ |>
+  ggplot(aes(fill = _____)) + 
   geom_sf(color = NA) + 
   scale_fill_viridis_c(option = "magma") 
 ```
 ```{r census2-solution, exercise.reveal_solution = FALSE}
-counties21 %>%
+counties21 |>
   ggplot(aes(fill = estimate)) + 
   geom_sf(color = NA) + 
   scale_fill_viridis_c(option = "magma") 
@@ -149,13 +149,13 @@ totalpop <- get_acs(
   state = "NE",
   geography = "county",
   variables = "B03001_001",
-  geometry = ????,
+  geometry = _____,
   year = 2021
-) %>%
+) |>
   rename(
-    total_population = ????????,
-  ) %>%
-  select(-???, -???????)
+    total_population = _____,
+  ) |>
+  select(-_____, -_____)
 ```
 ```{r census3-solution, exercise.reveal_solution = FALSE}
 totalpop <- get_acs(
@@ -164,10 +164,10 @@ totalpop <- get_acs(
   variables = "B03001_001",
   geometry = TRUE,
   year = 2021
-) %>%
+) |>
   rename(
     total_population = estimate,
-  ) %>%
+  ) |>
   select(-moe, -variable)
 ```
 ```{r census3-check}
@@ -183,13 +183,13 @@ hispanic <- get_acs(
   state = "NE",
   geography = "county",
   variables = "B03001_003",
-  geometry = ?????,
+  geometry = _____,
   year = 2021
-) %>%
+) |>
   rename(
-    hispanic = ????????,
-  ) %>%
-  select(-???, -????????)
+    hispanic = _____,
+  ) |>
+  select(-_____, -_____)
 ```
 ```{r census4-solution, exercise.reveal_solution = FALSE}
 hispanic <- get_acs(
@@ -198,10 +198,10 @@ hispanic <- get_acs(
   variables = "B03001_003",
   geometry = FALSE,
   year = 2021
-) %>%
+) |>
   rename(
     hispanic = estimate,
-  ) %>%
+  ) |>
   select(-moe, -variable)
 ```
 ```{r census4-check}
@@ -215,15 +215,15 @@ Now we're ready to join them together. While we're at it, we might as well calcu
 To calculate that percentage, you'll need the names of the renamed columns you got before. You renamed estimate twice. What did you call them? 
 
 ```{r census5, exercise=TRUE, exercise.setup = "census-load-data"}
-counties <- totalpop %>%
-  inner_join(hispanic) %>%
+counties <- totalpop |>
+  inner_join(hispanic) |>
   mutate(
-    percent_hispanic = (???????/?????_??????????)*100
+    percent_hispanic = (_____/___________)*100
     )
 ```
 ```{r census5-solution, exercise.reveal_solution = FALSE}
-counties <- totalpop %>%
-  inner_join(hispanic) %>%
+counties <- totalpop |>
+  inner_join(hispanic) |>
   mutate(
     percent_hispanic = (hispanic/total_population)*100
     )
@@ -239,13 +239,13 @@ And now, with a dataframe called `counties`, we're ready to make a map.
 For the fill ... why did we just do all that work above? Why calculate a number if we're not going to use it?
 
 ```{r census6, exercise=TRUE, exercise.setup = "census-load-data"}
-???????? %>%
-  ggplot(aes(fill = ???????_????????)) + 
+_____ |>
+  ggplot(aes(fill = ___________)) + 
   geom_sf(color = NA) + 
   scale_fill_viridis_c(option = "magma") 
 ```
 ```{r census6-solution, exercise.reveal_solution = FALSE}
-counties %>%
+counties |>
   ggplot(aes(fill = percent_hispanic)) + 
   geom_sf(color = NA) + 
   scale_fill_viridis_c(option = "magma") 

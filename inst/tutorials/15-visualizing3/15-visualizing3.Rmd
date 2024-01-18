@@ -31,7 +31,7 @@ library(tidyverse)
 
 predictions <- read_csv("https://mattwaite.github.io/datajournalismfiles/predictions.csv")
 
-preds <- predictions %>% filter(year == 2023) %>%
+preds <- predictions |> filter(year == 2023) |>
   separate(coordinates, into=c("latitude", "longitude"), sep=",") 
 
 write_csv(preds, "predictions.csv")

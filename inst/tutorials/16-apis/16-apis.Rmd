@@ -58,11 +58,11 @@ counties21 <- get_acs(geography = "county",
               state = "NE", 
               year = 2021)
 
-pop21 <- counties21 %>% select(GEOID, NAME, estimate) %>% rename(Population2021=estimate)
+pop21 <- counties21 |> select(GEOID, NAME, estimate) |> rename(Population2021=estimate)
 
-pop11 <- counties11 %>% select(GEOID, NAME, estimate) %>% rename(Population2011=estimate)
+pop11 <- counties11 |> select(GEOID, NAME, estimate) |> rename(Population2011=estimate)
 
-alldata <- pop21 %>% inner_join(pop11)
+alldata <- pop21 |> inner_join(pop11)
 ```
 ```{r census-load-data-exercise, exercise = TRUE}
 pl <- load_variables(2020, "pl", cache = TRUE)
@@ -102,7 +102,7 @@ Start with 2021.
 counties21 <- get_acs(geography = "county", 
               variables = "B01001_001", 
               state = "NE", 
-              year = ????)
+              year = ____)
 ```
 ```{r census3-solution, exercise.reveal_solution = FALSE}
 counties21 <- get_acs(geography = "county", 
@@ -137,7 +137,7 @@ grade_this_code()
 Let's look at counties21 of them, and you'll see an issue. 
 
 ```{r census5, exercise=TRUE, exercise.setup = "census-load-data"}
-head(????????)
+head(____)
 ```
 ```{r census5-solution, exercise.reveal_solution = FALSE}
 head(counties21)
@@ -151,14 +151,14 @@ As you can see, we have a GEOID, NAME, then estimate and moe. Estimate and moe a
 ### Exercise 3: Renaming 
 
 ```{r census6, exercise=TRUE, exercise.setup = "census-load-data"}
-pop21 <- counties21 %>% select(GEOID, NAME, estimate) %>% rename(Population20??=estimate)
+pop21 <- counties21 |> select(GEOID, NAME, estimate) |> rename(Population20____=estimate)
 
-pop11 <- counties11 %>% select(GEOID, NAME, estimate) %>% rename(Population20??=estimate)
+pop11 <- counties11 |> select(GEOID, NAME, estimate) |> rename(Population20____=estimate)
 ```
 ```{r census6-solution, exercise.reveal_solution = FALSE}
-pop21 <- counties21 %>% select(GEOID, NAME, estimate) %>% rename(Population2021=estimate)
+pop21 <- counties21 |> select(GEOID, NAME, estimate) |> rename(Population2021=estimate)
 
-pop11 <- counties11 %>% select(GEOID, NAME, estimate) %>% rename(Population2011=estimate)
+pop11 <- counties11 |> select(GEOID, NAME, estimate) |> rename(Population2011=estimate)
 ```
 ```{r census6-check}
 grade_this_code()
@@ -169,10 +169,10 @@ Now we join the data together. Let's start with the new data and join the old da
 ### Exercise 4: Joins
 
 ```{r census7, exercise=TRUE, exercise.setup = "census-load-data"}
-alldata <- pop?? %>% inner_join(pop??)
+alldata <- pop____ |> inner_join(pop____)
 ```
 ```{r census7-solution, exercise.reveal_solution = FALSE}
-alldata <- pop21 %>% inner_join(pop11)
+alldata <- pop21 |> inner_join(pop11)
 ```
 ```{r census7-check}
 grade_this_code()
@@ -183,13 +183,13 @@ grade_this_code()
 Now we have all the data we need to calculate percent change. Remember: Percent change is (new - old)/old.
 
 ```{r census8, exercise=TRUE, exercise.setup = "census-load-data"}
-alldata %>% 
-  mutate(PercentChange = (Population20?? - Population20??)/Population20??) %>%
+alldata |> 
+  mutate(PercentChange = (Population20____ - Population20____)/Population20____) |>
   arrange(desc(PercentChange))
 ```
 ```{r census8-solution, exercise.reveal_solution = FALSE}
-alldata %>% 
-  mutate(PercentChange = (Population2021 - Population2011)/Population2011) %>%
+alldata |> 
+  mutate(PercentChange = (Population2021 - Population2011)/Population2011) |>
   arrange(desc(PercentChange))
 ```
 ```{r census8-check}

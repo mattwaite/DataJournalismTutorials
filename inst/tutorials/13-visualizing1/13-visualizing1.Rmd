@@ -64,22 +64,22 @@ Now import the data.
 ```{r chart-load-data, message=FALSE, warning=FALSE}
 crimes <- read_csv("http://mattwaite.github.io/datajournalismfiles/crimelogs.csv")
 
-top10 <- crimes %>% 
-  group_by(incident_code) %>%
+top10 <- crimes |> 
+  group_by(incident_code) |>
   summarize(
     count = n()
-  ) %>%
-  ungroup() %>%
+  ) |>
+  ungroup() |>
   top_n(10, wt=count)
 
-beernweed <- crimes %>% 
+beernweed <- crimes |> 
   filter(
     grepl("ALCOHOL - MINOR IN POSSESSION", incident_code) == TRUE |
     grepl("ALCOHOL - DRUNK", incident_code) == TRUE |
     grepl("NARCOTICS - POSSESSION", incident_code) == TRUE
-    ) %>%
-  mutate(month = floor_date(mdy_hm(reported), unit="months")) %>%
-  group_by(month, incident_code) %>%
+    ) |>
+  mutate(month = floor_date(mdy_hm(reported), unit="months")) |>
+  group_by(month, incident_code) |>
   summarize(
     count = n()
   )
@@ -105,21 +105,21 @@ First, we'll create a dataframe of those top 10, called top10.
 ### Excercise 1: Making data
 
 ```{r top10, exercise=TRUE, exercise.setup = "chart-load-data"}
-????? <- ?????? %>% 
-  group_by(incident_code) %>%
+____ <- ____ |> 
+  group_by(incident_code) |>
   summarize(
     count = n()
-  ) %>%
-  ungroup() %>%
-  top_n(??, wt=count)
+  ) |>
+  ungroup() |>
+  top_n(____, wt=count)
 ```
 ```{r top10-solution, exercise.reveal_solution = FALSE}
-top10 <- crimes %>% 
-  group_by(incident_code) %>%
+top10 <- crimes |> 
+  group_by(incident_code) |>
   summarize(
     count = n()
-  ) %>%
-  ungroup() %>%
+  ) |>
+  ungroup() |>
   top_n(10, wt=count)
 ```
 ```{r top10-check}
@@ -132,7 +132,7 @@ Now ggplot. The first thing we do with ggplot is invoke it, which creates the ca
 
 ```{r bar1, exercise=TRUE, exercise.setup = "chart-load-data"}
 ggplot() + 
-  geom_bar(data=top10, aes(x=????????_????, weight=?????))
+  geom_bar(data=top10, aes(x=_________, weight=____))
 ```
 ```{r bar1-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
@@ -150,7 +150,7 @@ We'll start with the bars. In ggplot, we use reorder, and we reorder the x value
 
 ```{r bar2, exercise=TRUE, exercise.setup = "chart-load-data"}
 ggplot() + 
-  geom_bar(data=top10, aes(x=reorder(????????_????, ?????), weight=?????))
+  geom_bar(data=top10, aes(x=reorder(_________, ____), weight=____))
 ```
 ```{r bar2-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
@@ -166,7 +166,7 @@ Better, but it still looks ... not great on the bottom. We can fix that by flipp
 
 ```{r bar3, exercise=TRUE, exercise.setup = "chart-load-data"}
 ggplot() + 
-  geom_bar(data=top10, aes(x=reorder(????????_????, ?????), weight=?????)) + 
+  geom_bar(data=top10, aes(x=reorder(_________, ____), weight=____)) + 
   coord_flip()
 ```
 ```{r bar3-solution, exercise.reveal_solution = FALSE}
@@ -189,27 +189,27 @@ The first secret to knowing if you have a line chart is if you have data that ch
 Let's make a new dataframe called beernweed. It's going to be a dataframe of two alcohol and one drug related incident codes that are in the top 10 of reported incidents. We're then going to make a month column which is a floor date of the reported column. Then, we'll count up how many of those incidents happened in each month.  
 
 ```{r line1, exercise=TRUE, exercise.setup = "chart-load-data"}
-beernweed <- crimes %>% 
+beernweed <- crimes |> 
   filter(
     grepl("ALCOHOL - MINOR IN POSSESSION", incident_code) == TRUE |
     grepl("ALCOHOL - DRUNK", incident_code) == TRUE |
     grepl("NARCOTICS - POSSESSION", incident_code) == TRUE
-    ) %>%
-  mutate(month = floor_date(mdy_hm(reported), unit="months")) %>%
-  group_by(month, incident_code) %>%
+    ) |>
+  mutate(month = floor_date(mdy_hm(reported), unit="months")) |>
+  group_by(month, incident_code) |>
   summarize(
     count = n()
   )
 ```
 ```{r line1-solution, exercise.reveal_solution = FALSE}
-beernweed <- crimes %>% 
+beernweed <- crimes |> 
   filter(
     grepl("ALCOHOL - MINOR IN POSSESSION", incident_code) == TRUE |
     grepl("ALCOHOL - DRUNK", incident_code) == TRUE |
     grepl("NARCOTICS - POSSESSION", incident_code) == TRUE
-    ) %>%
-  mutate(month = floor_date(mdy_hm(reported), unit="months")) %>%
-  group_by(month, incident_code) %>%
+    ) |>
+  mutate(month = floor_date(mdy_hm(reported), unit="months")) |>
+  group_by(month, incident_code) |>
   summarize(
     count = n()
   )
@@ -225,12 +225,12 @@ Now we'll make a line chart out of this data. From our beernweed dataframe, you 
 ```{r line2, exercise=TRUE, exercise.setup = "chart-load-data"}
 ggplot() + 
   geom_line(
-    data=?????????, 
+    data=____, 
     aes(
-      x=?????, 
-      y=?????, 
-      group=????????_????, 
-      color=????????_????
+      x=____, 
+      y=____, 
+      group=_________, 
+      color=_________
       )
     )
 ```

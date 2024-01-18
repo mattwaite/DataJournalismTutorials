@@ -53,36 +53,36 @@ grade_this_code()
 We're going to load two datasets in -- the first one is the October numbers and the second is the November numbers. But the names of the columns are all wrong for working in R, so we're going to use `clean_names` from janitor immediately after. 
 
 ```{r merge-load-data, message=FALSE, warning=FALSE}
-october <- read_csv("http://mattwaite.github.io/datajournalismfiles/OctMV2022.csv") %>% clean_names() %>% remove_empty(which=c("cols", "rows"))
+october <- read_csv("http://mattwaite.github.io/datajournalismfiles/OctMV2022.csv") |> clean_names() |> remove_empty(which=c("cols", "rows"))
 
-november <- read_csv("http://mattwaite.github.io/datajournalismfiles/NovMV2022.csv") %>% clean_names() %>% remove_empty(which=c("cols", "rows"))
+november <- read_csv("http://mattwaite.github.io/datajournalismfiles/NovMV2022.csv") |> clean_names() |> remove_empty(which=c("cols", "rows"))
 
-october <- october %>% 
+october <- october |> 
   mutate(
     Month = as.Date("2022-10-01")
     )
 
-november <- november %>% 
+november <- november |> 
   mutate(
     Month = as.Date("2022-11-01")
     )
 ```
 ```{r merge-load-data-exercise, exercise = TRUE}
-october <- read_csv("http://mattwaite.github.io/datajournalismfiles/OctMV2022.csv") %>% 
-  clean_names() %>%
+october <- read_csv("http://mattwaite.github.io/datajournalismfiles/OctMV2022.csv") |> 
+  clean_names() |>
   remove_empty(which=c("cols", "rows"))
 
-november <- read_csv("http://mattwaite.github.io/datajournalismfiles/NovMV2022.csv") %>% 
-  clean_names() %>% 
+november <- read_csv("http://mattwaite.github.io/datajournalismfiles/NovMV2022.csv") |> 
+  clean_names() |> 
   remove_empty(which=c("cols", "rows"))
 ```
 ```{r merge-load-data-exercise-solution}
-october <- read_csv("http://mattwaite.github.io/datajournalismfiles/OctMV2022.csv") %>% 
-  clean_names() %>% 
+october <- read_csv("http://mattwaite.github.io/datajournalismfiles/OctMV2022.csv") |> 
+  clean_names() |> 
   remove_empty(which=c("cols", "rows"))
 
-november <- read_csv("http://mattwaite.github.io/datajournalismfiles/NovMV2022.csv") %>% 
-  clean_names() %>% 
+november <- read_csv("http://mattwaite.github.io/datajournalismfiles/NovMV2022.csv") |> 
+  clean_names() |> 
   remove_empty(which=c("cols", "rows"))
 ```
 ```{r merge-load-data-exercise-check}
@@ -96,23 +96,23 @@ Both of these datasets have the same number of columns, all with the same names,
 The problem we have first? Neither dataset has any information about what month it comes from. We have to add it with mutate. Here, we're going to add a Month column and populate it with the correct month in a date in case we need to do date math later. 
 
 ```{r add-month, exercise=TRUE, exercise.setup = "merge-load-data"}
-october <- october %>% 
+october <- october |> 
   mutate(
-    ????? = as.Date("2022-??-01")
+    ____ = as.Date("2022-____-01")
     )
 
-november <- november %>% 
+november <- november |> 
   mutate(
-    ????? = as.Date("2022-??-01")
+    ____ = as.Date("2022-____-01")
     )
 ```
 ```{r add-month-solution, exercise.reveal_solution = FALSE}
-october <- october %>% 
+october <- october |> 
   mutate(
     Month = as.Date("2022-10-01")
     )
 
-november <- november %>% 
+november <- november |> 
   mutate(
     Month = as.Date("2022-11-01")
     )
@@ -128,7 +128,7 @@ Now we're ready to bind rows.
 It's very simple -- you just put the names of your dataframes into bind_rows. Here we're just going to bind them, but normally you'd add it to a new dataframe like this: `taxes <- bind_rows...`
 
 ```{r bind, exercise=TRUE, exercise.setup = "merge-load-data"}
-bind_rows(???????, ?????????)
+bind_rows(____, ____)
 ```
 ```{r bind-solution, exercise.reveal_solution = FALSE}
 bind_rows(october, november)
@@ -152,7 +152,7 @@ accidents <- read_csv("http://mattwaite.github.io/datajournalismfiles/trainaccid
 
 fips <- read_csv("http://mattwaite.github.io/datajournalismfiles/fips.csv")
 
-accidentswithstates <- accidents %>% inner_join(fips, by=c("STATE" = "FIPS"))
+accidentswithstates <- accidents |> inner_join(fips, by=c("STATE" = "FIPS"))
 ```
 ```{r join-load-data-exercise, exercise = TRUE}
 accidents <- read_csv("http://mattwaite.github.io/datajournalismfiles/trainaccidents2022.csv")
@@ -209,11 +209,11 @@ The next issue is the column names are not the same. Joining in dplyr is easiest
 So we're going to put accidents on the left -- that would be the first position -- and fips on the right. Our accidents data has STATE and our fips data has FIPS, so the left side goes first and the right side goes second. 
 
 ```{r join1, exercise=TRUE, exercise.setup = "join-load-data"}
-accidents %>%
-  inner_join(fips, by=c("?????" = "????"))
+accidents |>
+  inner_join(fips, by=c("____" = "____"))
 ```
 ```{r join1-solution, exercise.reveal_solution = FALSE}
-accidents %>%
+accidents |>
   inner_join(fips, by=c("STATE" = "FIPS"))
 ```
 ```{r join1-check}
@@ -240,15 +240,15 @@ grade_this_code()
 Let's filter so we only have derailments, which is Type 01, group by the new state name column and tally. **Watch that capitalization**
 
 ```{r join2, exercise=TRUE, exercise.setup = "join-load-data"}
-accidentswithstates %>%
-  filter(TYPE == "??") %>%
-  group_by(?????) %>%
+accidentswithstates |>
+  filter(TYPE == "____") |>
+  group_by(____) |>
   tally(sort=TRUE)
 ```
 ```{r join2-solution, exercise.reveal_solution = FALSE}
-accidentswithstates %>%
-  filter(TYPE == "01") %>%
-  group_by(State) %>%
+accidentswithstates |>
+  filter(TYPE == "01") |>
+  group_by(State) |>
   tally(sort=TRUE)
 ```
 ```{r join2-check}
