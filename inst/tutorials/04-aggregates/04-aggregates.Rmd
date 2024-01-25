@@ -76,7 +76,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/datajournalismfiles/crimelogs.csv",
+  link = "https://mattwaite.github.io/datajournalismfiles/crimelogs.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -107,7 +107,7 @@ The `read_csv` bits are pretty obvious, except for one thing. What happens in th
 Your first task is to import the data. For this exercise, you need to simply run this:
 
 ```{r load-data, message=FALSE, warning=FALSE}
-calls <- read_csv("http://mattwaite.github.io/datajournalismfiles/crimelogs.csv")
+calls <- read_csv("https://mattwaite.github.io/datajournalismfiles/crimelogs.csv")
 
 ncalls <- nrow(calls)
 
@@ -120,10 +120,10 @@ totalcalls <- calls |>
 
 ```
 ```{r load-data-exercise, exercise = TRUE}
-calls <- read_csv("http://mattwaite.github.io/datajournalismfiles/crimelogs.csv")
+calls <- read_csv("https://mattwaite.github.io/datajournalismfiles/crimelogs.csv")
 ```
 ```{r load-data-exercise-solution}
-calls <- read_csv("http://mattwaite.github.io/datajournalismfiles/crimelogs.csv")
+calls <- read_csv("https://mattwaite.github.io/datajournalismfiles/crimelogs.csv")
 ```
 ```{r load-data-exercise-check}
 grade_this_code()
@@ -221,7 +221,7 @@ grade_this_code()
 <div id="group-by-hint">
 **Hint:** The name of your data is the same as what you used in `head()` and `glimpse()`. Then, look carefully at the first row of the output of head. What you need is in bold at the top.
 </div>
-In this case, we wanted to group together incident types, signified by the field name `incident_code`. After we group the data, we need to count them up. In dplyr, we use `summarize` [which can do more than just count things](http://dplyr.tidyverse.org/reference/summarise.html). Inside the parentheses in summarize, we set up the summaries we want. In this case, we just want a count of the types: `total = n(),` says create a new field, called `total` and set it equal to `n()`, which might look weird, but it's common in stats. The number of things in a dataset? Statisticians call it n. There are n number of call types in this dataset. So `n()` is a function that counts the number of things there are. 
+In this case, we wanted to group together incident types, signified by the field name `incident_code`. After we group the data, we need to count them up. In dplyr, we use `summarize` [which can do more than just count things](https://dplyr.tidyverse.org/reference/summarise.html). Inside the parentheses in summarize, we set up the summaries we want. In this case, we just want a count of the types: `total = n(),` says create a new field, called `total` and set it equal to `n()`, which might look weird, but it's common in stats. The number of things in a dataset? Statisticians call it n. There are n number of call types in this dataset. So `n()` is a function that counts the number of things there are. 
 
 ### Exercise 4: Arranging data
 

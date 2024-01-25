@@ -111,7 +111,7 @@ We're going to name the first variable UndergradStudents and the second variable
 
 Set them equal to the numbers you got from the table, then divide UndergradStudents by Total.
 
-*Write the code necessary to create the variables and set it to the number of home runs Nebraska hit in the 2021 season and the number of games played.*
+*Write the code necessary to create the variables and set it to the number of undergrads at Nebraska in 2022 and the total number of students.*
 
 ```{r variables-one, exercise=TRUE}
 
