@@ -67,7 +67,7 @@ grade_this_code()
 
 The first thing we need to do is get some data to work with. We do that by reading it in. In our case, we're going to read data from a csv file -- a comma-separated values file.
 
-The CSV file we're going to read is a list of all calls to UNLPD from 2018 to 2022.
+The CSV file we're going to read is a list of all calls to UNLPD from 2018 up to 2024.
 
 You can download the data here if you want to use it in your own notebook. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
 
@@ -148,7 +148,7 @@ grade_this_code()
 **Hint:** The thing you need is to the left of a <- in a block above.
 </div>
 
-Let's look at this. As you can see by the data, we have six players, **which is what we expect** from `head()`. But notice the first row -- the headers. We have things like `incident_code` and `reported` for what type of call it is and the date and time it was reported. 
+Let's look at this. As you can see by the data, we have six calls, **which is what we expect** from `head()`. But notice the first row -- the headers. We have things like `incident_code` and `reported` for what type of call it is and the date and time it was reported. 
 
 ### Exercise 2: Using glimpse to see your data 
 
@@ -197,13 +197,15 @@ That block of code you just ran has two hints for the code block you'll have to 
 
 ### Exercise 3: Group by and count
 
+First, we're going to group our data by the column containing the names of incidents. 
+
 After we group our data together by the thing we want to group it by, we need to count how many things are in each group. We do that first by saying we want to summarize our data (a count is a part of a summary). To get a summary, we have to tell it what we want to summarize. So in this case, we want a count. To get that, let's create a thing called total and set it equal to n(), which is `dplyr`s way of counting something. 
 
-Here's the pattern. **You fill in where there are all capitals with what needs to be there.** What you fill in are the two hints from above.
+Here's the pattern. **You fill in where there are blanks with what needs to be there.** What you fill in are the two hints from above.
 
 ```{r group-by, exercise=TRUE, exercise.setup = "load-data", message=FALSE}
-NAMEOFDATA |>
-  group_by(NAMEOFFIELD) |>
+____ |>
+  group_by(____) |>
   summarise(
     total = n()
   ) 
@@ -219,7 +221,7 @@ calls |>
 grade_this_code()
 ```
 <div id="group-by-hint">
-**Hint:** The name of your data is the same as what you used in `head()` and `glimpse()`. Then, look carefully at the first row of the output of head. What you need is in bold at the top.
+**Hint:** The name of your data is the same as what you used in `head()` and `glimpse()`. Then, look carefully at the first row of the output of head. What you need is in bold at the top. Which column has the names of the types of calls in them?
 </div>
 In this case, we wanted to group together incident types, signified by the field name `incident_code`. After we group the data, we need to count them up. In dplyr, we use `summarize` [which can do more than just count things](https://dplyr.tidyverse.org/reference/summarise.html). Inside the parentheses in summarize, we set up the summaries we want. In this case, we just want a count of the types: `total = n(),` says create a new field, called `total` and set it equal to `n()`, which might look weird, but it's common in stats. The number of things in a dataset? Statisticians call it n. There are n number of call types in this dataset. So `n()` is a function that counts the number of things there are. 
 
