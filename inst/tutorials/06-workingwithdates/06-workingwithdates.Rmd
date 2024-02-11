@@ -126,7 +126,7 @@ Reminder: You need month, day, four-digit year, hour (24 hour clock) and minute.
 
 ```{r posix, exercise=TRUE, exercise.setup = "load-data"}
 calls |> mutate(
-    clean_reported = as.POSIXct(reported, format="%?/%?/%? %?:%?")
+    clean_reported = as.POSIXct(reported, format="%____/%____/%____ %____:%____")
 )
 ```
 ```{r posix-solution, exercise.reveal_solution = FALSE}
