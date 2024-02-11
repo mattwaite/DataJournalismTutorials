@@ -102,7 +102,7 @@ Now that we can see the column names, we now know `location` is where the addres
 ### Exercise 1: Hanging out at the Union 
 
 ```{r filtering-nebraska, exercise=TRUE, exercise.setup = "filtering-load-data"}
-NAMEOFDATA |> filter(NAMEOFCOLUMN == "____")
+____ |> filter(____ == "____")
 ```
 ```{r filtering-nebraska-solution, exercise.reveal_solution = FALSE}
 crimes |> filter(location == "1400 R St")
@@ -122,7 +122,7 @@ But how do you write a filter that captures "ALCOHOL - DRUNK" and "ALCOHOL - MIN
 Computers have solved this. You can write a filter where a chunk of text contains a word or even part of a word. The function here is called `grepl`, and the basic pattern here is grepl is looking for X word in Y column of data. And if it finds it, it says `TRUE`. So our filter is saying if grepl == TRUE, then keep the row. See if you can fill it out, looking for ALCOHOL. 
 
 ```{r filtering-alcohol, exercise=TRUE, exercise.setup = "filtering-load-data"}
-NAMEOFDATA |> filter(grepl("____", incident_code) == ____)
+____ |> filter(grepl("____", incident_code) == ____)
 ```
 ```{r filtering-alcohol-solution, exercise.reveal_solution = FALSE}
 crimes |> filter(grepl("ALCOHOL", incident_code) == TRUE)
@@ -136,7 +136,7 @@ But how many of those were drunks were arrested? To do this we're going to *chai
 ### Exercise 3: Drunks under arrest
 
 ```{r filtering-drunks, exercise=TRUE, exercise.setup = "filtering-load-data"}
-NAMEOFDATA |> 
+____ |> 
   filter(grepl("____", incident_code) == ____) |>
   filter(____("Cleared by Arrest", ____) == ____)
 ```
@@ -192,7 +192,7 @@ With a list, we can use the %in% operator. It does what you think it does -- it 
 ```{r filtering-list, exercise=TRUE, exercise.setup = "filtering-load-data"}
 addresses <- c("880 N 17th St", "860 N 17th St", "1150 N 14th St", "630 N 14th St")
 
-NAMEOFDATA |> filter(____ %in% ____ )
+____ |> filter(____ %in% ____ )
 ```
 ```{r filtering-list-solution, exercise.reveal_solution = FALSE}
 addresses <- c("880 N 17th St", "860 N 17th St", "1150 N 14th St", "630 N 14th St")
@@ -212,7 +212,7 @@ So now we have a partial dorm list. What if we just wanted to see incident_codes
 ```{r selecting-dorms, exercise=TRUE, exercise.setup = "filtering-load-data"}
 addresses <- c("880 N 17th St", "860 N 17th St", "1150 N 14th St", "630 N 14th St")
 
-NAMEOFDATA |> 
+____ |> 
   filter(____ %in% ____) |>
   select(____, ____, ____)
 ```
@@ -238,7 +238,7 @@ One last little dplyr trick that's nice to have in the toolbox is a shortcut for
 So what are the top locations for alcohol? All we're doing here is chaining commands together with what we've already got. We're *filtering* our alcohol related charges, we're *grouping* by location, in summarize we're creating a count. We'll arrange it to get the largest count to the top. Now we'll introduce the new function: `top_n`. The `top_n` function just takes a number and a weight, abbreviated wt.
 
 ```{r selecting-top-locations, exercise=TRUE, exercise.setup = "filtering-load-data"}
-NAMEOFDATA |>
+____ |>
   group_by(____) |>
   summarize(
     count = n()
