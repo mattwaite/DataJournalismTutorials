@@ -143,34 +143,15 @@ crimes |>
 ```{r tally-data-check}
 grade_this_code()
 ```
-What we're looking for here are blanks: Crimes without a location. Typically, those will appear first or last, depending on several things, so it's worth checking the front and back of our data. We can do that using reverse alphabetical order on our location. 
-
-### Exercise 3: Missing data part 2
-```{r tally2-data, exercise=TRUE, exercise.setup = "smells-load-data"}
-crimes |> 
-  group_by(____) |> 
-  ____() |>
-  arrange(desc(____))
-```
-```{r tally2-data-solution, exercise.reveal_solution = FALSE}
-crimes |> 
-  group_by(location) |> 
-  tally() |>
-  arrange(desc(location))
-```
-```{r tally2-data-check}
-grade_this_code()
-```
-
-So far so good. We don't have any reported crimes without a location -- though recall from aggregates that the most common location for a crime was the police department.
+What we're looking for here are blanks: Crimes without a location. Typically, those will appear first or last in most analysis platforms. In the tidyverse, NA or null values will be last. See that last big number on the pagination bar at the bottom of your results? Click that and find the very last row of data. There is no location on campus called NA. That means there's crimes that occurred ... in an unknown place.  
 
 What about crime type?
 
-### Exercise 4: Missing data part 3
+### Exercise 3: Missing data part 2
 
 ```{r tally3-data, exercise=TRUE, exercise.setup = "smells-load-data"}
 crimes |> 
-  group_by(_________) |> 
+  group_by(____) |> 
   ____()
 ```
 ```{r tally3-data-solution, exercise.reveal_solution = FALSE}
@@ -182,31 +163,15 @@ crimes |>
 grade_this_code()
 ```
 
-And now looking at it the other way.
+Any at the very end?
 
-```{r tally4-data, exercise=TRUE, exercise.setup = "smells-load-data"}
-crimes |> 
-  group_by(_________) |> 
-  ____() |>
-  arrange(desc(_________))
-```
-```{r tally4-data-solution, exercise.reveal_solution = FALSE}
-crimes |> 
-  group_by(incident_code) |> 
-  tally() |>
-  arrange(desc(incident_code))
-```
-```{r tally4-data-check}
-grade_this_code()
-```
-
-None here either, so that's good. It means our incidents will always have a location and a type.
+None here, so that's good. It means our incidents will always have a type, and nearly always have a location. 
 
 ## Gaps in data
 
 Let's now look at **gaps in data**. It's been my experience that gaps in data often have to do with time, so let's first look at incident dates, so we can see if there's any big jumps in data. You'd expect the numbers to change, but not by huge amounts. Huge change would indicate, more often than not, that the data is missing. Let's start with Date. If we're going to work with dates, we should have `lubridate` handy for `floor_date`.
 
-### Exercise 5: Gaps
+### Exercise 4: Gaps
 
 ```{r gap-data, exercise=TRUE, exercise.setup = "smells-load-data"}
 crimes |> 
@@ -222,13 +187,13 @@ crimes |>
 grade_this_code()
 ```
 
-First thing to notice: our data has only 55 incidents in Janauary of 2018. That's because, if you were to look, it's only a partial month. Can that explain the small numbers in June and July? In this case no -- students have gone home. There's less for campus police to do. What about January 2023? Same story -- partial month. So can we include those months in any analysis? No we can't.
+First thing to notice: our data has only 55 incidents in Janauary of 2018. That's because, if you were to look, it's only a partial month. Can that explain the small numbers in June and July? In this case no -- students have gone home. There's less for campus police to do. So can we include those months in any analysis of "campus crime"? It's not a simple answer. It depends on how you structure the question and what you're trying to show. 
 
 ## Internal inconsistency
 
 Any time you are going to focus on something, you should check it for consistency inside the data set. So let's pretend you want to look at *where* the most incidents occur on campus. To do this, you will need internally consistent addresses. Do you have that? 
 
-### Exercise 6: Are they the same?
+### Exercise 5: Are they the same?
 
 ```{r consistent-data, exercise=TRUE, exercise.setup = "smells-load-data"}
 crimes |> 
@@ -244,7 +209,7 @@ crimes |>
 grade_this_code()
 ```
 
-Look at the first 10 rows of data here. Do you notice anything? For data to be exact, each row must be the same. Are the same addresses here *itentical to each other?* Or do you see the same address inconsistently reported?
+Look at the first 10 rows of data here -- particularly 6-10. Do you notice anything? For data to be exact, each row must be the same. Are the same addresses here *itentical to each other?* Or do you see the same address inconsistently reported?
 
 Can you accurately report on the number of indicents at each address with data like that? Not yet you can (more on that soon!).
 
