@@ -165,11 +165,8 @@ clean_headers_inmates |>
 ```{r dupes-data-check}
 grade_this_code()
 ```
-Uh oh. We get four rows -- a Jerry Christensen and a Travis Williams. Same birthday. Same middle initial if you look.
 
-Look closely. 
-
-Two different `id_number`s. In two different facilities on two different dates. Look all the way out to their current status. What does that indicate to you?    
+This data appears to have no duplicates. That's good. 
 
 ## Inconsistency
 
@@ -217,7 +214,7 @@ clean_headers_inmates |> tabyl(race_desc)
 grade_this_code()
 ```
 
-Four people do not have a race -- and according to the Census Bureau, Hispanic is not a race, it's an ethnicity -- but otherwise, it looks solid enough to do some analysis. There's very little in the way of inconsistency. 
+Nine people do not have a race -- and according to the Census Bureau, Hispanic is not a race, it's an ethnicity -- but otherwise, it looks solid enough to do some analysis. There's very little in the way of inconsistency. 
 
 How about what facilities they are in? 
 
