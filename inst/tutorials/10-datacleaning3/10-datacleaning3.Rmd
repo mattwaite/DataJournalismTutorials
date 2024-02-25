@@ -270,7 +270,7 @@ charges |>
 grade_this_code()
 ```
 
-Cuts down the duplicates by 582. 
+Cuts down the duplicates by more than 600. 
 
 ### Exercise 3: n grams
 
@@ -304,7 +304,7 @@ charges |>
 grade_this_code()
 ```
 
-Cuts it down by almost 1000. 
+Cuts it down by more than 1000. 
 
 ### Exercise 4: soundex
 
@@ -336,7 +336,7 @@ charges |>
 grade_this_code()
 ```
 
-Cut it down by almost 1400!
+Cut it down by almost 1600!
 
 *BUT.*
 
