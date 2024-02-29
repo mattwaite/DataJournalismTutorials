@@ -20,7 +20,7 @@ tutorial_options(exercise.completion=FALSE)
 
 The next circle of Hell on the Dante's Inferno of Data Journalism is the PDF. Governments everywhere love the PDF and publish all kinds of records in a PDF. The problem is a PDF isn't a data format -- it's a middle finger, saying I've Got Your Accountability Right Here, Pal.
 
-It's so ridiculous that there's a constellation of tools that do nothing more than try to harvest tables out of PDFs. There are online services like [CometDocs](https://www.cometdocs.com/) where you can upload your PDF and point and click your way into an Excel file. There are mobile device apps that take a picture of a table and convert it into a spreadsheet. One of the best is a tool called [Tabula](https://tabula.technology/). It was build by journalists for journalists.
+It's so ridiculous that there's a constellation of tools that do nothing more than try to harvest tables out of PDFs. There are online services like [CometDocs](https://www.cometdocs.com/) where you can upload your PDF and point and click your way into an Excel file. There are mobile device apps that take a picture of a table and convert it into a spreadsheet. 
 
 But as a student at the Harvard of the Plains, you have an advantage: You have an Adobe Creative Suite account. And that opens some very useful doors.
 
@@ -57,6 +57,8 @@ But we're not going to edit this here. I am not filled with faith in Microsoft's
 ```{r, echo=FALSE, out.width = "100%"}
 knitr::include_graphics(rep("images/pdfs3.png"))
 ```
+
+If you don't have Microsoft Excel Online approved, you'll see a big blue download button on the top left. Click that. 
 
 From here, if you have Excel installed on your computer, you could use it there. Since not everyone does, let's use Google Sheets. 
 
