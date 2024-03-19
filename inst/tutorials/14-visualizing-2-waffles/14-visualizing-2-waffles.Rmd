@@ -1,0 +1,21 @@
+---
+title: "Data Journalism Lesson 14: Visualizing part 2: components"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+description: >
+  Making quick graphics for reporting.
+---
+```{r setup, include=FALSE}
+library(learnr)
+library(gradethis)
+library(waffle)
+knitr::opts_chunk$set(echo = FALSE)
+tutorial_options(exercise.completion=FALSE)
+```
+
+# Components of magnitude
+
+More to come.

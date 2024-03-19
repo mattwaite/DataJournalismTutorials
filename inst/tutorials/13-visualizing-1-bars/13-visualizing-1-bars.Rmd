@@ -30,11 +30,9 @@ Let's revisit some data we've used in the past and turn it into charts.
 
 ```{r load-tidyverse, exercise=TRUE}
 library(tidyverse)
-library(lubridate)
 ```
 ```{r load-tidyverse-solution}
 library(tidyverse)
-library(lubridate)
 ```
 ```{r load-tidyverse-check}
 grade_this_code()
@@ -71,18 +69,6 @@ top10 <- crimes |>
   ) |>
   ungroup() |>
   top_n(10, wt=count)
-
-beernweed <- crimes |> 
-  filter(
-    grepl("ALCOHOL - MINOR IN POSSESSION", incident_code) == TRUE |
-    grepl("ALCOHOL - DRUNK", incident_code) == TRUE |
-    grepl("NARCOTICS - POSSESSION", incident_code) == TRUE
-    ) |>
-  mutate(month = floor_date(mdy_hm(reported), unit="months")) |>
-  group_by(month, incident_code) |>
-  summarize(
-    count = n()
-  )
 ```
 ```{r chart-load-data-exercise, exercise = TRUE}
 crimes <- read_csv("http://mattwaite.github.io/datajournalismfiles/crimelogs.csv")
@@ -96,11 +82,11 @@ grade_this_code()
 
 ## Bar charts
 
-The first kind of chart we'll create is a simple bar chart. It's a chart designed to show differences between things -- the magnitude of one compared to the next and the next and the next. So if we have thing, like a county, or a state, or a group name, and then a count of that group, we can make a bar chart.
+The first kind of chart we'll create is a simple bar chart. It's a chart designed to show differences between things -- the magnitude of one compared to the next and the next and the next. So if we have thing, like a county, or a state, or a group name, and then a count or a number attached to the group, we can make a bar chart.
 
 So what does the chart of the top 10 crimes on campus since 2018 look like? 
 
-First, we'll create a dataframe of those top 10, called top10.
+First, we'll create a dataframe of those top 10, called ... top10. Something we haven't worked with a lot here? The top_n function, which creates a top X list where X is the number you want. So ... 10. 
 
 ### Excercise 1: Making data
 
@@ -126,7 +112,21 @@ top10 <- crimes |>
 grade_this_code()
 ```
 
-Now ggplot. The first thing we do with ggplot is invoke it, which creates the canvas. In ggplot, we work with geometries -- the shape that the data will take -- and aesthetics -- the data that will give it that shape. In a bar chart, we first pass in the data to the geometry, then set the aesthetic. We tell ggplot what the x value is -- in a bar chart, that's almost always your grouping variable from the data you created. Then we tell it the weight of the bar -- the number that will set the height. 
+Now ggplot. The first thing we do with ggplot is invoke it, which creates the canvas. In ggplot, we work with geometries -- the shape that the data will take -- and aesthetics -- the data that will give it that shape. In a bar chart, we first pass in the data to the geometry, then set the aesthetic. We tell ggplot what the x value is -- in a bar chart, that's almost always your grouping variable from the data you created. Then we tell it the weight of the bar -- the number that will set the height. To find these, look in the code from exercise 1. What did we call the number? What did we group it by?
+
+Best to take a look:
+
+```{r top10head, exercise=TRUE, exercise.setup = "chart-load-data"}
+head(top10)
+```
+```{r top10head-solution, exercise.reveal_solution = FALSE}
+head(top10)
+```
+```{r top10head-check}
+grade_this_code()
+```
+
+Now that you know the names of your columns, you've got what you need to make a bar chart.
 
 ### Exercise 2: Your first bar
 
@@ -142,9 +142,9 @@ ggplot() +
 grade_this_code()
 ```
 
-The bars look good, but he order makes no sense. And, can you read the x axis labels? I can't. 
+The bars look good, but the order makes no sense. And, can you read the x axis labels? I can't. 
 
-We'll start with the bars. In ggplot, we use reorder, and we reorder the x value based on the weight.
+We'll start with the bars. In ggplot, we use reorder. The thing to understand about reorder is it's WHAT ARE YOU REORDERING, HOW ARE YOU REORDERING IT. So if I had a list of students in a column called Name, and each of their grades were in a column called Grades, I am reordering Name by Grades, so `reorder(Name, Grades)`, for an example. Now apply that same pattern from the data you're working with here: 
 
 ### Exercise 3: Reordering
 
@@ -160,9 +160,9 @@ ggplot() +
 grade_this_code()
 ```
 
-Better, but it still looks ... not great on the bottom. We can fix that by flipping the coordinates. 
+Better, but it still looks ... not great on the bottom. We can fix that by flipping the coordinates with `coord_flip()`. That makes vertical bars go horizontal, which makes the labels easier to read. 
 
-### Exercise 3: Flipping
+### Exercise 4: Flipping
 
 ```{r bar3, exercise=TRUE, exercise.setup = "chart-load-data"}
 ggplot() + 
@@ -180,74 +180,3 @@ grade_this_code()
 
 Art? No. Tells you the story? Yep. And for reporting purposes, that's enough. 
 
-## Line charts
-
-Line charts show change over time. It works the much the same as a bar chart, code wise, but instead of a weight, it uses a y. And if you have more than one group in your data, it takes a group element.
-
-The first secret to knowing if you have a line chart is if you have data that changes over time. The second secret to making a line chart is your x value is almost always a date. 
-
-Let's make a new dataframe called beernweed. It's going to be a dataframe of two alcohol and one drug related incident codes that are in the top 10 of reported incidents. We're then going to make a month column which is a floor date of the reported column. Then, we'll count up how many of those incidents happened in each month.  
-
-```{r line1, exercise=TRUE, exercise.setup = "chart-load-data"}
-beernweed <- crimes |> 
-  filter(
-    grepl("ALCOHOL - MINOR IN POSSESSION", incident_code) == TRUE |
-    grepl("ALCOHOL - DRUNK", incident_code) == TRUE |
-    grepl("NARCOTICS - POSSESSION", incident_code) == TRUE
-    ) |>
-  mutate(month = floor_date(mdy_hm(reported), unit="months")) |>
-  group_by(month, incident_code) |>
-  summarize(
-    count = n()
-  )
-```
-```{r line1-solution, exercise.reveal_solution = FALSE}
-beernweed <- crimes |> 
-  filter(
-    grepl("ALCOHOL - MINOR IN POSSESSION", incident_code) == TRUE |
-    grepl("ALCOHOL - DRUNK", incident_code) == TRUE |
-    grepl("NARCOTICS - POSSESSION", incident_code) == TRUE
-    ) |>
-  mutate(month = floor_date(mdy_hm(reported), unit="months")) |>
-  group_by(month, incident_code) |>
-  summarize(
-    count = n()
-  )
-```
-```{r line1-check}
-grade_this_code()
-```
-
-Now we'll make a line chart out of this data. From our beernweed dataframe, you have three columns to work with: `month`, `incident_code` and `count`. From those three, we need to fill in the x, the y, the group and the color. The color will help us see which is which. 
-
-### Exercise 5: Making lines
-
-```{r line2, exercise=TRUE, exercise.setup = "chart-load-data"}
-ggplot() + 
-  geom_line(
-    data=____, 
-    aes(
-      x=____, 
-      y=____, 
-      group=_________, 
-      color=_________
-      )
-    )
-```
-```{r line2-solution, exercise.reveal_solution = FALSE}
-ggplot() + 
-  geom_line(
-    data=beernweed, 
-    aes(
-      x=month, 
-      y=count, 
-      group=incident_code, 
-      color=incident_code
-      )
-    )
-```
-```{r line2-check}
-grade_this_code()
-```
-
-And what do we learn from this? Looks like campus was a much wilder place before the pandemic. COVID tamped down on police calls for alcohol and drugs. But, it looks like alcohol calls are trending back up again.
