@@ -1,5 +1,5 @@
 ---
-title: "Data Journalism Lesson 13: Visualizing part 1: magnitude"
+title: "Data Journalism Lesson 15: Visualizing part 1: Change over time"
 output: 
   learnr::tutorial:
     progressive: true

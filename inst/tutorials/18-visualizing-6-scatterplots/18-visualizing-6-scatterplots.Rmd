@@ -1,5 +1,5 @@
 ---
-title: "Data Journalism Lesson 14: Visualizing part 2: components"
+title: "Data Journalism Lesson 18: Visualizing part 6: scatterplots"
 output: 
   learnr::tutorial:
     progressive: true
