@@ -194,7 +194,7 @@ We can fix the uneven box sizes by adding an unnamed padding number so the numbe
 Now, in our waffle iron, if we don't give that padding a color, we'll get an error. So we need to make it white. Which, given our white background, means it will disappear.
 
 ```{r waffle5, exercise=TRUE, exercise.setup = "waffle-load-data", message=FALSE}
-cojmc2 <- c("Men" = 324, "Women" = 431, 2239)
+cojmc2 <- c("Men" = 324, "Women" = 431, ____)
 cob2 <- c("Men" = 1890, "Women" = 1104)
 
 iron(
