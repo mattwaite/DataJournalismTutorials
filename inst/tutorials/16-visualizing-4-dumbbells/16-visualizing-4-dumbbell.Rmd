@@ -1,5 +1,5 @@
 ---
-title: "Data Journalism Lesson 16: An introduction to APIs"
+title: "Data Journalism Lesson 16: Visualizing part 4: Gaps"
 output: 
   learnr::tutorial:
     progressive: true
@@ -12,188 +12,193 @@ description: >
 library(learnr)
 library(gradethis)
 library(tidyverse)
-library(tidycensus)
+library(ggalt)
 knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Intro to APIs: The Census
+# When the gap is the news
 
-There is truly an astonishing amount of data collected by the US Census Bureau. First, there's the Census that most people know -- the every 10 year census. That's the one mandated by the Constitution where the government attempts to count every person in the US. It's a mind-boggling feat to even try, and billions get spent on it. That data is used first for determining how many representatives each state gets in Congress. From there, the Census gets used to divide up billions of dollars of federal spending. 
+## The Basics.
 
-To answer the questions the government needs to do that, a ton of data gets collected. That, unfortunately, means the Census is exceedingly complicated to work with. The good news is, the Census has an API -- an application programming interface. What that means is we can get data directly through the Census Bureau via calls over the internet. 
+Second to my love of waffle charts because or their name and I'm always hungry, dumbbell charts are an excellently named way of **showing the difference between two things on a number line** -- a start and a finish, for instance. Or the difference between two related things. When the gap between numbers is the news, dumbbell charts are what you want.
 
-Let's demonstrate. 
+Dumbbell charts come batteries included in `ggalt` which we will have to load. Like usual, you already installed this if you followed the install instructions at the beginning of the course. But if you're having trouble getting this to work, go to your console in R Studio and install it with `install.packages("ggalt")`
 
-We're going to use a library called `tidycensus` which makes calls to the Census API in a very tidy way, and gives you back tidy data. That means we don't have to go through the process of importing the data from a file. I can't tell you how amazing this is, speaking from experience.
+Let's give it a whirl.
 
-```{r load-tidyverse, exercise=TRUE}
+```{r load-tidyverse, exercise=TRUE, message=FALSE, warning=FALSE}
 library(tidyverse)
-library(tidycensus)
+library(ggalt)
+
 ```
 ```{r load-tidyverse-solution}
 library(tidyverse)
-library(tidycensus)
+library(ggalt)
 ```
 ```{r load-tidyverse-check}
 grade_this_code()
 ```
 
-To use the API, you need an API key. To get that, you need to [apply for an API key with the Census Bureau](https://api.census.gov/data/key_signup.html). It takes a few minutes and you need to activate your key via email. Once you have your key, you need to set that for in your environment. If you've already done that per instructions, this should already work. 
+For this, let's use a list of a colleges from the Department of Education's College Scorecard. I've gone ahead and limited it to colleges that grant bachelor's degrees and are the main campus. I've also thinned the number of columns from 3,214 down to 8. 
 
-Just FYI: Your key is your key. Do not share it around.
+```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
+library(downloadthis)
+library(glue)
 
-So to give you some idea of how complicated the data is, let's pull up just one file from the decennial Census. We'll use the PL 94-171 file. This is the file the Census Bureau uses for redistricting. It has the major population and housing stuff. 
+dllink <- download_link(
+  link = "https://mattwaite.github.io/datajournalismfiles/colleges.csv",
+  button_label = "Download csv file",
+  button_type = "danger",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
 
-```{r census-load-data, message=FALSE, warning=FALSE}
-pl <- load_variables(2020, "pl", cache = TRUE)
-
-counties11 <- get_acs(geography = "county", 
-              variables = "B01001_001", 
-              state = "NE", 
-              year = 2011)
-
-counties21 <- get_acs(geography = "county", 
-              variables = "B01001_001", 
-              state = "NE", 
-              year = 2021)
-
-pop21 <- counties21 |> select(GEOID, NAME, estimate) |> rename(Population2021=estimate)
-
-pop11 <- counties11 |> select(GEOID, NAME, estimate) |> rename(Population2011=estimate)
-
-alldata <- pop21 |> inner_join(pop11)
+glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
 ```
-```{r census-load-data-exercise, exercise = TRUE}
-pl <- load_variables(2020, "pl", cache = TRUE)
+
+And load it.
+
+```{r dumbbell-load-data, message=FALSE, warning=FALSE}
+colleges <- read_csv("https://mattwaite.github.io/datajournalismfiles/colleges.csv")
+
+big <- c("University of Nebraska-Lincoln", "University of Iowa", "University of Minnesota-Twin Cities", "University of Illinois Urbana-Champaign", "Northwestern University", "Indiana University-Bloomington", "Purdue University-Main Campus", "Michigan State University", "University of Michigan-Ann Arbor", "Ohio State University-Main Campus", "The Pennsylvania State University", "University of Maryland-College Park", "Rutgers University-New Brunswick", "University of Wisconsin-Madison", "University of Washington-Seattle Campus", "University of Oregon", "University of Southern California", "University of California-Los Angeles")
+
+
+bigten <- colleges |> 
+  filter(INSTNM %in% big)
 ```
-```{r census-load-data-exercise-solution}
-pl <- load_variables(2020, "pl", cache = TRUE)
+```{r dumbbell-load-data-exercise, exercise = TRUE}
+colleges <- read_csv("https://mattwaite.github.io/datajournalismfiles/colleges.csv")
 ```
-```{r census-load-data-exercise-check}
+```{r dumbbell-load-data-exercise-solution}
+colleges <- read_csv("https://mattwaite.github.io/datajournalismfiles/colleges.csv")
+```
+```{r dumbbell-load-data-exercise-check}
 grade_this_code()
 ```
 
-Now glimpse it: 
+Let's look at what we've got here:
 
-```{r census2, exercise=TRUE, exercise.setup = "census-load-data"}
-glimpse(pl)
+```{r head-data, exercise=TRUE, exercise.setup = "dumbbell-load-data"}
+head(colleges)
 ```
-```{r census2-solution, exercise.reveal_solution = FALSE}
-glimpse(pl)
+```{r head-data-solution}
+head(colleges)
 ```
-```{r census2-check}
+```{r head-data-check}
 grade_this_code()
 ```
 
-There's 301 rows of data. That's 301 different kinds of data you can get from just six questions on the Census form. Population, population by race and ethnicity, population by age, housing, etc. 
+For this example, let's look at the difference between a Big Ten school's in state tuition vs out of state tuition. The problem we have? There's no conference column for us to filter on, so we've got to build a list of schools and filter that way. Because I like you, I've done that part for you. 
 
-If you think that's crazy, there's 3,346 variables in Summary File 1, which is the PL data's more enumerated big brother. The really, really big one is SF3 file it has 5,555 variables.
+### Exercise 1: Preparing the data
 
-Let's try to answer a question using the Census. What is the fastest growing county in Nebraska? Fastest shrinking? We'll use the American Community Survey, a massive rolling survey of Americans. There are better datsets for this, but this is an example. 
+To get this, we need to filter our school names -- in the `INSTNM` column -- by a list. And in the end, we'll end up with a dataframe called bigten that'll have the 14 schools currently in the conference and the four new schools coming in next year. 
 
-We're going to use a function called `get_acs`, which allows us to access all of the American Community Survey. You can explore the vastness of the Census in their [data explorer](https://data.census.gov/). We're going to focus on total population, which you can get with variable B01001_001. 
+```{r dumbbell1, exercise=TRUE, exercise.setup = "dumbbell-load-data", message=FALSE}
+big <- c("University of Nebraska-Lincoln", "University of Iowa", "University of Minnesota-Twin Cities", "University of Illinois Urbana-Champaign", "Northwestern University", "Indiana University-Bloomington", "Purdue University-Main Campus", "Michigan State University", "University of Michigan-Ann Arbor", "Ohio State University-Main Campus", "The Pennsylvania State University", "University of Maryland-College Park", "Rutgers University-New Brunswick", "University of Wisconsin-Madison", "University of Washington-Seattle Campus", "University of Oregon", "University of Southern California", "University of California-Los Angeles")
 
-### Exercise 1: Your first query
 
-Start with 2021.
-
-```{r census3, exercise=TRUE, exercise.setup = "census-load-data"}
-counties21 <- get_acs(geography = "county", 
-              variables = "B01001_001", 
-              state = "NE", 
-              year = ____)
+bigten <- ____ |> 
+  filter(INSTNM %in% ____)
 ```
-```{r census3-solution, exercise.reveal_solution = FALSE}
-counties21 <- get_acs(geography = "county", 
-              variables = "B01001_001", 
-              state = "NE", 
-              year = 2021)
+```{r dumbbell1-solution, exercise.reveal_solution = FALSE}
+big <- c("University of Nebraska-Lincoln", "University of Iowa", "University of Minnesota-Twin Cities", "University of Illinois Urbana-Champaign", "Northwestern University", "Indiana University-Bloomington", "Purdue University-Main Campus", "Michigan State University", "University of Michigan-Ann Arbor", "Ohio State University-Main Campus", "The Pennsylvania State University", "University of Maryland-College Park", "Rutgers University-New Brunswick", "University of Wisconsin-Madison", "University of Washington-Seattle Campus", "University of Oregon", "University of Southern California", "University of California-Los Angeles")
+
+
+bigten <- colleges |> 
+  filter(INSTNM %in% big)
 ```
-```{r census3-check}
+```{r dumbbell1-check}
 grade_this_code()
 ```
 
-Now 2011.
+Now, the way that the `geom_dumbbell` works is pretty simple when viewed through what we've done before. There's just some tweaks. 
 
-```{r census4, exercise=TRUE, exercise.setup = "census-load-data"}
-counties11 <- get_acs(geography = "county", 
-              variables = "B01001_001", 
-              state = "NE", 
-              year = 2011)
+### Exercise 2: The first dumbbell
+
+First: We start with the y axis. The reason is we want our dumbbells going left and right, so the label is going to be on the y axis. 
+
+Second: Our x is actually two things: x and xend. What you put in there will decide where on the line the dot appears. What goes in the x and xend are the two numbers where the gap between them is meaningful. So for us, it's our two tuition columns. 
+
+```{r dumbbell2, exercise=TRUE, exercise.setup = "dumbbell-load-data", message=FALSE}
+ggplot() + 
+  geom_dumbbell(
+    data=bigten, 
+    aes(y=____, x=____, xend=____)
+  )
 ```
-```{r census4-solution, exercise.reveal_solution = FALSE}
-counties11 <- get_acs(geography = "county", 
-              variables = "B01001_001", 
-              state = "NE", 
-              year = 2011)
+```{r dumbbell2-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_dumbbell(
+    data=bigten, 
+    aes(y=INSTNM, x=TUITIONFEE_IN, xend=TUITIONFEE_OUT)
+  )
 ```
-```{r census4-check}
+```{r dumbbell2-check}
 grade_this_code()
 ```
 
-### Exercise 2: Taking a look
+Well, that's a chart alright, but what dot is the in-state tuition and what the out of state? To fix this, we'll add colors.
 
-Let's look at counties21 of them, and you'll see an issue. 
+### Exercise 3: Colors and size
 
-```{r census5, exercise=TRUE, exercise.setup = "census-load-data"}
-head(____)
+To make this work, we'll need to do three things: first, use the English spelling of color, so `colour`. The, uh, `colour` is the bar between the dots, the `colour_x` is the color of the x value dot and the `colour_xend` is the color of the xend dot. So in our setup, in-state tuition is the x, so let's make that green. And let's make the out-of-state tuition red. While we're at it, we'll add a size to make the dots stand out.
+
+```{r dumbbell3, exercise=TRUE, exercise.setup = "dumbbell-load-data", message=FALSE}
+ggplot() + 
+  geom_dumbbell(
+    data=____, 
+    aes(y=____, x=TUITIONFEE_IN, xend=TUITIONFEE_OUT),
+    size = 2,
+    colour = "____",
+    colour_x = "____",
+    colour_xend = "____")
 ```
-```{r census5-solution, exercise.reveal_solution = FALSE}
-head(counties21)
+```{r dumbbell3-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_dumbbell(
+    data=bigten, 
+    aes(y=INSTNM, x=TUITIONFEE_IN, xend=TUITIONFEE_OUT),
+    size = 2,
+    colour = "grey",
+    colour_x = "green",
+    colour_xend = "red")
 ```
-```{r census5-check}
+```{r dumbbell3-check}
 grade_this_code()
 ```
 
-As you can see, we have a GEOID, NAME, then estimate and moe. Estimate and moe are going to be the same in both. Because those are named the same thing -- and neither indicates the year -- to merge them together, we need to rename them. 
+And now we have a chart that is trying to tells a story. We know, logically, that green on the left is good, because it means cheaper tuition. A long distance between green and red? That shows a massive gap between what in-state students pay and what out-of-state students pay. 
 
-### Exercise 3: Renaming 
+### Exercise 4: Arrange helps tell the story
 
-```{r census6, exercise=TRUE, exercise.setup = "census-load-data"}
-pop21 <- counties21 |> select(GEOID, NAME, estimate) |> rename(Population20____=estimate)
+But what if we sort it by in-state tuition, so we see them in order of cost. 
 
-pop11 <- counties11 |> select(GEOID, NAME, estimate) |> rename(Population20____=estimate)
+```{r dumbbell4, exercise=TRUE, exercise.setup = "dumbbell-load-data", message=FALSE}
+ggplot() + 
+  geom_dumbbell(
+    data=____, 
+    aes(y=reorder(____, ____), x=TUITIONFEE_IN, xend=TUITIONFEE_OUT),
+    size = 2,
+    colour = "____",
+    colour_x = "____",
+    colour_xend = "____")
 ```
-```{r census6-solution, exercise.reveal_solution = FALSE}
-pop21 <- counties21 |> select(GEOID, NAME, estimate) |> rename(Population2021=estimate)
-
-pop11 <- counties11 |> select(GEOID, NAME, estimate) |> rename(Population2011=estimate)
+```{r dumbbell4-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_dumbbell(
+    data=bigten, 
+    aes(y=reorder(INSTNM, TUITIONFEE_IN), x=TUITIONFEE_IN, xend=TUITIONFEE_OUT),
+    size = 2,
+    colour = "grey",
+    colour_x = "green",
+    colour_xend = "red")
 ```
-```{r census6-check}
+```{r dumbbell4-check}
 grade_this_code()
 ```
 
-Now we join the data together. Let's start with the new data and join the old data to it. 
-
-### Exercise 4: Joins
-
-```{r census7, exercise=TRUE, exercise.setup = "census-load-data"}
-alldata <- pop____ |> inner_join(pop____)
-```
-```{r census7-solution, exercise.reveal_solution = FALSE}
-alldata <- pop21 |> inner_join(pop11)
-```
-```{r census7-check}
-grade_this_code()
-```
-
-### Exercise 5: Percent change
-
-Now we have all the data we need to calculate percent change. Remember: Percent change is (new - old)/old.
-
-```{r census8, exercise=TRUE, exercise.setup = "census-load-data"}
-alldata |> 
-  mutate(PercentChange = (Population20____ - Population20____)/Population20____) |>
-  arrange(desc(PercentChange))
-```
-```{r census8-solution, exercise.reveal_solution = FALSE}
-alldata |> 
-  mutate(PercentChange = (Population2021 - Population2011)/Population2011) |>
-  arrange(desc(PercentChange))
-```
-```{r census8-check}
-grade_this_code()
-```
-
-And just like that: Keya Paha is the fastest growing by percentage. Huh.
+Guess who is the cheapest in the Big Ten?
