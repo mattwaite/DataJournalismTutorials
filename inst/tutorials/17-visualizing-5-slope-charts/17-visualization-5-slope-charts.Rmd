@@ -1,255 +1,323 @@
 ---
-title: "Data Journalism Lesson 17: Quick maps with Census data"
+title: "Data Journalism Lesson 17: Visualization 5: Slope charts"
 output: 
   learnr::tutorial:
     progressive: true
     allow_skip: true
 runtime: shiny_prerendered
 description: >
-  Making quick maps for reporting and publication
+  Comparing one year to the next
 ---
 ```{r setup, include=FALSE}
 library(learnr)
 library(gradethis)
 library(tidyverse)
-library(tidycensus)
-library(tigris)
-library(sf)
-options(tigris_use_cache = TRUE)
 knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Quick maps with Census data
+# Slope charts
 
 ## The basics
 
-Up to now, we've been looking at patterns in data for what is more than this, or what's the middle look like. We've calculated metrics like per capita rates, or looked at how data changes over time. 
+A line chart, as we learned, shows change over time, with the date on the x-axis and each line representing a team or player. But sometimes, you have just two seasons -- a line chart of two seasons is ... not a line chart. 
 
-Another way we can look at the data is geographically. Is there a spatial pattern to our data? Can we learn anything by using distance as a metric? What if we merge non-geographic data into geographic data? 
+But with some fiddling with lines and points, you can create a new chart type that does show change over two time periods quite well: A slope chart. 
 
-The bad news is that there isn't a One Library To Rule Them All when it comes to geo queries in R. But there's one emerging, called Simple Features, that is very good. That's where we'll start -- loading libraries we'll need. We'll need the `tidyverse` for data manipulation, `tidycensus` to pull data from the Census Bureau, `tigris` to give us access to Census Bureau maps and `sf` to display it all when we're where we need to go.
+Think of a slope chart like the meme you see online: How is started vs how it's going. 
+
+For purposes of this exercise, we're going to look at how many Nebraska high school students went to college. The state Department of Education tracks this year after year. We're going to look at students who enrolled in the fall of 2022 and the fall of 2021. Just two years, but that's what slope charts do well. 
+
+Think of it like playing connect the dots from elementary school.
+
+The data you're going to use is only the 25 largest school districts. There's 180 school districts with complete data -- way too many to chart. 
+
+**For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
+
+```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
+library(downloadthis)
+library(glue)
+
+dllink <- download_link(
+  link = "https://mattwaite.github.io/datajournalismfiles/college_bound.csv",
+  button_label = "Download csv file",
+  button_type = "danger",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
+
+```
+
+We'll need the tidyverse.
 
 ```{r load-tidyverse, exercise=TRUE}
 library(tidyverse)
-library(tidycensus)
-library(tigris)
-library(sf)
-options(tigris_use_cache = TRUE)
 ```
 ```{r load-tidyverse-solution}
 library(tidyverse)
-library(tidycensus)
-library(tigris)
-library(sf)
-options(tigris_use_cache = TRUE)
 ```
 ```{r load-tidyverse-check}
 grade_this_code()
 ```
 
-## Answering a question with Census maps
+And the data.
 
-Let's do a simple version of this first and then a more complicated one. How about just a map of population in Nebraska? In the last tutorial, we ran a block that pulled county populations in Nebraska and we'll do that again here. This time, however, we're going to add one bit: `geometry = TRUE` which is going to use the `tigris` library and add geographic features to our dataframe as a simple features file. 
+```{r slope-load-data, message=FALSE, warning=FALSE}
+schools <- read_csv("https://mattwaite.github.io/datajournalismfiles/college_bound.csv")
 
-```{r census-load-data, message=FALSE, warning=FALSE}
-counties21 <- get_acs(
-  geography = "county", 
-  variables = "B01001_001",
-  geometry = TRUE, 
-  state = "NE", 
-  year = 2021)
+sb <- schools |> filter(agency_name == "SCOTTSBLUFF PUBLIC SCHOOLS") |> mutate(agency_label = "Scottsbluff")
+gi <- schools |> filter(agency_name == "GRAND ISLAND PUBLIC SCHOOLS") |> mutate(agency_label = "Grand Island")
+se <- schools |> filter(agency_name == "SEWARD PUBLIC SCHOOLS") |> mutate(agency_label = "Seward")
+```
+```{r slope-load-data-exercise, exercise = TRUE}
+schools <- read_csv("https://mattwaite.github.io/datajournalismfiles/college_bound.csv")
+```
+```{r slope-load-data-exercise-solution}
+schools <- read_csv("https://mattwaite.github.io/datajournalismfiles/college_bound.csv")
+```
+```{r slope-load-data-exercise-check}
+grade_this_code()
+```
 
-totalpop <- get_acs(
-  state = "NE",
-  geography = "county",
-  variables = "B03001_001",
-  geometry = TRUE,
-  year = 2021
-) |>
-  rename(
-    total_population = estimate,
-  ) |>
-  select(-moe, -variable)
+We should take a quick look at our data so we know what we're working with. We'll use `glimpse` for that. 
 
-hispanic <- get_acs(
-  state = "NE",
-  geography = "county",
-  variables = "B03001_003",
-  geometry = FALSE,
-  year = 2021
-) |>
-  rename(
-    hispanic = estimate,
-  ) |>
-  select(-moe, -variable)
+```{r glimpse-data, exercise=TRUE, exercise.setup = "slope-load-data"}
+glimpse(schools)
+```
+```{r glimpse-data-solution}
+glimpse(schools)
+```
+```{r glimpse-data-check}
+grade_this_code()
+```
 
-counties <- totalpop |>
-  inner_join(hispanic) |>
+### Exercise 1: Our first slope chart
+
+Our data is in pretty good shape already, so we can go right to making a chart. 
+
+A slope chart is really made up of two separate geoms that combine to make a form -- a geom_point and a geom_line. The form the two geoms take is identical. In this case, we're going to have the x be the `college_enrollment_date` because like a line chart, our x has to be a date or date-like thing. The y is our college going percent column and we're going to add a group value, which is the `agency_name`. I'm also going to go ahead and set the color for these to grey, which you'll see why in a moment. 
+
+```{r slope2, exercise=TRUE, exercise.setup = "slope-load-data", message=FALSE}
+ggplot() + 
+  geom_line(data=____, aes(x=college_enrollment_date, y=____, group=agency_name), color="grey") +
+  geom_point(data=____, aes(x=college_enrollment_date, y=____, group=agency_name), color="grey")
+```
+```{r slope2-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_line(data=schools, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="grey") +
+  geom_point(data=schools, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="grey")
+```
+```{r slope2-check}
+grade_this_code()
+```
+
+Well, we got something. But who changed the most? What should we focus on? We don't have anything to guide us here.  
+
+## Working with your data
+
+Because our data is long data -- we have two rows for each school -- finding the schools with the biggest drops in college-bound students is a little convoluted. We first have to change the structure of the data, so instead of two rows for each district we have 1. That is a function called `pivot_wider` and it takes long data and makes it wide. In other words, two becomes one and our numbers, instead of being in two different rows, they're in the same row. Let's first look at the data as it is. 
+
+```{r slope3, exercise=TRUE, exercise.setup = "slope-load-data", message=FALSE}
+head(schools)
+```
+```{r slope3-solution, exercise.reveal_solution = FALSE}
+head(schools)
+```
+```{r slope3-check}
+grade_this_code()
+```
+
+See how there's two rows for each district? 
+
+Now, let's flip that. I'm going to use select to narrow down the columns I have, then I'm going to use `pivot_wider`. In pivot_wider, I have to specify which columns are going to become column *names*, which in this case are going to be the school years. Then, where `values_to` is, that's where the numbers that go below those years appear. I want those numbers to be the college going percent. 
+
+Let's look at it halfway through what we need to do to see if we're getting what we need.
+
+```{r slope4, exercise=TRUE, exercise.setup = "slope-load-data", message=FALSE}
+schools |>
+  select(agency_name, nep_school_year, college_going_pct) |> 
+  pivot_wider(names_from = nep_school_year, values_from = college_going_pct)
+```
+```{r slope4-solution, exercise.reveal_solution = FALSE}
+schools |>
+  select(agency_name, nep_school_year, college_going_pct) |> 
+  pivot_wider(names_from = nep_school_year, values_from = college_going_pct)
+```
+```{r slope4-check}
+grade_this_code()
+```
+
+Good news. We're on the right path. Now I can calculate the change in the number of college bound students with a simple mutate. Then, I can find the three biggest drops with an arrange.
+
+### Exercise 2: Finding and filtering
+
+To get the column names for the mutate, look at what we just did. 
+
+```{r slope5, exercise=TRUE, exercise.setup = "slope-load-data", message=FALSE}
+schools |>
+  select(agency_name, nep_school_year, college_going_pct) |> 
+  pivot_wider(names_from = nep_school_year, values_from = college_going_pct) |> 
   mutate(
-    percent_hispanic = (hispanic/total_population)*100
-    )
+    change = `____`-`____`
+  ) |> 
+  arrange(____)
 ```
-```{r census-load-data-exercise, exercise = TRUE}
-counties21 <- get_acs(
-  geography = "county", 
-  variables = "B01001_001",
-  geometry = TRUE, 
-  state = "NE", 
-  year = 2021)
-```
-```{r census-load-data-exercise-solution}
-counties21 <- get_acs(
-  geography = "county", 
-  variables = "B01001_001",
-  geometry = TRUE, 
-  state = "NE", 
-  year = 2021)
-```
-```{r census-load-data-exercise-check}
-grade_this_code()
-```
-
-To see it, we're going to add our data to a ggplot. The `sf` package has added some geoms to our toolbox, and making a simple map is very, very easy. You just start with your new dataframe name and the name of your data column. In this case, that column name is `estimate`.
-
-### Exercise 1: Make a map
-
-```{r census2, exercise=TRUE, exercise.setup = "census-load-data"}
-_____ |>
-  ggplot(aes(fill = _____)) + 
-  geom_sf(color = NA) + 
-  scale_fill_viridis_c(option = "magma") 
-```
-```{r census2-solution, exercise.reveal_solution = FALSE}
-counties21 |>
-  ggplot(aes(fill = estimate)) + 
-  geom_sf(color = NA) + 
-  scale_fill_viridis_c(option = "magma") 
-```
-```{r census2-check}
-grade_this_code()
-```
-
-And just that fast, you can see lots of people live in Omaha and Lincoln and not a lot of people live in certain areas of the state.
-
-## A more complex example
-
-Let's ask a more significant question: Which counties have the largest populations of people of Hispanic origin? In this case, we're going to look at it as a percentage of the population, not just a number.
-
-To do this, we're going to need to this in a few steps. The goal is to have a dataframe that has the total number of people in a county, the total number of people reporting Hispanic origin, and then we'll use mutate to calculate a percentage. We're going to need to use a join along the way, and we're going to need to use select to make that join easier on us. 
-
-The first dataframe we're going to make will have the total population in it. It will also have the geography. We want just one of our dataframes to be geographic, because spatial joins -- where you join two map files -- are much more complicated than we want to get into today. 
-
-In this dataframe, we need to do two extra things after we get the data. We're going to rename the estimate column first -- we want it to be named what it is to help us later. Then we're going to use select to drop the moe and variable columns so we don't have them later to complicate our joins. 
-
-### Exercise 2: Getting the total population
-
-```{r census3, exercise=TRUE, exercise.setup = "census-load-data"}
-totalpop <- get_acs(
-  state = "NE",
-  geography = "county",
-  variables = "B03001_001",
-  geometry = _____,
-  year = 2021
-) |>
-  rename(
-    total_population = _____,
-  ) |>
-  select(-_____, -_____)
-```
-```{r census3-solution, exercise.reveal_solution = FALSE}
-totalpop <- get_acs(
-  state = "NE",
-  geography = "county",
-  variables = "B03001_001",
-  geometry = TRUE,
-  year = 2021
-) |>
-  rename(
-    total_population = estimate,
-  ) |>
-  select(-moe, -variable)
-```
-```{r census3-check}
-grade_this_code()
-```
-
-Now we'll do the same thing for getting the number of people who are of Hispanic origin. However, this time we do NOT want geography. 
-
-## Exercise 3: Getting Hispanic numbers
-
-```{r census4, exercise=TRUE, exercise.setup = "census-load-data"}
-hispanic <- get_acs(
-  state = "NE",
-  geography = "county",
-  variables = "B03001_003",
-  geometry = _____,
-  year = 2021
-) |>
-  rename(
-    hispanic = _____,
-  ) |>
-  select(-_____, -_____)
-```
-```{r census4-solution, exercise.reveal_solution = FALSE}
-hispanic <- get_acs(
-  state = "NE",
-  geography = "county",
-  variables = "B03001_003",
-  geometry = FALSE,
-  year = 2021
-) |>
-  rename(
-    hispanic = estimate,
-  ) |>
-  select(-moe, -variable)
-```
-```{r census4-check}
-grade_this_code()
-```
-
-Now we're ready to join them together. While we're at it, we might as well calculate the percentage. 
-
-### Exercise 4: Joining and mutating
-
-To calculate that percentage, you'll need the names of the renamed columns you got before. You renamed estimate twice. What did you call them? 
-
-```{r census5, exercise=TRUE, exercise.setup = "census-load-data"}
-counties <- totalpop |>
-  inner_join(hispanic) |>
+```{r slope5-solution, exercise.reveal_solution = FALSE}
+schools |>
+  select(agency_name, nep_school_year, college_going_pct) |> 
+  pivot_wider(names_from = nep_school_year, values_from = college_going_pct) |> 
   mutate(
-    percent_hispanic = (_____/___________)*100
-    )
+    change = `2022-2023`-`2021-2022`
+  ) |> 
+  arrange(change)
 ```
-```{r census5-solution, exercise.reveal_solution = FALSE}
-counties <- totalpop |>
-  inner_join(hispanic) |>
-  mutate(
-    percent_hispanic = (hispanic/total_population)*100
-    )
-```
-```{r census5-check}
+```{r slope5-check}
 grade_this_code()
 ```
 
-And now, with a dataframe called `counties`, we're ready to make a map.
+Now we know Scottsbluff, Grand Island and Seward had the biggest drops year to year. To add them to our slope chart, we're going to need to make dataframes of each one of them. 
 
-### Exercise 5: Making a map
+### Exercise 3: Making three new dataframes
 
-For the fill ... why did we just do all that work above? Why calculate a number if we're not going to use it?
+Looking at the previous block, look at the agency names. To filter them out, the match has to be exact. Then, I'm going to mutate a new column onto our data called `agency_label` which will come in very handy later when we have limited room on our chart to work with. 
 
-```{r census6, exercise=TRUE, exercise.setup = "census-load-data"}
-_____ |>
-  ggplot(aes(fill = ___________)) + 
-  geom_sf(color = NA) + 
-  scale_fill_viridis_c(option = "magma") 
+```{r slope6, exercise=TRUE, exercise.setup = "slope-load-data", message=FALSE}
+sb <- schools |> filter(agency_name == "____") |> mutate(agency_label = "Scottsbluff")
+gi <- schools |> filter(agency_name == "____") |> mutate(agency_label = "Grand Island")
+se <- schools |> filter(agency_name == "____") |> mutate(agency_label = "Seward")
 ```
-```{r census6-solution, exercise.reveal_solution = FALSE}
-counties |>
-  ggplot(aes(fill = percent_hispanic)) + 
-  geom_sf(color = NA) + 
-  scale_fill_viridis_c(option = "magma") 
+```{r slope6-solution, exercise.reveal_solution = FALSE}
+sb <- schools |> filter(agency_name == "SCOTTSBLUFF PUBLIC SCHOOLS") |> mutate(agency_label = "Scottsbluff")
+gi <- schools |> filter(agency_name == "GRAND ISLAND PUBLIC SCHOOLS") |> mutate(agency_label = "Grand Island")
+se <- schools |> filter(agency_name == "SEWARD PUBLIC SCHOOLS") |> mutate(agency_label = "Seward")
 ```
-```{r census6-check}
+```{r slope6-check}
 grade_this_code()
 ```
+
+Now that we have these schools isolated, we can layer them in. 
+
+### Exercise 4: Layering with color
+
+Adding in layers in ggplot is easy, we just have to be aware of ordering and color. Putting a black line on a black line will not do much. So we're going to add our schools points and lines first, then, we'll layer in the other schools. For each school, we'll add two geoms -- the point and the line. The aes will be the same as the schools with one exception -- the color. 
+
+```{r slope7, exercise=TRUE, exercise.setup = "slope-load-data", message=FALSE}
+ggplot() + 
+  geom_line(data=schools, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="grey") +
+  geom_point(data=schools, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="grey") +
+  geom_line(data=____, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="red") +
+  geom_point(data=____, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="red") +
+  geom_line(data=____, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="black") +
+  geom_point(data=____, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="black") +
+  geom_line(data=____, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="blue") +
+  geom_point(data=____, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="blue")
+```
+```{r slope7-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_line(data=schools, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="grey") +
+  geom_point(data=schools, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="grey") +
+  geom_line(data=sb, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="red") +
+  geom_point(data=sb, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="red") +
+  geom_line(data=gi, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="black") +
+  geom_point(data=gi, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="black") +
+  geom_line(data=se, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="blue") +
+  geom_point(data=se, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="blue")
+```
+```{r slope7-check}
+grade_this_code()
+```
+
+What story does this tell? 
+
+### Exercise 5: Getting creative with spacing and breaks
+
+Now that we have something to work with, it's time to start improving it. It would be good to label each school district -- the reason we mutated that label earlier. Maybe we label them on each end of the graph. Given how much space the default ggplot behavior has left us to do that, we're going to need to make some space.
+
+We can do that with some clever manipulations of the x axis. In ggplot, there are all kinds of ways to work with the x and y axis scales. In this case, we have a date on the x axis, so we'll use `scale_x_date` and we're going to first set the line breaks manually so there's just 2021 and 2022. Then, we're going to set the limits of our x axis so that it doesn't just default to 2021-2022, but is a little wider so we have extra space. We're going to add a half a year on each side to pad it out. But because our column is a date column, all of our work here has to be in date format. That's why you see all the as.Date stuff. 
+
+```{r slope8, exercise=TRUE, exercise.setup = "slope-load-data", message=FALSE}
+ggplot() + 
+  geom_line(data=schools, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="grey") +
+  geom_point(data=schools, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="grey") +
+  geom_line(data=sb, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="red") +
+  geom_point(data=sb, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="red") +
+  geom_line(data=gi, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="black") +
+  geom_point(data=gi, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="black") +
+  geom_line(data=se, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="blue") +
+  geom_point(data=se, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="blue") + 
+  scale_x_date(breaks = c(as.Date("____-10-15"), as.Date("____-10-15")), labels = c(2021, 2022), limits = c(as.Date("2021-04-15"), as.Date("2023-04-15"))) 
+```
+```{r slope8-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_line(data=schools, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="grey") +
+  geom_point(data=schools, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="grey") +
+  geom_line(data=sb, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="red") +
+  geom_point(data=sb, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="red") +
+  geom_line(data=gi, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="black") +
+  geom_point(data=gi, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="black") +
+  geom_line(data=se, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="blue") +
+  geom_point(data=se, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="blue") + 
+  scale_x_date(breaks = c(as.Date("2021-10-15"), as.Date("2022-10-15")), labels = c(2021, 2022), limits = c(as.Date("2021-04-15"), as.Date("2023-04-15"))) 
+```
+```{r slope8-check}
+grade_this_code()
+```
+
+A ha! Better. We now just have the two years and we have some space to put our school names in there to help people.
+
+### Exercise 6: adding labels
+
+To add the labels, we again need to be a bit clever. We want to label each dot *twice* -- once for 2021 and once for 2022. To do this *looks* like a lot, but it really isn't. It's two rows for each school, but most of it is copy and paste work. Once you get one school working, you can do the rest with copy, paste, change the dataframe and done. 
+
+The first problem we have is our data has both years in it, so we're going to have to do something we don't do a lot of: put a `dplyr` filter into our data= bits. 
+
+We're going to use a `geom_text`, which will just put text anywhere on your graph. The aes will be the same as the geom_point, except it will have a label in it that we'll set to the Team. Then, for data, we're going to filter our dataframes for the `min(college_enrollment_date)` and the `max(college_enrollment_date)`, which will give us 2021 and 2022 respectively. Then, one last little trick -- we're going to nudge our labels over a little. For our min, we're going to subtract 80 days off our enrollment date, which will have the effect of moving the text to the left just a bit. Then, on the max side, we'll nudge it 80 days to the right by adding it to the enrollment date. How did I come to 80? The truth is I just found it through trial and error. Tried something, adjusted from there. Rinse and repeat until I got the number I liked.
+
+To cap it off, we'll add `theme_minimal()` at the end because we want to remove the grey background. 
+
+```{r slope9, exercise=TRUE, exercise.setup = "slope-load-data", message=FALSE}
+ggplot() + 
+  geom_line(data=schools, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="grey") +
+  geom_point(data=schools, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="grey") +
+  geom_line(data=sb, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="red") +
+  geom_point(data=sb, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="red") +
+  geom_line(data=gi, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="black") +
+  geom_point(data=gi, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="black") +
+  geom_line(data=se, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="blue") +
+  geom_point(data=se, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="blue") + 
+  geom_text(data=sb |> filter(college_enrollment_date == max(____)), aes(x=college_enrollment_date + 80, y=college_going_pct, group=agency_name, label=____)) + 
+  geom_text(data=sb |> filter(college_enrollment_date == min(____)), aes(x=college_enrollment_date - 80, y=college_going_pct, group=agency_name, label=____)) + 
+  geom_text(data=gi |> filter(college_enrollment_date == max(college_enrollment_date)), aes(x=college_enrollment_date + 80, y=college_going_pct, group=agency_name, label=agency_label)) + 
+  geom_text(data=gi |> filter(college_enrollment_date == min(college_enrollment_date)), aes(x=college_enrollment_date - 80, y=college_going_pct, group=agency_name, label=agency_label)) + 
+  geom_text(data=se |> filter(college_enrollment_date == max(college_enrollment_date)), aes(x=college_enrollment_date + 80, y=college_going_pct, group=agency_name, label=agency_label)) + 
+  geom_text(data=se |> filter(college_enrollment_date == min(college_enrollment_date)), aes(x=college_enrollment_date - 80, y=college_going_pct, group=agency_name, label=agency_label)) + 
+  scale_x_date(breaks = c(as.Date("2021-10-15"), as.Date("2022-10-15")), labels = c(2021, 2022), limits = c(as.Date("2021-04-15"), as.Date("2023-04-15"))) +
+  theme_minimal()
+```
+```{r slope9-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_line(data=schools, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="grey") +
+  geom_point(data=schools, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="grey") +
+  geom_line(data=sb, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="red") +
+  geom_point(data=sb, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="red") +
+  geom_line(data=gi, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="black") +
+  geom_point(data=gi, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="black") +
+  geom_line(data=se, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="blue") +
+  geom_point(data=se, aes(x=college_enrollment_date, y=college_going_pct, group=agency_name), color="blue") + 
+  geom_text(data=sb |> filter(college_enrollment_date == max(college_enrollment_date)), aes(x=college_enrollment_date + 80, y=college_going_pct, group=agency_name, label=agency_label)) + 
+  geom_text(data=sb |> filter(college_enrollment_date == min(college_enrollment_date)), aes(x=college_enrollment_date - 80, y=college_going_pct, group=agency_name, label=agency_label)) + 
+  geom_text(data=gi |> filter(college_enrollment_date == max(college_enrollment_date)), aes(x=college_enrollment_date + 80, y=college_going_pct, group=agency_name, label=agency_label)) + 
+  geom_text(data=gi |> filter(college_enrollment_date == min(college_enrollment_date)), aes(x=college_enrollment_date - 80, y=college_going_pct, group=agency_name, label=agency_label)) + 
+  geom_text(data=se |> filter(college_enrollment_date == max(college_enrollment_date)), aes(x=college_enrollment_date + 80, y=college_going_pct, group=agency_name, label=agency_label)) + 
+  geom_text(data=se |> filter(college_enrollment_date == min(college_enrollment_date)), aes(x=college_enrollment_date - 80, y=college_going_pct, group=agency_name, label=agency_label)) + 
+  scale_x_date(breaks = c(as.Date("2021-10-15"), as.Date("2022-10-15")), labels = c(2021, 2022), limits = c(as.Date("2021-04-15"), as.Date("2023-04-15")))  +
+  theme_minimal()
+```
+```{r slope9-check}
+grade_this_code()
+```
+
+And there you have it. A clean and clear slope chart showing how last year compared to the previous one. 
