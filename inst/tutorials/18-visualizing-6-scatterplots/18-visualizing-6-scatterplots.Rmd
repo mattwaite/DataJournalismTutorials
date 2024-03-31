@@ -6,7 +6,7 @@ output:
     allow_skip: true
 runtime: shiny_prerendered
 description: >
-  Making quick graphics for reporting.
+  Comparing two numbers to uncover a trend.
 ---
 ```{r setup, include=FALSE}
 library(learnr)
@@ -17,11 +17,15 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# More visualizing your data for reporting
+# Scatterplots
 
-One of the most powerful things that we can do with visualizing data is establish relationships and find when things don't fit the relationship. Earlier in this course, you worked with some PPP data that included population and you were asked who had the most loans. And it was always the most populous county -- Douglas. The point of that was that with obvious things like where were the most loans issued, population is going to dictate it. But what happens when it doesn't? 
+## The basics
 
-We'll start with libraries. 
+One of the most powerful things that we can do with visualizing data is establish relationships and find when things don't fit the relationship. 
+
+We've been looking at colleges this semester, at the gap between in-state and out-of-state tuition and admission rates. Next question: Is there a relationship between tuition -- how much you pay -- and how many people get into the school? In other words -- do the really exclusive schools also charge a lot of money? Do the schools that will take anyone not charge as much for tuition because they aren't as exclusive? 
+
+We'll start with libraries. We're adding `ggrepel` to this one because one very common thing to do is to label dots in the scatterplot. `ggrepel` does that. 
 
 ```{r load-tidyverse, exercise=TRUE}
 library(tidyverse)
@@ -35,14 +39,14 @@ library(ggrepel)
 grade_this_code()
 ```
 
-We'll work with the PPP data with populations that we worked with before called ppppop.csv. This is the same data we've used before, so if you already downloaded it, you don't need to do it again. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
+We'll work with the colleges data from before. This is the same data we've used before, so if you already downloaded it, you don't need to do it again. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
 
 ```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
 library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://mattwaite.github.io/datajournalismfiles/ppppop.csv",
+  link = "https://mattwaite.github.io/datajournalismfiles/colleges.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -57,16 +61,17 @@ glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
 Now import the data.
 
 ```{r chart-load-data, message=FALSE, warning=FALSE}
-ppp <- read_csv("http://mattwaite.github.io/datajournalismfiles/ppppop.csv")
+colleges <- read_csv("https://mattwaite.github.io/datajournalismfiles/colleges.csv")
 
-smallercounties <- ppp |>
-  filter(total_loans < 4000)
+collegechart <- colleges |> na.omit()
+
+nu <- collegechart |> filter(INSTNM == "University of Nebraska-Lincoln")
 ```
 ```{r chart-load-data-exercise, exercise = TRUE}
-ppp <- read_csv("http://mattwaite.github.io/datajournalismfiles/ppppop.csv")
+colleges <- read_csv("https://mattwaite.github.io/datajournalismfiles/colleges.csv")
 ```
 ```{r chart-load-data-exercise-solution}
-ppp <- read_csv("http://mattwaite.github.io/datajournalismfiles/ppppop.csv")
+colleges <- read_csv("https://mattwaite.github.io/datajournalismfiles/colleges.csv")
 ```
 ```{r chart-load-data-exercise-check}
 grade_this_code()
@@ -74,82 +79,115 @@ grade_this_code()
 
 ## Scatterplots
 
-Scatterplots are, for my money, the most revealing and useful chart type out there that isn't a map. They reveal so much, and they allow you to make comparisons between two numbers. With a scatterplot, we put what predicts the thing on the x axis, and the thing being predicted on the y axis. `geom_point` works just like other geoms -- we need an x and a y and a data element. Both x and y  are numbers. 
+Scatterplots are, for my money, the most revealing and useful chart type out there that isn't a map. They reveal so much, and they allow you to make comparisons between two numbers. With a scatterplot, we put what we think predicts the thing on the x axis, and the thing being predicted on the y axis. `geom_point` works just like other geoms -- we need an x and a y and a data element. Both x and y are numbers. 
 
-We're also going to add a second geom here called `geom_smooth`. This geom creates a line of best fit -- remember algebra and the equation of a line? This is it. This line best fits through all the dots. You can think of it like a prediction. Given all the data, the line is what you should expect given your two numbers. The x and y are identical, and it just takes a couple of extra bits on the end. 
+But first, we need to remove some bad data in our dataset. Not every school has an admit rate or in-state tuition. We can't have NA in our data. We can remove all rows with NA in any column with `na.omit()`
 
-Let's start by charting the 2021 column of population numbers and the total number of loans as our x and y.  
+### Excercise 1: Cleanup
 
-### Excercise 1: First scatterplot
+We'll run `na.omit()` on our colleges data and save it to a new dataframe called collegechart.
 
 ```{r scatter1, exercise=TRUE, exercise.setup = "chart-load-data"}
-ggplot() + 
-  geom_point(data=____, aes(x=`____`, y=total_loans)) + 
-  geom_smooth(data=____, aes(x=`____`, y=total_loans), method="lm", se=FALSE)
+____ <- colleges |> ____
 ```
 ```{r scatter1-solution, exercise.reveal_solution = FALSE}
-ggplot() + 
-  geom_point(data=ppp, aes(x=`2021`, y=total_loans)) + 
-  geom_smooth(data=ppp, aes(x=`2021`, y=total_loans), method="lm", se=FALSE)
+collegechart <- colleges |> na.omit()
 ```
 ```{r scatter1-check}
 grade_this_code()
 ```
 
-Note the dot on the far right. That's Douglas County. The line of best fit goes right through it. And you see just how much bigger Omaha is from the rest of the state. Even to the second farthest right dot Lancaster and the third farthest dot right which is Sarpy. 
+Doing that takes us from 1,828 colleges to 1,302. 
 
-But what happens when we remove those three big counties? 
-
-Let's filter so we only get counties with fewer than 4000 loans.
-
-### Exercise 2: Get smaller
+Let's take a look at our data so we know what we can work with going forward. 
 
 ```{r scatter2, exercise=TRUE, exercise.setup = "chart-load-data"}
-smallercounties <- ppp |>
-  filter(total_loans < ____)
+head(collegechart)
 ```
 ```{r scatter2-solution, exercise.reveal_solution = FALSE}
-smallercounties <- ppp |>
-  filter(total_loans < 4000)
+head(collegechart)
 ```
 ```{r scatter2-check}
 grade_this_code()
 ```
 
-Now that we've got that, let's chart it.
+Now we're ready to start making a chart. 
 
-### Exercise 3: One more scatter
+### Exercise 2: Dots on a graph
+
+The great part about scatterplots is that you can include a *lot* of data on it. To make our graph, we're going to put the admit rate in for x and the in-state tuition on the y. We're going to do ourselves a favor right away and make every dot grey.  
 
 ```{r scatter3, exercise=TRUE, exercise.setup = "chart-load-data"}
 ggplot() + 
-  geom_point(data=____, aes(x=`2021`, y=total_loans)) + 
-  geom_smooth(data=____, aes(x=`2021`, y=total_loans), method="lm", se=FALSE)
+  geom_point(data=collegechart, aes(x=____, y=____), color="grey")
 ```
 ```{r scatter3-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
-  geom_point(data=smallercounties, aes(x=`2021`, y=total_loans)) + 
-  geom_smooth(data=smallercounties, aes(x=`2021`, y=total_loans), method="lm", se=FALSE)
+  geom_point(data=collegechart, aes(x=ADM_RATE, y=TUITIONFEE_IN), color="grey")
 ```
 ```{r scatter3-check}
 grade_this_code()
 ```
 
-Better, but what dot is which county? To get that, we're going to add another geom. This one is called `geom_text_repel` and it's going to add text near each dot -- a `label` -- without them overlapping. So is it going to label them all? No, especially where they bunch close together. But it will help us see what we need to see. The smartest column for us to use here is the ProjectCountyName.
+So that chart is kinda wild. Think about dividing it up into quadrants -- on the upper left quadrant is the Admit Few, Charge Them a Ton schools. On the bottom right are schools that lets lots of people in and don't charge them a ton of money (relative to the expensive schools, that is). 
 
-### Exercise 4: Labeling
+Where is Nebraska in this chart? Let's find Dear Old Nebraska U. 
+
+### Exercise 3: There is no place like ... 
+
+The way to highlight a dot is to make a dataframe of one and add another geom_point. If you change the color of that one dot, it stands out. First, the dataframe. 
+
 
 ```{r scatter4, exercise=TRUE, exercise.setup = "chart-load-data"}
-ggplot() + 
-  geom_point(data=____, aes(x=`2021`, y=total_loans)) + 
-  geom_smooth(data=____, aes(x=`2021`, y=total_loans), method="lm", se=FALSE) +
-  geom_text_repel(data=smallercounties, aes(x=`2021`, y=total_loans, label=____))
+nu <- collegechart |> filter(____ == "University of ____-Lincoln")
+
 ```
 ```{r scatter4-solution, exercise.reveal_solution = FALSE}
-ggplot() + 
-  geom_point(data=smallercounties, aes(x=`2021`, y=total_loans)) + 
-  geom_smooth(data=smallercounties, aes(x=`2021`, y=total_loans), method="lm", se=FALSE) +
-  geom_text_repel(data=smallercounties, aes(x=`2021`, y=total_loans, label=ProjectCountyName))
+nu <- collegechart |> filter(INSTNM == "University of Nebraska-Lincoln")
+
 ```
 ```{r scatter4-check}
 grade_this_code()
 ```
+
+Now we have a dataframe of one. Let's use it. 
+
+### Exercise 4: One red dot please
+
+```{r scatter5, exercise=TRUE, exercise.setup = "chart-load-data"}
+ggplot() + 
+  geom_point(data=collegechart, aes(x=____, y=____), color="grey") + 
+  geom_point(data=____, aes(x=____, y=____), color="red")
+```
+```{r scatter5-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_point(data=collegechart, aes(x=ADM_RATE, y=TUITIONFEE_IN), color="grey") +
+  geom_point(data=nu, aes(x=ADM_RATE, y=TUITIONFEE_IN), color="red")
+```
+```{r scatter5-check}
+grade_this_code()
+```
+
+There we are. As a state school -- a Land Grant school no less -- we don't reject a lot of people and tuition is relatively cheap compared to a lot of places. 
+
+Better, but while we might know who that dot is, does everyone else? To get a label on there, we're going to add another geom. This one is called `geom_text_repel` and it's going to add text near each dot -- a `label` -- without them overlapping. The good news -- your `geom_text_repel` aes is exactly the same as your geom_point aes, just adding a `label`. And what column would make the most sense here to label the dot? 
+
+### Exercise 5: Labeling
+
+```{r scatter6, exercise=TRUE, exercise.setup = "chart-load-data"}
+ggplot() + 
+  geom_point(data=collegechart, aes(x=____, y=____), color="grey") + 
+  geom_point(data=____, aes(x=____, y=____), color="red") + 
+  geom_text_repel(data=____, aes(x=____, y=____, label=____))
+```
+```{r scatter6-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_point(data=collegechart, aes(x=ADM_RATE, y=TUITIONFEE_IN), color="grey") +
+  geom_point(data=nu, aes(x=ADM_RATE, y=TUITIONFEE_IN), color="red") + 
+  geom_text_repel(data=nu, aes(x=ADM_RATE, y=TUITIONFEE_IN, label=INSTNM))
+```
+```{r scatter6-check}
+grade_this_code()
+```
+
+And now everyone knows where the Harvard of the Plains resides on this chart. 
