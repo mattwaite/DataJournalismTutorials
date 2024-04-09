@@ -178,10 +178,10 @@ topmajors |>
     ____ = "Nebraska has 182 majors and most of them are small. Here's the big ones."
   ) |> tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
-    locations = cells_title("title")
+    locations = cells_title("____")
   ) |> tab_style(
     style = cell_text(color = "black", align = "left"),
-    locations = cells_title("subtitle")
+    locations = cells_title("____")
   )
 ```
 ```{r table5-solution, exercise.reveal_solution = FALSE}
@@ -226,10 +226,10 @@ topmajors |>
     ____ = "Nebraska has 182 majors and most of them are small. Here's the big ones."
   ) |> tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
-    locations = cells_title("title")
+    locations = cells_title("____")
   ) |> tab_style(
     style = cell_text(color = "black", align = "left"),
-    locations = cells_title("subtitle")
+    locations = cells_title("____")
   ) |>
   ______________(
     source_note = md("**By:** Matt Waite  |  **Source:** University of Nebraska-Lincoln")
