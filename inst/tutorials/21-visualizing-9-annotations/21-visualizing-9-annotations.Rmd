@@ -1,5 +1,5 @@
 ---
-title: "Data Journalism Lesson 29: Visualizing 9: The importance of text"
+title: "Data Journalism Lesson 21: Visualizing 9: The importance of text"
 output: 
   learnr::tutorial:
     progressive: true
