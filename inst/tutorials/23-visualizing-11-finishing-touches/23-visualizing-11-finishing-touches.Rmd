@@ -220,6 +220,8 @@ grade_this_code()
 
 One last thing: ggplot, by default, sets the margin for the title and subtitle to the edge of the chart area -- the area were the data appears. It creates an odd spacing where the title is shifted right for little reason. We can fix that too in `theme()` by making the plot.title.position set to the plot. 
 
+### Exercise 3: Fixing the indent
+
 ```{r finishing5, exercise=TRUE, exercise.setup = "finishing-load-data", message=FALSE}
 ggplot() + 
   geom_bar(data=top20, aes(x=reorder(incident_code, count), weight=count), fill="lightgrey") + 
