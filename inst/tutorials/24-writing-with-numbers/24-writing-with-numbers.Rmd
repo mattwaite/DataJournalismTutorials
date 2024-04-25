@@ -8,7 +8,13 @@ runtime: shiny_prerendered
 description: >
   Learn how to create narratives out of your numbers.
 ---
-
+```{r setup, include=FALSE}
+library(learnr)
+library(gradethis)
+library(tidyverse)
+knitr::opts_chunk$set(echo = FALSE)
+tutorial_options(exercise.completion=FALSE)
+```
 # Writing with numbers
 
 The number one sin of all early career data journalist is to get really, really, really attached to the analysis you've done and include every number you find.
