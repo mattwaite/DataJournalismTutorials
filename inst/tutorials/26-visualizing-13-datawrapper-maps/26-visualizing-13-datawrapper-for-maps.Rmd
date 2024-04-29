@@ -1,5 +1,5 @@
 ---
-title: "Data Journalism Lesson 24: Visualizing part 12: Datawrapper"
+title: "Data Journalism Lesson 26: Visualizing part 13: Datawrapper for maps"
 output: 
   learnr::tutorial:
     progressive: true
@@ -18,9 +18,7 @@ tutorial_options(exercise.completion=FALSE)
 
 # Visualizing your data with Datawrapper
 
-Making charts in Datawrapper is preposterously simple, which is the point. There are dozens of chart types, and dozens of options. To get from a csv to a chart to publication is very, very easy.
-
-First, go to [datawrapper.de](https://www.datawrapper.de/) and sign up for an account. It’s free.
+Making charts in Datawrapper is preposterously simple. Making maps is less so, but not hard. 
 
 ## Data prep
 
@@ -31,7 +29,7 @@ library(tidyverse)
 
 predictions <- read_csv("https://mattwaite.github.io/datajournalismfiles/predictions.csv")
 
-preds <- predictions |> filter(year == 2023) |>
+preds <- predictions |> filter(year == 2024) |>
   separate(coordinates, into=c("latitude", "longitude"), sep=",") 
 
 write_csv(preds, "predictions.csv")

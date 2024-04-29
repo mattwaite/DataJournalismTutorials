@@ -1,0 +1,97 @@
+---
+title: "Data Journalism Lesson 25: Visualizing part 12: Datawrapper for charts"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+description: >
+  Making quick graphics for publication
+---
+```{r setup, include=FALSE}
+library(learnr)
+library(gradethis)
+library(tidyverse)
+knitr::opts_chunk$set(echo = FALSE)
+tutorial_options(exercise.completion=FALSE)
+```
+
+# Visualizing your data with Datawrapper
+
+Making charts in Datawrapper is preposterously simple, which is the point. There are dozens of chart types, and dozens of options. To get from a csv to a chart to publication is very, very easy.
+
+First, go to [datawrapper.de](https://www.datawrapper.de/) and sign up for an account. It’s free.
+
+## Data prep
+
+Next, we need some data. **Start a notebook in your homework project**, copy this block of code and run it: 
+
+```
+library(tidyverse)
+
+crimes <- read_csv("http://mattwaite.github.io/datajournalismfiles/crimelogs.csv")
+
+top20 <- crimes |> 
+  group_by(incident_code) |>
+  summarize(
+    count = n()
+  ) |>
+  ungroup() |>
+  top_n(20, wt=count)
+
+write_csv(top20, "top20calls.csv")
+```
+
+This block of code does a few things -- it pulls in the UNL Police data we've worked with, groups the call types together and creates a top 20 list of the most common. Then, using write_csv it writes the dataframe out to a csv file. It's the opposite of read_csv. 
+
+After you run that, you'll have a csv file in your homework directory called top20calls.csv. We'll use that for our datawrapper example. 
+
+## Working in Datawrapper
+
+In your Datawrapper dashboard, we want to start with a new chart. So let's make a chart.
+
+```{r, echo=FALSE, out.width = "100%"}
+knitr::include_graphics(rep("images/datawrapper1.png"))
+```
+
+We're going to make a chart, similar to what we did in the Color chapter. When you pick chart, it's going to take you right to the steps to making a chart. The first thing we're going to do is upload our csv file to Datawrapper. Click XLS/CSV upload, find your file and hit okay.
+
+```{r, echo=FALSE, out.width = "100%"}
+knitr::include_graphics(rep("images/datawrapper2.png"))
+```
+
+Once you do that, hit proceed. Datawrapper is going to show you what it thinks your data is like. Text will appear in black, numbers in blue, dates in green. If there's something in red, that means there's a problem. Your data is very simple, so very little to go wrong. You can hit proceed.
+
+Once you do, it's going to show you all of the chart types you can make, and it's going to guess (wrongly) at one. Pick a bar chart and hit proceed.
+
+```{r, echo=FALSE, out.width = "100%"}
+knitr::include_graphics(rep("images/datawrapper3.png"))
+```
+
+In the next window, we're going to do two things: First, we're going to sort the bars. Then, change the bar color to grey. 
+
+```{r, echo=FALSE, out.width = "100%"}
+knitr::include_graphics(rep("images/datawrapper4.png"))
+```
+
+Now, let's highlight Narcotics possession calls by clicking customize colors, finding Narcotics possession in the dropdown list and then making that color green. To finish it off, uncheck the color key box. 
+
+```{r, echo=FALSE, out.width = "100%"}
+knitr::include_graphics(rep("images/datawrapper5.png"))
+```
+
+Hit proceed. Now we're on the annotate menu. This is where we get to add a headline, byline and source. The description is the chatter or subtitle in what we've been doing. You should also be sure to add alt-text at the bottom.  
+
+```{r, echo=FALSE, out.width = "100%"}
+knitr::include_graphics(rep("images/datawrapper6.png"))
+```
+
+After adding annotations, hit proceed. The next screen is layout, and we rarely ever change anything there. You can just hit proceed again. 
+
+Now, the last screen is the publish screen. We don't need to publish this, but to get credit for the assignment, you need to hit the png button on the bottom and download the image. 
+
+```{r, echo=FALSE, out.width = "100%"}
+knitr::include_graphics(rep("images/datawrapper8.png"))
+```
+
+If we did publish it, we could embed the chart into a story on a website. How you do that depends on what publication system you use. 
