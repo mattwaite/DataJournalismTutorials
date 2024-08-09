@@ -19,7 +19,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Data journalism in the age of replication
+## The Goal
+
+In this lesson, you'll learn about the critical importance of replication and transparency in data journalism. You'll understand why being able to reproduce your analysis is essential for credibility and accuracy in reporting. By the end of this tutorial, you'll grasp the concept of keeping detailed logs of your data analysis process, know why traditional tools like Excel may fall short in this regard, and be introduced to more advanced tools like analysis notebooks that can help document your work step-by-step. You'll also learn the basics of working with R Notebooks, which will be your primary tool for the rest of this course.
+
+## The Basics
 
 It's a single word in a single job description, but a Buzzfeed job posting in 2017 is another indicator in what could be a profound shift in how data journalism is both practiced and taught.
 
@@ -211,3 +215,20 @@ That explaination, plus the code, is the real power of notebooks. To add a block
 In that window, use some of the code from above and add two numbers together. To see it run, click the green triangle on the right. That runs the chunk. You should see the answer to your addition problem. 
 
 And that, just that, is the foundation you need to start this book.
+
+## The Recap
+
+Throughout this lesson, you've explored the growing emphasis on replication in data journalism, as highlighted by the AP Stylebook's guidelines. You've learned about the challenges of reproducing analyses and the importance of documenting your process thoroughly. You've been introduced to R Notebooks as a powerful tool for combining code, explanation, and results in a single, shareable document. Remember, transparency in your work isn't just about avoiding errors—it's about building trust with your audience and contributing to a more accountable form of journalism. As you move forward, keep in mind that every step of your data analysis should be documented and explainable, allowing others to follow your path from raw data to published conclusions.
+
+## Terms to Know
+
+- Replication: The process of reproducing a data analysis to verify its accuracy and credibility.
+- Data Journalism: A form of journalism that uses data analysis and visualization to uncover and tell stories.
+- AP Stylebook: A writing style guide for journalists that now includes standards for data journalism practices.
+- Methodology Description: A detailed explanation of the steps taken in a data analysis, allowing others to reproduce the work.
+- R Notebook: An interactive document that combines explanatory text, code, and output in a single file.
+- Markdown: A lightweight markup language used for formatting text in R Notebooks and other documents.
+- Code Repository: A storage location for code and related files, often used for sharing and collaborating on data journalism projects.
+- Data Dictionary: A document that provides definitions and explanations for the variables in a dataset.
+- Nerd Box: A sidebar in a news story that explains the technical details of how a data analysis was conducted.
+- Reproducible Workflow: A series of documented steps in data analysis that allows others to repeat the process and obtain the same results.

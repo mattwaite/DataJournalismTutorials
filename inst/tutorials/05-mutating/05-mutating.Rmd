@@ -19,9 +19,11 @@ library(tidyverse)
 knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
-# Mutating data
+## The Goal
 
-## The basics
+In this lesson, you'll learn about mutating data - a powerful technique for creating new columns based on existing data. By the end of this tutorial, you'll understand how to use the mutate() function in R to perform calculations, such as percent change, on your data. You'll also learn how to combine mutate with other dplyr functions like arrange() to answer specific questions about your dataset. This skill is essential for data journalists who often need to derive new insights from raw data.
+
+## The Basics
 
 One of the most common data analysis techniques is to look at change over time. The most common way of comparing change over time is through percent change. The math behind calculating percent change is very simple, and you should know it off the top of your head. The easy way to remember it is:
 
@@ -192,3 +194,18 @@ grade_this_code()
 ```{r rawchange, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "mutating-load-data", results='asis'}
 glue("What county added the most people by raw number? It's {biggest$County}, {biggest$State} adding {biggest$rawchange} people in one year. Know where that is?")
 ``` 
+
+## The Recap
+
+Throughout this lesson, you've learned how to use the mutate() function to create new columns in your dataset. You've calculated percent change and raw change in population data, demonstrating how to perform simple mathematical operations on existing columns. You've also combined mutate() with arrange() to identify the fastest-growing counties and those with the largest absolute population increases. Remember, mutating data allows you to uncover new insights and tell more complex stories with your data. As you continue your data journalism journey, you'll find that the ability to create new variables is an invaluable tool in your analytical toolkit.
+
+## Terms to Know
+
+- Mutate: A dplyr function used to create new columns or modify existing ones in a dataset.
+- Percent change: A calculation that shows the relative change between two values over time.
+- Raw change: The absolute difference between two values, without considering proportional change.
+- dplyr: A package in R that provides a set of tools for efficiently manipulating datasets.
+- Pipe operator (|>): A symbol used in R to chain together multiple operations on data.
+- Arrange: A dplyr function used to sort data based on one or more columns.
+- desc(): A function used within arrange() to sort data in descending order.
+- Backticks (`): Symbols used in R to enclose column names that start with numbers or contain spaces.

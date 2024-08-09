@@ -20,36 +20,17 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Introduction 
+## The Goal
 
-## The basics
+In this lesson, you will learn about aggregates - a fundamental concept in data analysis. By the end of this tutorial, you'll understand how to group data together and perform calculations on those groups using R and the dplyr package. You'll practice grouping data by one or more variables, counting occurrences within groups, and arranging results to answer questions about your dataset. These skills are essential for summarizing large datasets and uncovering patterns in your data.
 
-R is a statistical programming language that is purpose built for data analysis.
+## The Basics
 
-Base R does a lot, but there are a mountain of external libraries that do things to make R better/easier/more fully featured. We already installed the tidyverse -- or you should have if you followed the instructions for the last assignment -- which isn't exactly a library, but a collection of libraries. Together, they make up the tidyverse. Individually, they are extraordinarily useful for what they do. We can load them all at once using the tidyverse name, or we can load them individually. Let's start with individually. 
+One of the most basic bits of data analysis is just simply taking a lot of things -- thousands of things -- and putting them together somehow. If you have a dataset of every police call in a city, you can find out how many times police are called for someone breaking into a house. If you have a dataset of every pass thrown in college football you can find out which quarterbacks threw for the most yards *and* which receivers caught the most passes. 
 
-The two libraries we are going to need for this assignment are `readr` and `dplyr`. The library `readr` reads different types of data in as a dataframe -- think of it like a big spreadsheet. For this assignment, we're going to read in csv data or Comma Separated Values data. That's data that has a comma between each column of data. 
+So how do you put things together? 
 
-Then we're going to use `dplyr` to analyze it. 
-
-To use a library, you need to import it. Good practice -- one I'm going to insist on -- is that you put all your library steps at the top of your notebooks. 
-
-That code looks like this:
-
-```
-library(readr)
-```
-
-To load them both, you need to run two lines of code like this:
-
-```
-library(readr)
-library(dplyr)
-```
-
-You can keep doing that for as many libraries as you need. I've seen notebooks with 10 or more library imports.
-
-But the tidyverse has a neat little trick. We can load most of the libraries we'll need for the whole semester with one line.
+First, we need to load our libraries. 
 
 Run this.
 
@@ -92,21 +73,7 @@ glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
 
 So step 2, after setting up our libraries, is most often going to be importing data. In order to analyze data, we need data, so it stands to reason that this would be something we'd do very early.
 
-The code looks *something* like this, but hold off doing anything just yet:
-
-```
-calls <- read_csv("~/Books/mattwaite.github.io/datajournalismfiles/crimelogs.csv")
-```
-
-Let's unpack that.
-
-The first part -- calls -- is the name of your variable. A variable is just a name of a thing that stores stuff. In this case, our variable is a data frame, which is R's way of storing data (technically it's a tibble, which is the tidyverse way of storing data, but the differences aren't important and people use them interchangeably). **We can call this whatever we want, with a few exceptions.** I always want to name data frames after what is in it. In this case, we're going to import a dataset of police calls. Variable names, by convention are one word all lower case. **You can end a variable with a number, but you can't start one with a number**.
-
-The <- bit is the variable assignment operator. It's how we know we're assigning something to a word. Think of the arrow as saying "Take everything on the right of this arrow and stuff it into the thing on the left." So we're creating an empty vessel called `calls` and stuffing all this data into it. 
-
-The `read_csv` bits are pretty obvious, except for one thing. What happens in the quote marks is the path to the data. In there, I have to tell R where it will find the data. The easiest thing to do when you are working on your own computer, if you are confused about how to find your data, is to put your data in the same folder as as your notebook (you'll have to save that notebook first). If you do that, then you just need to put the name of the file in there (DailyCrimeLogSummary.csv). For this exercise, we're pulling the data from a website, and the path that we'll enter is the url of the data.
-
-Your first task is to import the data. For this exercise, you need to simply run this:
+For this exercise, you need to simply run this:
 
 ```{r load-data, message=FALSE, warning=FALSE}
 calls <- read_csv("https://mattwaite.github.io/datajournalismfiles/crimelogs.csv")
@@ -152,27 +119,6 @@ grade_this_code()
 
 Let's look at this. As you can see by the data, we have six calls, **which is what we expect** from `head()`. But notice the first row -- the headers. We have things like `incident_code` and `reported` for what type of call it is and the date and time it was reported. 
 
-### Exercise 2: Using glimpse to see your data 
-
-Why do this? Why use head? It gives us a glimpse of the data. Which ... conveniently ... is also a way to look at your data, and it works the same way as `head()` 
-
-```{r glimpse-data, exercise=TRUE, exercise.setup = "load-data"}
-glimpse(____)
-```
-```{r glimpse-data-solution, exercise.reveal_solution = FALSE}
-glimpse(calls)
-```
-```{r glimpse-data-check}
-grade_this_code()
-```
-<div id="glimpse-data-hint">
-**Hint:** This works the same as head() above.
-</div>
-
-Either of these will guide you with what you have to work with in the coming problems. 
-
-## Answering questions with code
-
 ```{r numberplayers, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "load-data", results='asis'}
 glue("What if we wanted to know what the most common call type to UNLPD is? To do that by hand, we'd have to take each of the {ncalls} records and sort them into piles. Drunks over here. Potheads over here. We'd put them in groups and then count them.")
 ```
@@ -183,21 +129,9 @@ glue("What if we wanted to know what the most common call type to UNLPD is? To d
 
 To accomplish our goal, we start with the name of the data we created before. The same name we used in `head()` and `glipse()`. We'll take that data and we'll introduce a new operator: `|>`. The best way to read that operator, in my opinion, is to interpret that as "and then do this." So the start of our pattern is `data |>` which you can read as `data and now we'll do this`.
 
-The this, in our case, is `group_by()`. Like `head()` and `glimpse()`, **we need to put something in the parenthesis**. But unlike `head()` and `glimpse()`, this time the something comes from that first row of head. We are grouping data by one of the pieces of the data -- a field. *If we're trying to group by incident type*, which field looks like it holds the incident name? Let's use head again and take a look at the very top row in bold.
+The this, in our case, is `group_by()`. Like `head()` and `glimpse()`, **we need to put something in the parenthesis**. But unlike `head()` and `glimpse()`, this time the something comes from that first row of head. We are grouping data by one of the pieces of the data -- a column name. *If we're trying to group by incident type*, which field looks like it holds the incident name? Look where you ran head above.
 
-```{r head-review, exercise=TRUE, exercise.setup = "load-data"}
-head(____)
-```
-```{r head-review-solution, exercise.reveal_solution = FALSE}
-head(calls)
-```
-```{r head-review-check}
-grade_this_code()
-```
-
-That block of code you just ran has two hints for the code block you'll have to complete later: What data are you using? What field in that data do you want to group by? Keep those in mind.
-
-### Exercise 3: Group by and count
+### Exercise 2: Group by and count
 
 First, we're going to group our data by the column containing the names of incidents. 
 
@@ -227,7 +161,7 @@ grade_this_code()
 </div>
 In this case, we wanted to group together incident types, signified by the field name `incident_code`. After we group the data, we need to count them up. In dplyr, we use `summarize` [which can do more than just count things](https://dplyr.tidyverse.org/reference/summarise.html). Inside the parentheses in summarize, we set up the summaries we want. In this case, we just want a count of the types: `total = n(),` says create a new field, called `total` and set it equal to `n()`, which might look weird, but it's common in stats. The number of things in a dataset? Statisticians call it n. There are n number of call types in this dataset. So `n()` is a function that counts the number of things there are. 
 
-### Exercise 4: Arranging data
+### Exercise 3: Arranging data
 
 And when we run that, we get a list of positions with a count next to them. But it's not in any order. So we'll add another And Then Do This |> and use `arrange`. Arrange does what you think it does -- it arranges data in order. By default, it's in ascending order -- smallest to largest. But if we want to know the type with the most calls, we need to sort it in descending order. In arrange, we need to tell it what we are arranging by. **If you have group_by, then whatever you are arranging by will *always* come from inside summarize.** The pattern looks like this:
 
@@ -255,7 +189,7 @@ grade_this_code()
 </div>
 What is the most common police call on campus? If you look at the row with the largest total, you get your answer. 
 
-### Exercise 5: Grouping by more than one thing 
+### Exercise 4: Grouping by more than one thing 
 
 We can, if we want, group by more than one thing. Which location has the most of a single call type? To do that, we can group by the type and location in the data:
 
@@ -283,3 +217,17 @@ grade_this_code()
 </div>
 
 You can learn a bit about students by looking at these simple counts.
+
+## The Recap
+
+Throughout this lesson, you've learned how to use aggregates to analyze data more effectively. You've practiced grouping data using group_by(), summarizing groups with summarise(), and arranging results with arrange(). These powerful functions allow you to quickly answer questions about your data, such as finding the most common types of incidents or identifying locations with the highest occurrences of specific events. Remember, the ability to aggregate data is a crucial skill in data journalism, enabling you to distill large datasets into meaningful insights. As you continue your journey in data analysis, you'll find these techniques invaluable for uncovering stories hidden within your data.
+
+## Terms to Know
+
+- Aggregate: A summary or total created by combining individual data points into groups.
+- `group_by()`: A dplyr function used to group data by one or more variables.
+- `summarise()`: A dplyr function used to create summary statistics for grouped data.
+- `n()`: A function used within summarise() to count the number of rows in each group.
+- `arrange()`: A dplyr function used to sort data based on specified columns.
+- `desc()`: A function used within arrange() to sort data in descending order.
+- Pipe operator (`|>`): An operator used to chain together multiple operations in R, often read as "and then."
