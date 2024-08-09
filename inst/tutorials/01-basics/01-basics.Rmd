@@ -19,9 +19,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Starting out
+## The Goal
 
-## The basics of the basics
+This introductory lesson aims to familiarize students with the fundamental concepts of R programming in the context of data journalism. The primary goal is to help learners understand the basic syntax of R, its function as a calculator, and the crucial concept of variables. By the end of this tutorial, students should be comfortable with simple mathematical operations in R, understand the importance of order in calculations (PEMDAS), and grasp the basics of creating and using variables to store both numeric and string data.
+
+## The Basics
 
 R is a programming language, one specifically geared toward statistical analysis. Like all programming languages, it has certain built-in functions and you can interact with it in multiple ways. The first, and most basic, is the console. Think of the console like talking directly to R. It's direct, but it has some drawbacks and some quirks we'll get into later. 
 
@@ -82,12 +84,12 @@ Declaring variables is a pattern. The pattern here is `Name Of The Thing <- Valu
 
 Names can be anything you want them to be, but they have to be one word, and it's better if they have no numbers or symbols in it. So you can create a variable called NebraskaWillWinTheNationalTitleThisSeasonMattRhuhleIsGod if you want. But some questions for you: What is that variable going to contain? Is it obvious by the name? And do you want to try and type that again? How about three more times? Yeah, me neither.
 
-> **5 Rules For Naming Variables**<br>
- 1. One word, no spaces.<br>
- 2. If you must use a number, it has to be at the end, never at the beginning.<br> 
- 3. No symbols (like ! or ? or # or anything like it).<br>
- 4. Keep them short, but never one letter. If your variable is holding the number of touchdowns a team scored, don't call it t.<br> 
- 5. Make them understandable. If your variable is holding the number of touchdowns a teams scored, call it touchdowns. Keep it simple.<br>
+### 5 Rules For Naming Variables
+1. One word, no spaces.
+2. If you must use a number, it has to be at the end, never at the beginning.
+3. No symbols (like ! or ? or # or anything like it).
+4. Keep them short, but never one letter. If your variable is holding the number of touchdowns a team scored, don't call it t.
+5. Make them understandable. If your variable is holding the number of touchdowns a teams scored, call it touchdowns. Keep it simple.
  
 The next thing we need to know about are the values. There's a bunch of different kinds of values, but two that we're going to work with the most are **strings** and **numbers**. A string is just text. Your name is a string. Your home address is a string. For the most part, strings aren't hard -- they're anything you wouldn't do math on. So, for example, your phone number is a string, even though it's made up of numbers. If we add your phone number to mine, do we get something meaningful? No. Same with ZIP codes. They're strings.
 
@@ -135,3 +137,42 @@ grade_this_code()
 The number you get is .80something something. That's a decimal and when we express it as a percentage, we multiply it by 100. So about 81 percent of students at UNL are undergrads. You're everywhere. You infect everything. 
 
 This isn't terribly useful just yet. If we wanted to know if Nebraska was unusual in the Big Ten or among land-grant institutions, it would take us forever to look up every school and do this math. But as you now know, variables can hold anything we want to store in them. Soon enough, that UndergradStudents value will hold every school in higher education. The code doesn't change all that much, but we need to crawl before we walk.
+
+## Notebooks
+
+Outside of these tutorials, you will work in notebooks. Notebooks are a place where we can combine text, where we explain our thinking, with code, where we do our work. Modern data science requires transparency. Notebooks are where we are transparent. Here is my data, here is my code, here is my thinking, you can see it all and judge for yourself.
+
+To make a notebook, go up to the top left of your R Studio window and you'll see a green plus sign. Click that, and go down to R Notebook. Or, you can go to the File menu and go to New File and then to R Notebook.
+
+![](images/basics1.png){width="100%"}
+
+You'll notice, in your notebook, a lot of automatically generated text. We do not want that. So you'll need to select it all - command A on a Mac, control A on Windows - and hit delete. You should have a blank page now.
+
+Text -- explanations -- go between code chunks. So At first, just write a sentence.
+
+Then, you can click the green C in the tool bar and go to R or use the keyboard shortcut to add a chunk: Ctrl + Alt + I on Windows or Command + Option + I on Mac.
+
+![](images/basics2.png){width="100%"}
+
+Then, it's simply a matter of putting things where they need to go.
+
+![](images/basics3.png){width="100%"}
+
+When it's time to turn it in, you just go to File \> Save and give the file a name and save it. When asked, you're turning in the .Rmd file you just saved.
+
+## The Recap
+
+In this lesson, we covered the essentials of R programming for beginners. We learned how to use R as a calculator, performing basic arithmetic operations and understanding the order of operations (PEMDAS). We then explored the concept of variables, learning how to create them, name them effectively, and assign different types of values (numbers and strings) to them. We practiced these skills by calculating the percentage of undergraduate students at UNL, demonstrating how these basic concepts can be applied to real-world data analysis tasks. Remember, mastering these fundamentals is crucial as they form the foundation for more complex data journalism techniques we'll explore in future lessons.
+
+## Terms to Know
+
+- R: A programming language specifically designed for statistical analysis and data manipulation.
+- Console: The basic interface for interacting directly with R, where commands are entered and executed line by line.
+- Variable: A named storage location in a program that holds a value, which can be a number, text, or other data types.
+- Assignment operator (<-): The symbol used in R to assign a value to a variable (e.g., x <- 5).
+- String: A data type representing text, enclosed in quotation marks (e.g., "Hello, world!").
+- Numeric: A data type representing numbers that can be used in mathematical operations.
+- PEMDAS: An acronym for the order of operations in mathematics (Parentheses, Exponents, Multiplication, Division, Addition, Subtraction).
+- Function: A reusable block of code that performs a specific task, often taking inputs and returning outputs.
+- Syntax: The set of rules that define how R code must be written to be valid and executable.
+- Data type: A classification that specifies which type of value a variable can hold (e.g., numeric, string, logical).
