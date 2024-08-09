@@ -4,6 +4,8 @@ output:
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    theme: journal
+    ace_theme: github
 runtime: shiny_prerendered
 description: >
   Learn how to narrow in on what's important and remove what isn't.

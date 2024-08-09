@@ -1,9 +1,11 @@
 ---
-title: "Data Journalism Lesson 10: Data Cleaning 3: OpenRefine"
+title: "Data Journalism Lesson 10: OpenRefine"
 output: 
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    theme: journal
+    ace_theme: github
 runtime: shiny_prerendered
 description: >
   Clean up your data with OpenRefine.

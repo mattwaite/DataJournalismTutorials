@@ -1,9 +1,11 @@
 ---
-title: "Data Journalism Lesson 22: Visualizing 10: Color"
+title: "Data Journalism Lesson 22: Color"
 output: 
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    theme: journal
+    ace_theme: github
 runtime: shiny_prerendered
 description: >
   Learn how to add color to draw attention.

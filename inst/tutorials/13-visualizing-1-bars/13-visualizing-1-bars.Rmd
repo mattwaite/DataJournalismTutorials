@@ -1,9 +1,11 @@
 ---
-title: "Data Journalism Lesson 13: Visualizing part 1: magnitude"
+title: "Data Journalism Lesson 13: Bar charts"
 output: 
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    theme: journal
+    ace_theme: github
 runtime: shiny_prerendered
 description: >
   Making quick graphics for reporting.

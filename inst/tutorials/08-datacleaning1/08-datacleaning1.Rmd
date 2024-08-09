@@ -1,9 +1,11 @@
 ---
-title: "Data Journalism Lesson 8: Data Cleaning 1: Data Smells"
+title: "Data Journalism Lesson 8: Data Smells"
 output: 
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    theme: journal
+    ace_theme: github
 runtime: shiny_prerendered
 description: >
   Stop a wrong story before it starts.

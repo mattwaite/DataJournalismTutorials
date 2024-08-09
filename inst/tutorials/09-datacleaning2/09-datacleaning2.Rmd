@@ -1,9 +1,11 @@
 ---
-title: "Data Journalism Lesson 9: Data Cleaning 2: Janitor"
+title: "Data Journalism Lesson 9: Janitor"
 output: 
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    theme: journal
+    ace_theme: github
 runtime: shiny_prerendered
 description: >
   Clean up your data with code.

@@ -1,9 +1,11 @@
 ---
-title: "Data Journalism Lesson 17: Visualization 5: Slope charts"
+title: "Data Journalism Lesson 17: Slope charts"
 output: 
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    theme: journal
+    ace_theme: github
 runtime: shiny_prerendered
 description: >
   Comparing one year to the next

@@ -1,9 +1,11 @@
 ---
-title: "Data Journalism Lesson 15: Visualizing part 3: Change over time"
+title: "Data Journalism Lesson 15: Line charts"
 output: 
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    theme: journal
+    ace_theme: github
 runtime: shiny_prerendered
 description: >
   Showing how things change over time with lines.

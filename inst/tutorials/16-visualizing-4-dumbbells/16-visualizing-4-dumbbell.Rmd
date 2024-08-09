@@ -1,9 +1,11 @@
 ---
-title: "Data Journalism Lesson 16: Visualizing part 4: Gaps"
+title: "Data Journalism Lesson 16: Dumbbell charts"
 output: 
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    theme: journal
+    ace_theme: github
 runtime: shiny_prerendered
 description: >
   Making quick graphics for publication

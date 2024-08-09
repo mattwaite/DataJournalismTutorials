@@ -1,9 +1,11 @@
 ---
-title: "Data Journalism Lesson 19: Visualizing part 7: Bubble charts"
+title: "Data Journalism Lesson 19: Bubble charts"
 output: 
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    theme: journal
+    ace_theme: github
 runtime: shiny_prerendered
 description: >
   Adding a new dimension to scatterplots.

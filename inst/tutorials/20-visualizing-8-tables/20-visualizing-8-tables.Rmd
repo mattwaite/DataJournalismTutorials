@@ -1,9 +1,11 @@
 ---
-title: "Data Journalism Lesson 20: Visualizing part 8: Tables"
+title: "Data Journalism Lesson 20: Tables"
 output: 
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    theme: journal
+    ace_theme: github
 runtime: shiny_prerendered
 description: >
   Learn how to make a table with visual interestingness.

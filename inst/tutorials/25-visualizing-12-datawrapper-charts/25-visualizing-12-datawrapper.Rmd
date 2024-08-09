@@ -1,9 +1,11 @@
 ---
-title: "Data Journalism Lesson 25: Visualizing part 12: Datawrapper for charts"
+title: "Data Journalism Lesson 25: Datawrapper for charts"
 output: 
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    theme: journal
+    ace_theme: github
 runtime: shiny_prerendered
 description: >
   Making quick graphics for publication

@@ -1,9 +1,11 @@
 ---
-title: "Data Journalism Lesson 18: Visualizing part 6: Scatterplots"
+title: "Data Journalism Lesson 18: Scatterplots"
 output: 
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    theme: journal
+    ace_theme: github
 runtime: shiny_prerendered
 description: >
   Comparing two numbers to uncover a trend.

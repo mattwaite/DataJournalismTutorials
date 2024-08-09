@@ -1,9 +1,11 @@
 ---
-title: "Data Journalism Lesson 26: Visualizing part 13: Datawrapper for maps"
+title: "Data Journalism Lesson 26: Datawrapper for maps"
 output: 
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    theme: journal
+    ace_theme: github
 runtime: shiny_prerendered
 description: >
   Making quick graphics for publication

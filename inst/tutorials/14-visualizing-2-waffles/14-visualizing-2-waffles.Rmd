@@ -1,9 +1,11 @@
 ---
-title: "Data Journalism Lesson 14: Visualizing part 2: components"
+title: "Data Journalism Lesson 14: Waffle charts"
 output: 
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    theme: journal
+    ace_theme: github
 runtime: shiny_prerendered
 description: >
   Making quick graphics for reporting.
