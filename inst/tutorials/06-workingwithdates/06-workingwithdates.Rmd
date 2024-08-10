@@ -21,7 +21,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Working with dates
+## The Goal
+
+In this lesson, you'll learn how to work with dates in R, a critical skill for data analysis. By the end of this tutorial, you'll understand how to convert character strings into proper date formats using both base R and the lubridate package. You'll practice reformatting dates using as.POSIXct() and lubridate functions, and learn how to use floor_date() to group dates by month. These skills will enable you to perform time-based analyses and answer questions about trends over time in your datasets.
+
+## The Basics
 
 One of the most frustrating things in data is working with dates. Everyone has a different opinion on how to record them, and every software package on the planet has to sort it out. Dealing with it can be a little ... confusing. And every dataset has something new to throw at you. So consider this an introduction. 
 
@@ -201,3 +205,17 @@ calls |>
 ```{r floormonth-check}
 grade_this_code()
 ```
+
+## The Recap
+
+Throughout this lesson, you've learned several ways to handle dates in R. You've practiced using as.POSIXct() to parse dates with specific formats, and discovered how lubridate can simplify this process with intuitive functions like mdy_hm(). You've also learned about floor_date(), which allows you to group dates by larger time units like months. Remember, working with dates is a common challenge in data journalism, and these skills will help you analyze time-based patterns in your data more effectively. As you continue to work with different datasets, you'll encounter various date formats, and the techniques you've learned here will serve as a foundation for handling these challenges.
+
+## Terms to Know
+
+- `as.POSIXct()`: A base R function used to convert character strings to date-time objects.
+- `lubridate`: An R package designed to make working with dates and times easier.
+- `mdy_hm()`: A lubridate function that parses dates in the month-day-year hour-minute format.
+- `floor_date()`: A lubridate function that rounds dates down to a specified time unit (e.g., month, year).
+- Date format codes: Special character combinations (like %Y, %m, %d) used to specify date formats in R.
+- Character field: A data type that stores text, including improperly formatted dates.
+- Date object: A special data type in R that represents dates and allows for date-based calculations.
