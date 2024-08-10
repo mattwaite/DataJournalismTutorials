@@ -20,9 +20,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# The importance of text
+## The Goal
 
-## What makes a good graphic
+In this lesson, you'll learn about the critical role of text elements in creating effective data visualizations for journalism. By the end of this tutorial, you'll understand how to craft compelling headlines, write informative subtitles, add clear axis labels, and use strategic annotations to guide readers through your charts. You'll practice applying these text elements to a bubble chart, gaining hands-on experience in transforming raw data into a story-driven visualization. These skills will enable you to create more impactful and informative graphics that effectively communicate your data stories to readers.
+
+## The Basics
 
 These are the pieces of a good graphic:
 
@@ -251,3 +253,19 @@ ggplot() +
 ```{r bubble4-check}
 grade_this_code()
 ```
+
+## The Recap
+
+Throughout this lesson, you've learned how to enhance your data visualizations with key text elements. You've practiced writing headlines that grab attention and convey the main story, crafting subtitles that provide context, and adding clear labels to guide readers through your chart. You've also explored how to use annotations to highlight key insights and divide your chart into meaningful sections. Remember, effective data journalism isn't just about the numbers—it's about using text strategically to tell a compelling story. As you continue to create visualizations, always consider how you can use headlines, labels, and annotations to make your charts more accessible and impactful for your audience.
+
+## Terms to Know
+
+- Headline: The main title of a chart that should convey the key message or story of the visualization.
+- Chatter (Subtitle): A brief explanatory text below the headline that provides context or additional information about the chart.
+- Annotation: Text or graphical elements added to a chart to highlight or explain specific data points or trends.
+- Caption: Text below a chart that provides information about the data source and creator.
+- `labs()`: A ggplot2 function used to add various text elements to a chart, including title, subtitle, and axis labels.
+- `geom_text()`: A ggplot2 function used to add text directly to a plot at specified coordinates.
+- `geom_text_repel()`: A function from the ggrepel package that adds text labels to a plot while avoiding overlaps.
+- `geom_hline()`: A ggplot2 function used to add a horizontal line to a plot, often used for showing averages or thresholds.
+- `geom_vline()`: A ggplot2 function used to add a vertical line to a plot, often used for showing averages or thresholds.
