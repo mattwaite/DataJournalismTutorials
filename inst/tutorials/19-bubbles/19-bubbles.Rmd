@@ -19,9 +19,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Bubble charts
+## The Goal
 
-## The basics
+In this lesson, you'll learn how to create bubble charts, which add a third dimension to scatterplots through varying circle sizes. By the end of this tutorial, you'll understand when bubble charts are effective, how to construct them using ggplot2, and how to enhance them with transparency and labels. You'll practice filtering data, adjusting visual elements, and using ggrepel for clear labeling. These skills will enable you to visualize complex relationships between three variables, a powerful tool for uncovering and communicating insights in your data journalism projects.
+
+## The Basics
 
 Here is the real talk: Bubble charts are hard. The reason they are hard is not because of the code, or the complexity or anything like that. They're a scatterplot with magnitude added -- the size of the dot in the scatterplot has meaning. The hard part is seeing when a bubble chart works and when it doesn't. 
 
@@ -217,3 +219,14 @@ grade_this_code()
 ```
 
 And what story does that tell? 
+
+## The Recap
+
+Throughout this lesson, you've mastered the creation of bubble charts, learning to visualize relationships between three variables simultaneously. You've practiced transforming scatterplots into bubble charts, adjusting transparency and size scales for clarity, and adding labels to highlight key data points. Remember, while bubble charts can be powerful, they're most effective when used judiciously - when the relationships between all three variables tell a compelling story. As you continue your data journalism journey, consider how bubble charts might reveal hidden patterns in your datasets, but always balance their complexity with the clarity of your message.
+
+## Terms to Know
+
+-- Bubble chart: A variation of a scatterplot where data points are represented by circles (bubbles) whose sizes correspond to a third variable.
+-- Scatterplot: A type of chart that shows the relationship between two variables as points on a two-dimensional grid.
+- `scale_size()`: A ggplot2 function used to adjust the range of sizes for elements like points in a bubble chart.
+- range: In the context of scale_size(), this parameter sets the minimum and maximum sizes for the bubbles in the chart.
