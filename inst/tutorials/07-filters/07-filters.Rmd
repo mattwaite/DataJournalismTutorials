@@ -20,9 +20,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Filtering
+## The Goal
 
-## The basics
+In this lesson, you'll learn about filtering data - a crucial skill for focusing your analysis on specific subsets of information. By the end of this tutorial, you'll understand how to use the filter() function in R to narrow down your dataset based on various criteria. You'll practice filtering with exact matches, partial matches using grepl(), and filtering with lists. You'll also learn how to combine multiple filters and use select() to simplify your data view. These skills will enable you to efficiently extract the most relevant information from large datasets, a key ability in data journalism.
+
+## The Basics
 
 More often than not, we have more data than we want. Sometimes we need to be rid of that data. In `dplyr`, there's two ways to go about this: filtering and selecting.
 
@@ -83,9 +85,9 @@ grade_this_code()
 
 So, first things first, let's look at one building on campus. We do that with `filter` and then we pass it a condition. 
 
-Before we do anything, a note about conditions. Most of the conditional operators you'll understand -- greater than and less than are > and <. The tough one to remember is equal to. In conditional statements, equal to is == not =. If you haven't noticed, = is a variable assignment operator, not a conditional statement. So equal is == and NOT equal is !=. 
+Before we do anything, a note about conditions. Most of the conditional operators you'll understand -- greater than and less than are > and <. The tough one to remember is equal to. In conditional statements, equal to is == not =. If you haven't noticed, = is a variable assignment operator, not a conditional statement. So equal is == and NOT equal is !=. You can also combine greater than and equal to. So, for instance, if you want all values that are 10 or greater, you can use >= 10, which is the same thing as > 9. Both will include 10 and everything greater. But one is more clear -- >= 10 -- and one is a trick. Always be clear. 
 
-So if you want to see the Nebraska Union, what would you do?
+So if you want to see every row that exactly matches the Nebraska Union, what would you do?
 
 First, let's use head to give us a peek at the data.
 
@@ -262,3 +264,19 @@ grade_this_code()
 ```
 
 Anyone know where 300 N 17th Street is? It's the address of the university police. Is the most crime-ridden place on campus the police department? Not exactly. It's a convenient address for reports that don't have a clear location. 
+
+## The Recap
+
+Throughout this lesson, you've learned how to use filters to focus on specific parts of your dataset. You've practiced filtering with exact matches, using grepl() for partial matches, and filtering with lists. You've also learned how to chain multiple filters together and use select() to simplify your data view. Remember, filtering is a powerful tool that allows you to zoom in on the most relevant data for your story. As you continue your data journalism journey, you'll find these filtering techniques invaluable for uncovering specific trends and patterns within larger datasets.
+
+## Terms to Know
+
+- `filter()`: A dplyr function used to subset data based on specific conditions.
+- `select()`: A dplyr function used to choose specific columns from a dataset.
+- `grepl()`: A function used for pattern matching in strings, often used with filter() for partial matches.
+- Conditional operators: Symbols used in filtering (e.g., ==, !=, >, <) to compare values.
+- Boolean logic: The use of AND (&) and OR (|) in filtering to combine multiple conditions.
+- `%in%` operator: Used to check if values are present in a list, useful for filtering with multiple options.
+- `c()`: A function used to concatenate values into a vector or list.
+- Chaining: The process of connecting multiple dplyr operations using the pipe operator (|>).
+- `top_n()`: A dplyr function used to select the top N rows based on a specified column.
