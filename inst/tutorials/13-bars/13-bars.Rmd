@@ -20,7 +20,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Visualizing your data for reporting
+## The Goal
+
+In this lesson, you'll learn how to create basic bar charts using ggplot2, a powerful data visualization package in R. By the end of this tutorial, you'll understand how to prepare data for visualization, create a simple bar chart, reorder bars for better readability, and flip coordinates to improve label visibility. You'll practice these skills using real-world data from UNLPD crime reports, gaining practical experience in visualizing data for reporting purposes.
+
+## The Basics
 
 Visualizing data is becoming a much greater part of journalism. Large news organizations are creating graphics desks that create complex visuals with data to inform the public about important events. 
 
@@ -182,3 +186,19 @@ grade_this_code()
 
 Art? No. Tells you the story? Yep. And for reporting purposes, that's enough. 
 
+## The Recap
+
+Throughout this lesson, you've learned the fundamentals of creating bar charts with ggplot2. You've practiced preparing data by grouping and summarizing, creating a basic bar chart, reordering bars based on values, and flipping coordinates for better readability. Remember, while these charts may not be publication-ready visualizations, they serve as valuable tools for quickly understanding and reporting on data trends. As you continue your data journalism journey, these skills will help you rapidly explore datasets and identify stories worth telling.
+
+## Terms to Know
+
+- `ggplot2`: A data visualization package in R that is part of the tidyverse.
+- Geometry: In ggplot2, the visual representation of data (e.g., bars, points, lines).
+- Aesthetics: In ggplot2, the visual properties of geometries, such as x and y positions, colors, or sizes.
+- `geom_bar()`: A ggplot2 function used to create bar charts.
+- `reorder()`: A function used to change the order of categorical variables, often used for improving chart readability.
+- `coord_flip()`: A ggplot2 function that switches the x and y axes, useful for making horizontal bar charts.
+- `top_n()`: A dplyr function used to select the top (or bottom) n rows from a dataset based on a specified variable.
+- `ungroup()`: A dplyr function that removes grouping from a dataset, often used after group-based operations.
+- `aes()`: Short for "aesthetics," this function in ggplot2 maps variables in your data to visual properties in the plot.
+- Canvas: In ggplot2, the initial plotting area created by the ggplot() function, onto which layers of geometries and other elements are added.
