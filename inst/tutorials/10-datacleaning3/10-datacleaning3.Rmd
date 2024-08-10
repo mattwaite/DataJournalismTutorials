@@ -20,9 +20,11 @@ library(glue)
 knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
-# Data Cleaning Part III: OpenRefine
+## The Goal
 
-## The basics
+In this lesson, you'll learn about advanced data cleaning techniques using OpenRefine and the R package refinr. By the end of this tutorial, you'll understand how to use clustering algorithms to identify and merge similar text entries, both through the OpenRefine application and programmatically in R. You'll practice using different merging methods like key collision, n-gram merging, and soundex, and learn to critically evaluate the results of automated cleaning processes. This skill is crucial for data journalists who often work with messy, real-world datasets that require careful standardization before analysis.
+
+## The Basics
 
 Gather 'round kids and let me tell you a tale about your author. In college, your author got involved in a project where he mapped crime in the city, looking specifically in the neighborhoods surrounding campus. This was in the mid 1990s. Computers were under powered. Tools were pretty primitive. I was given a database of nearly 50,000 calls for service. 
 
@@ -353,3 +355,17 @@ This note from the documentation is exceedingly important:
 > This package is NOT meant to replace OpenRefine for every use case. For situations in which merging accuracy is the most important consideration, OpenRefine is preferable. Since the merging steps in refinr are automated, there will usually be more false positive merges, versus manually selecting clusters to merge in OpenRefine.
 
 In short, only use Refinr where the use case is simple and the changes of a mistake are low and easy to catch if it happens. In cases where you need to do massive corrections of data, OpenRefine with a human in the loop is the better choice. 
+
+## The Recap
+
+Throughout this lesson, you've explored powerful tools for cleaning and standardizing messy data. You've learned how to use OpenRefine's graphical interface to manually review and merge similar text entries, and how to achieve similar results programmatically using the refinr package in R. You've practiced different merging techniques and seen how they can dramatically reduce the number of unique entries in a dataset. However, you've also learned the critical importance of verifying the results of automated cleaning processes, as illustrated by the potential errors in soundex merging. Remember, while these tools can greatly speed up your data cleaning workflow, they should be used judiciously and always with careful human oversight to ensure the accuracy and integrity of your data.
+
+## Terms to Know
+
+- OpenRefine: A standalone application for data cleaning that uses clustering algorithms to identify similar text entries.
+- Clustering: A technique used to group similar data points together based on certain criteria or algorithms.
+- Key collision merge: A method that extracts key parts of strings to identify and merge similar entries.
+- Faceting: A feature in OpenRefine that allows you to see a summary of all values in a column and filter or edit them.
+- `refinr`: An R package that implements OpenRefine's clustering algorithms for use within R scripts.
+- n-gram merge: A method that looks at multiple words or character sequences to identify similar entries.
+- Soundex: A phonetic algorithm for indexing names by sound, as pronounced in English.
