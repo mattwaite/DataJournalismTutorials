@@ -18,7 +18,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Harvesting data from PDFs
+## The Goal
+
+In this lesson, you'll learn how to extract data from PDF files, a common challenge in data journalism. By the end of this tutorial, you'll understand two methods for converting PDFs to spreadsheets: using Adobe's online PDF converter and Adobe Acrobat software. You'll also practice cleaning and organizing the extracted data in Google Sheets. These skills will enable you to access and analyze information trapped in PDF format, expanding your ability to work with a wider range of data sources.
+
+## The Basics
 
 The next circle of Hell on the Dante's Inferno of Data Journalism is the PDF. Governments everywhere love the PDF and publish all kinds of records in a PDF. The problem is a PDF isn't a data format -- it's a middle finger, saying I've Got Your Accountability Right Here, Pal.
 
@@ -134,3 +138,17 @@ knitr::include_graphics(rep("images/pdfs12.png"))
 
 After that, it's the same steps as above. You'll get the same file, with the same problems, and you'll use the same fixes. 
 
+## The Recap
+
+Throughout this lesson, you've learned valuable techniques for harvesting data from PDFs. You've practiced using Adobe's online converter and Adobe Acrobat to transform PDF tables into spreadsheets. You've also gained experience in cleaning and formatting the extracted data using Google Sheets, including unmerging cells, deleting unnecessary rows and columns, and exporting to CSV format. Remember, while PDFs can be challenging, these skills allow you to access important information that might otherwise be difficult to analyze. As you continue your data journalism journey, you'll find these techniques invaluable for working with government records and other PDF-based data sources.
+
+## Terms to Know
+
+- PDF (Portable Document Format): A file format used to present documents, including text formatting and images, independent of software, hardware, or operating systems.
+- CSV (Comma-Separated Values): A simple file format used to store tabular data, where each line of the file is a data record and each record consists of fields separated by commas.
+- Adobe Creative Suite: A collection of applications for graphic design, video editing, web development, and photography made by Adobe Inc.
+- CometDocs: An online service that converts various file formats, including PDFs to spreadsheets.
+- Merge cells: A spreadsheet function that combines two or more adjacent cells into a single cell.
+- Unmerge cells: The process of separating previously merged cells back into individual cells.
+- Google Sheets: A web-based spreadsheet program offered by Google as part of its free, web-based Google Docs Editors suite.
+- Microsoft Excel: A spreadsheet program developed by Microsoft for Windows, macOS, Android, and iOS.
