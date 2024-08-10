@@ -22,9 +22,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Using color
+## The Goal
 
-## An introduction
+In this lesson, you'll learn how to effectively use color in data visualizations to enhance storytelling and guide reader attention. By the end of this tutorial, you'll understand key principles of color usage in charts, including limiting color palette, using contrast for emphasis, and avoiding overuse of color. You'll practice applying these concepts by creating a bar chart of campus police calls, using color strategically to highlight specific data points. These skills will enable you to create more impactful and clear visualizations in your data journalism projects.
+
+## The Basics
 
 The main focus of this whole class -- indeed the whole journalism major -- is to tell a story. If the chart is not telling a story, then it doesn't serve a purpose and we've failed. And if our chart does tell a story, but the reader can't find it, then that means we've still failed the main purpose. 
 
@@ -242,3 +244,15 @@ ggplot() +
 grade_this_code()
 ```
 Good luck reading that -- the legend needed to tell you which color is which bar consumes the whole graph area. Even if you could see it, good luck finding something to focus on. If you give your reader too much to focus on, there's nothing they can focus on. 
+
+## The Recap
+
+Throughout this lesson, you've explored the power of color in data visualization and learned how to use it judiciously to enhance your charts. You've practiced creating a base chart, using color to fade less important elements into the background, and highlighting key data points with contrasting colors. Remember, effective use of color is about balance - drawing attention to the most important aspects of your data while avoiding visual clutter. As you continue your data journalism journey, consider how thoughtful color choices can make your visualizations more engaging and easier to understand, ultimately helping you tell stronger data-driven stories.
+
+## Terms to Know
+
+- Color contrast: The use of different colors to create visual distinction between elements in a chart.
+- Fill: In ggplot2, the color used to fill the interior of graphical elements like bars or points.
+- Color: In ggplot2, typically refers to the outline color of graphical elements.
+- `theme_minimal()`: A ggplot2 function that applies a minimal theme, removing background colors and grids.
+- `theme_light()`: Another ggplot2 theme function that applies a light background with minimal gridlines.

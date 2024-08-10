@@ -22,9 +22,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Finishing touches
+## The Goal
 
-## A quick review
+In this lesson, you'll learn how to apply professional finishing touches to your data visualizations. By the end of this tutorial, you'll understand how to enhance the readability and visual appeal of your charts through strategic use of themes, text formatting, and layout adjustments. You'll practice customizing titles, subtitles, axes, and other chart elements to create polished, publication-ready graphics. These skills will enable you to present your data journalism projects with a level of professionalism that meets industry standards.
+
+## The Basics
 
 The output from ggplot is good, but not great. We need to add some pieces to it. The elements of a good graphic are:
 
@@ -394,3 +396,19 @@ grade_this_code()
 ```
 
 Note: These finishing touches aren't optional. They're required of every graphic you create going forward.
+
+## The Recap
+
+Throughout this lesson, you've mastered the art of refining your data visualizations for professional presentation. You've learned to apply clean themes, adjust text hierarchy, customize chart elements, and fine-tune layouts for both standard ggplot charts and waffle charts. Remember, these finishing touches are not just cosmetic - they're essential for effectively communicating your data story to your audience. As you continue your data journalism journey, always consider how these final adjustments can enhance the clarity and impact of your visualizations.
+
+## Terms to Know
+
+- Theme: A predefined set of visual parameters in ggplot2 that control the overall appearance of a chart.
+- `element_text()`: A function used within theme() to modify text properties like size, color, and font face.
+- `element_blank()`: A function used to remove chart elements entirely, such as gridlines.
+- `plot.title`: The theme element that controls the appearance of the chart's main title.
+- `plot.subtitle`: The theme element that controls the appearance of the chart's subtitle.
+- `axis.title`: The theme element that controls the appearance of axis labels.
+- `panel.grid`: The theme element that controls the appearance of gridlines in the chart.
+- `plot.title.position`: A theme setting that adjusts the alignment of the chart title.
+- `labs()`: A function in ggplot2 used to add or modify chart labels, including title, subtitle, and axis labels.
