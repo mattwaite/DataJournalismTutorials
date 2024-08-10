@@ -19,9 +19,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Scatterplots
+## The Goal
 
-## The basics
+In this lesson, you'll learn how to create and interpret scatterplots, a powerful tool for visualizing relationships between two numerical variables. By the end of this tutorial, you'll understand how to prepare data for scatterplots, construct basic plots using ggplot2, highlight specific data points, and add labels using ggrepel. You'll practice these skills using real-world college admissions and tuition data, gaining insight into how to uncover and communicate trends and outliers in your datasets. These abilities will be crucial for identifying patterns and relationships in your data journalism projects.
+
+## The Basics
 
 One of the most powerful things that we can do with visualizing data is establish relationships and find when things don't fit the relationship. 
 
@@ -193,3 +195,19 @@ grade_this_code()
 ```
 
 And now everyone knows where the Harvard of the Plains resides on this chart. 
+
+## The Recap
+
+Throughout this lesson, you've mastered the basics of creating informative scatterplots. You've learned how to clean your data by removing NA values, plot multiple data points to reveal overall trends, highlight specific points of interest, and add labels to key data points. Remember, scatterplots are excellent for visualizing relationships between two variables and identifying outliers. As you continue your data journalism journey, you'll find scatterplots invaluable for uncovering stories within your data, such as the relationship between college selectivity and tuition costs. Always consider how you can use color, labels, and additional data points to enhance the story your scatterplot tells.
+
+## Terms to Know
+
+- Scatterplot: A type of chart that shows the relationship between two numerical variables, with each data point represented as a dot on a two-dimensional plane.
+- `ggrepel`: An R package that provides text and label geoms for ggplot2 that repel each other to avoid overlapping.
+- `geom_point()`: A ggplot2 function used to create the points (dots) in a scatterplot.
+- `geom_text_repel()`: A function from the ggrepel package used to add non-overlapping text labels to points in a plot.
+- `na.omit()`: A function in R used to remove any rows containing NA (missing) values from a dataset.
+- `aes()`: Short for "aesthetics," this ggplot2 function maps variables in your data to visual properties in the plot.
+- `x-axis`: The horizontal axis in a scatterplot, typically representing the independent variable.
+- `y-axis`: The vertical axis in a scatterplot, typically representing the dependent variable.
+- Outlier: A data point in a scatterplot that falls far from the overall pattern of the other points, often representing an unusual or interesting case.
