@@ -19,9 +19,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Tables
+## The Goal
 
-## The basics
+In this lesson, you'll learn how to create informative and visually appealing tables using the gt package in R. By the end of this tutorial, you'll understand how to structure data for table creation, customize table elements such as headers and labels, and apply styling to enhance readability. You'll practice these skills using real-world data on college majors, gaining practical experience in presenting complex information in a clear, tabular format. This ability to create professional-looking tables will be invaluable for effectively communicating data findings in your journalism projects.
+
+## The Basics
 
 A table is the most simple form of data presentation. Tables have been around for millenia. We've improved in them since, so we're not making a table. We're making a table with features. 
 
@@ -489,3 +491,15 @@ grade_this_code()
 ```
 
 We've arrived where we want to be: We've created a clear table that allows a reader to compare majors at will while also using color to draw attention to the thing we want to draw attention to. **We've kept it simple so the color has impact**.
+
+## The Recap
+
+Throughout this lesson, you've mastered the art of creating sophisticated tables using gt. You've learned to transform raw data into structured, easy-to-read tables by customizing headers, applying styles, and highlighting key information. Remember, effective tables strike a balance between informativeness and visual appeal. As you continue your data journalism journey, you'll find that well-designed tables can be powerful tools for presenting complex data in a format that's accessible to your audience. Keep experimenting with different styling options to find the perfect balance for your specific data and story needs.
+
+## Terms to Know
+
+- `gt`: An R package designed for creating publication-quality tables.
+- `tab_header()`: A gt function used to add a title and subtitle to your table.
+- `cols_label()`: A gt function used to rename column headers in your table.
+- `tab_style()`: A gt function that allows you to apply custom styles to specific parts of your table.
+- `tab_source_note()`: A gt function used to add source information or notes at the bottom of your table.
