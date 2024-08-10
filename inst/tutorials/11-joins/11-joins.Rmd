@@ -20,9 +20,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Combining and joining
+## The Goal
 
-## Merging two datasets
+In this lesson, you'll learn how to combine and join datasets, a crucial skill for data journalists. By the end of this tutorial, you'll understand how to use bind_rows() to stack datasets with identical structures, and how to use different types of joins (inner_join, left_join, right_join) to merge datasets based on common elements. You'll practice these techniques using real-world examples, such as merging monthly car sales tax data and combining train accident data with state information. These skills will enable you to work with more complex datasets and uncover deeper insights in your data journalism projects.
+
+## The Basics
 
 Often, as data journalists, we're looking at data across time or at data stored in multiple tables. And to do that, we often need to merge that data together. 
 
@@ -258,3 +260,18 @@ grade_this_code()
 ```
 
 And now you have the start of a story about Nebraska and train derailments. 
+
+## The Recap
+
+Throughout this lesson, you've learned two important techniques for working with multiple datasets: binding and joining. You've practiced using bind_rows() to combine datasets with identical structures, such as monthly car sales tax data. You've also explored different types of joins, focusing on inner_join() to merge train accident data with state information. Remember, choosing the right type of join is crucial for maintaining data integrity and getting accurate results. As you continue your data journalism journey, these skills will allow you to work with more diverse and complex datasets, enabling you to tell more comprehensive and insightful stories.
+
+## Terms to Know
+
+- `bind_rows()`: A dplyr function used to stack datasets with identical structures vertically.
+- `inner_join()`: A type of join that keeps only the data where both datasets have matching values in the specified columns.
+- `left_join()`: A join that keeps all data from the left dataset and only matching data from the right dataset.
+- `right_join()`: A join that keeps all data from the right dataset and only matching data from the left dataset.
+- `clean_names()`: A function from the janitor package that standardizes column names for easier data manipulation.
+- `remove_empty()`: A janitor function that removes empty rows or columns from a dataset.
+- `as.Date()`: A function used to convert strings or numbers into proper date objects in R.
+- Common element: A column or set of columns that exist in both datasets and are used to match records when joining.
