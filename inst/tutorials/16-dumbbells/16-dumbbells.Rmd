@@ -19,7 +19,9 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# When the gap is the news
+## The Goal
+
+In this lesson, you'll learn how to create dumbbell charts, a powerful tool for visualizing the difference between two related values. By the end of this tutorial, you'll understand when to use dumbbell charts, how to prepare your data for this type of visualization, and how to create and customize dumbbell charts using ggplot2 and the ggalt package. You'll practice filtering data, reordering chart elements, and adding color to enhance the visual story. These skills will enable you to effectively communicate comparisons and gaps in your data, a crucial ability for data journalists looking to highlight meaningful differences.
 
 ## The Basics.
 
@@ -204,3 +206,16 @@ grade_this_code()
 ```
 
 Guess who is the cheapest in the Big Ten?
+
+## The Recap
+
+Throughout this lesson, you've learned how to create and customize dumbbell charts to visualize differences between two related values. You've practiced preparing data by filtering for specific institutions, creating basic dumbbell charts, and enhancing them with color and size adjustments. You've also seen how reordering the chart elements can help tell a clearer story, as demonstrated with the comparison of in-state and out-of-state tuition costs across Big Ten universities. Remember, dumbbell charts are particularly effective when the gap between two values is the key story you want to tell. As you continue your data journalism journey, consider how this visualization technique can help you highlight important comparisons in your datasets.
+
+## Terms to Know
+
+- Dumbbell chart: A type of chart that displays the difference between two related values for multiple categories, resembling a dumbbell shape.
+- `ggalt`: An extension package for ggplot2 that includes additional geoms, including geom_dumbbell for creating dumbbell charts.
+- `geom_dumbbell()`: The specific function in ggalt used to create dumbbell charts in ggplot2.
+- `x` and `xend`: In dumbbell charts, these aesthetics define the start and end points of each "dumbbell."
+- `colour`, `colour_x`, `colour_xend`: Aesthetics in geom_dumbbell() used to set the colors of the connecting line and the start and end points of each dumbbell.
+- `size`: An aesthetic in geom_dumbbell() used to adjust the thickness of the points and connecting line.
