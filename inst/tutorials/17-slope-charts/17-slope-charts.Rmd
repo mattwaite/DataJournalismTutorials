@@ -18,9 +18,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Slope charts
+## The Goal
 
-## The basics
+In this lesson, you'll learn how to create slope charts, a powerful tool for visualizing changes between two time periods. By the end of this tutorial, you'll understand when to use slope charts, how to prepare your data, and how to construct these charts using ggplot2 in R. You'll practice filtering data, manipulating chart elements, and adding informative labels to create clear and impactful visualizations. These skills will enable you to effectively communicate trends and comparisons in your data journalism projects, especially when dealing with before-and-after scenarios or year-over-year changes.
+
+## The Basics
 
 A line chart, as we learned, shows change over time, with the date on the x-axis and each line representing a team or player. But sometimes, you have just two seasons -- a line chart of two seasons is ... not a line chart. 
 
@@ -323,3 +325,18 @@ grade_this_code()
 ```
 
 And there you have it. A clean and clear slope chart showing how last year compared to the previous one. 
+
+## The Recap
+
+Throughout this lesson, you've mastered the art of creating slope charts to visualize changes between two time periods. You've learned how to prepare your data, construct the basic chart structure, and enhance it with custom colors, labels, and spacing. Remember, slope charts are particularly effective for showing how different entities (like school districts in our example) change relative to each other over time. As you continue your data journalism journey, you'll find slope charts to be a valuable addition to your visualization toolkit, especially when you need to clearly communicate before-and-after comparisons or year-over-year changes in a compelling and easy-to-understand format.
+
+## Terms to Know
+
+- Slope chart: A type of chart that shows changes between two time periods by connecting data points with lines.
+- `geom_line`: A ggplot2 function used to create lines in a chart, essential for connecting points in a slope chart.
+- `geom_point`: A ggplot2 function used to create points in a chart, used to mark the start and end points in a slope chart.
+- `geom_text`: A ggplot2 function used to add text labels to a chart, often used to label data points in slope charts.
+`scale_x_date`: A ggplot2 function used to customize the x-axis when working with date data.
+- `theme_minimal()`: A ggplot2 function that applies a minimalist theme to the chart, removing unnecessary visual elements.
+- `aes()`: Short for "aesthetics," this ggplot2 function maps variables to visual properties of the chart.
+- `nudge`: In the context of ggplot2, a technique used to slightly adjust the position of elements like labels to improve readability and avoid overlaps.
