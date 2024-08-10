@@ -21,7 +21,9 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Data Cleaning Part I: Data smells
+## The Goal
+
+In this lesson, you'll learn about the critical concept of "data smells" - common issues and inconsistencies that can arise in datasets. By the end of this tutorial, you'll understand how to conduct an initial assessment of a dataset to identify potential problems like missing data, wrong data types, gaps in data, and internal inconsistencies. You'll practice using R functions like glimpse(), group_by(), and tally() to explore your data systematically. This skill is essential for data journalists to ensure the accuracy and reliability of their analyses before drawing any conclusions.
 
 ## The Basics
 
@@ -216,3 +218,19 @@ Look at the first 10 rows of data here -- particularly 6-10. Do you notice anyth
 Can you accurately report on the number of indicents at each address with data like that? Not yet you can (more on that soon!).
 
 And that's what Data Smells are designed to do: stop you from going down a bad path.
+
+## The Recap
+
+Throughout this lesson, you've learned how to apply the concept of "data smells" to critically examine a dataset. You've practiced using glimpse() to check for wrong data types, group_by() and tally() to identify missing data and gaps, and explored ways to spot internal inconsistencies in your data. Remember, these initial checks are crucial steps in any data analysis project. They help you understand the limitations of your data and prevent you from drawing incorrect conclusions. As you continue your journey in data journalism, always approach new datasets with healthy skepticism and use these techniques to validate your data before proceeding with more in-depth analysis.
+
+## Terms to Know
+
+- Data Smells: Common issues or inconsistencies in datasets that may indicate potential problems.
+- Exploratory Data Analysis (EDA): An approach to analyzing datasets to summarize their main characteristics, often using visual methods.
+- Wrong Type of Data: When data is imported or stored in an inappropriate format (e.g., dates stored as text).
+- Missing Data: Values that are absent from the dataset, often represented as NA in R.
+- Gaps in Data: Unexpected breaks or discontinuities in a dataset, often in time-series data.
+- Internal Inconsistency: When the same information is represented differently within a dataset (e.g., inconsistent spelling of locations).
+- `tally()`: A function in R that counts the number of observations in each group when used with group_by().
+- `guess_max`: A parameter in read_csv() that determines how many rows are used to guess column types.
+- `floor_date()`: A function from the lubridate package that rounds dates down to a specified unit of time (e.g., month, year).
