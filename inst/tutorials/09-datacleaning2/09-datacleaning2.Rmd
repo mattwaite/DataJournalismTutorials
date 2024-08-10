@@ -19,9 +19,11 @@ library(janitor)
 knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
-# Data Cleaning Part II: Janitor
+## The Goal
 
-## The basics
+In this lesson, you'll learn how to use the janitor package to clean and standardize your data more efficiently. By the end of this tutorial, you'll understand how to clean column names, remove empty rows and columns, identify duplicates, and explore data consistency using janitor functions. These skills will help you prepare messy datasets for analysis more quickly and reliably, saving you time and reducing errors in your data journalism work.
+
+## The Basics
 
 The bane of every data analyst's existence is data cleaning. 
 
@@ -244,3 +246,19 @@ clean_headers_inmates |> tabyl(inst_release_type)
 grade_this_code()
 ```
 By far the largest group here is NA. Why is that? They haven't been released yet. They're still in prison.
+
+## The Recap
+
+Throughout this lesson, you've learned several key data cleaning techniques using the janitor package. You've practiced cleaning column names with clean_names(), removing empty rows and columns with remove_empty(), identifying duplicates with get_dupes(), and exploring data consistency with tabyl(). Remember, data cleaning is an essential step in any data analysis project, and the tools you've learned here will help you tackle common data issues more efficiently. As you work with different datasets, you'll find these janitor functions invaluable for quickly standardizing and exploring your data before diving into deeper analysis.
+
+## Terms to Know
+
+- `janitor`: An R package designed to simplify data cleaning tasks.
+clean_names(): A janitor function that standardizes column names to lowercase, removes spaces and special characters.
+remove_empty(): A janitor function that removes empty rows, columns, or both from a dataset.
+get_dupes(): A janitor function that identifies duplicate records based on specified columns.
+tabyl(): A janitor function that creates a frequency table of unique values in a column.
+Data cleaning: The process of identifying and correcting errors or inconsistencies in datasets.
+Duplicates: Multiple identical records in a dataset that may skew analysis results.
+Data consistency: The uniformity and reliability of data across a dataset.
+NA (Not Available): A special value in R representing missing or undefined data.
