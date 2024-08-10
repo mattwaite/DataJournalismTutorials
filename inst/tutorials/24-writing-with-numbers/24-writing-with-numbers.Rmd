@@ -17,7 +17,11 @@ library(tidyverse)
 knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
-# Writing with numbers
+## The Goal
+
+In this lesson, you'll learn how to effectively communicate numerical data in your writing without overwhelming readers. By the end of this tutorial, you'll understand key strategies for simplifying complex data, using comparisons to provide context, and determining when exact numbers are necessary. You'll also learn how to frame data-driven stories around people to make them more engaging and relatable. These skills will enable you to craft compelling narratives that clearly convey the significance of your data findings to your audience.
+
+## The Basics
 
 The number one sin of all early career data journalist is to get really, really, really attached to the analysis you've done and include every number you find.
 
@@ -83,3 +87,20 @@ Then, the compare what they found to a truly massive fire: The Paradise fire tha
 > Across the West, 526 small communities — more than 10 percent of all places — rank higher.
 
 And that is how it's done. Simplify, round, ratios: simple metrics, powerful results.
+
+## The Recap
+
+Throughout this lesson, you've learned essential techniques for writing about numbers in a clear and impactful way. You've explored methods for simplifying complex data, such as using ratios and rounding, and understood the importance of providing context through comparisons. You've also learned when to use exact figures and how to frame your stories around people to make them more compelling. Remember, effective data journalism isn't just about presenting numbers—it's about telling a story that helps your readers understand the significance of those numbers. As you continue your journey in data journalism, always strive to balance accuracy with clarity, and never lose sight of the human element in your data-driven stories.
+
+## Terms to Know
+
+- Ratio: A comparison between two related quantities, often used to simplify percentages (e.g., 6 in 10 instead of 60%).
+- Rounding: The process of reducing a number to a nearby round number for simplicity.
+- Context: Additional information that helps readers understand the significance of a number or statistic.
+- Framing: The way a story is presented, often focusing on human elements to make data more relatable.
+- Exact figures: Precise numbers used when accuracy is crucial, such as in reporting deaths or specific case counts.
+- Comparative analysis: Examining data in relation to other relevant figures or benchmarks.
+- Simplification: The process of making complex data easier to understand without losing its essential meaning.
+- Lead: The opening of a story, which may feature a compelling statistic or a human interest element.
+- Data visualization: The use of charts, graphs, or other visual aids to complement written explanations of numerical data.
+- Attribution: Citing the source of numerical data or expert interpretations to add credibility to your writing.
