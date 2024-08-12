@@ -152,7 +152,7 @@ You can almost read the code that created it: The format of the date is %Y, whic
 
 There is a [library called lubridate](https://lubridate.tidyverse.org/reference/index.html) that can parse some common date problems. 
 
-Lubridate can handle this calls data easier with one of it's many functions. The functions parse dates given a basic pattern. In this case, our data is in a very common pattern of month day year hours minutes. Lubridate names its functions after the pattern you need. Need year month day, there's a function called `ymd` that will parse what you have with year month and day.  
+Lubridate can handle this calls data easier with one of it's many functions. The functions parse dates given a basic pattern. In this case, our data is in a very common pattern of **month day year hours minutes**. Lubridate names its functions after the pattern you need. Need year month day, there's a function called `ymd` that will parse what you have with year month and day. And this is all on our reported column.  
 
 ### Exercise 2: Lubridate
 
@@ -160,7 +160,7 @@ We have month day year hours minutes. See if you can figure out how it works.
 
 ```{r lubridate, exercise=TRUE, exercise.setup = "load-data"}
 calls |> mutate(
-    clean_reported = _________(reported)
+    clean_reported = _________(_________)
 )
 ```
 ```{r lubridate-solution, exercise.reveal_solution = FALSE}
