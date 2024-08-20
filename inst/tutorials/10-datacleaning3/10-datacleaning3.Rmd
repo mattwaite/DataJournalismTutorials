@@ -321,7 +321,7 @@ charges |>
       offense_arrest_desc, 
       method = "____", useBytes = TRUE
       )) |> 
-  group_by(clean_charges) |> 
+  group_by(____) |> 
   tally() |>
   nrow()
 ```
