@@ -15,8 +15,14 @@ description: >
 library(learnr)
 library(gradethis)
 library(tidyverse)
+library(glue)
 knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
+```
+```{r load-data, message=FALSE, warning=FALSE}
+state <- Sys.getenv("tutorial.state")
+
+stateName <- read_csv("data/states.csv") |> filter(Postal == state) 
 ```
 
 ## The Goal
@@ -82,7 +88,9 @@ One of the key concepts of programming that you'll need to learn is that most th
 
 Declaring variables is a pattern. The pattern here is `Name Of The Thing <- Value Of The Thing`. 
 
-Names can be anything you want them to be, but they have to be one word, and it's better if they have no numbers or symbols in it. So you can create a variable called NebraskaWillWinTheNationalTitleThisSeasonMattRhuhleIsGod if you want. But some questions for you: What is that variable going to contain? Is it obvious by the name? And do you want to try and type that again? How about three more times? Yeah, me neither.
+```{r variabletest, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "load-data", results='asis'}
+glue("Names can be anything you want them to be, but they have to be one word, and it's better if they have no numbers or symbols in it. So you can create a variable called {stateName$State}isawesome if you want. But some questions for you: What is that variable going to contain? Is it obvious by the name? And do you want to try and type that again? How about three more times? Yeah, me neither.")
+```
 
 ### 5 Rules For Naming Variables
 1. One word, no spaces.
